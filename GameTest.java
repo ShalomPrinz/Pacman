@@ -6,7 +6,6 @@ import org.junit.Test;
 public class BoardTest {
 	
 	Game game;
-	Game.Creatures[][] board;
 	
 	@Before
 	public void setup(){
