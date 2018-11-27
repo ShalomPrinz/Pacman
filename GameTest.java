@@ -6,12 +6,15 @@ import org.junit.Test;
 public class GameTest {
 	
 	@Test
-	public void testBoardDimensions() {
+	public void testDimensions(){
 		// arrange
-		
+		Game game = new Game();
+
 		// action
-		
-		// assert	
+		int dimensions = game.getBoardDimensions();
+
+		// assert
+		assertEquals(3030, dimensions);
 	}
 	
 }
