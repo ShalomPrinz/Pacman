@@ -1,5 +1,4 @@
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Scanner;
 
@@ -20,10 +19,13 @@ public class Game {
 	}
 	
 	public Creatures[][] setBoard() throws Exception{
-		Scanner sc = new Scanner(new BufferedReader(new FileReader("D:/Users/Board.txt")));
+		// Change Board.txt path on another computer.
+		// Home path: E:/Docs/שלום/A android project 2018/Pacman/Board.txt
+		Scanner sc = new Scanner(new BufferedReader(new FileReader("E:/Docs/שלום/A android project 2018/Pacman/Board.txt")));
 	    while(sc.hasNextLine()) {
 	    	for (int i = 0; i < board.length && sc.hasNextLine(); i++) {
     			String[] line = sc.nextLine().trim().split("	");
+    			line = reverseLine(line);
 	        	for (int j = 0; j < line.length; j++) 
 	        		board[i][j] = StringToCreature(line[j]); 
 	        }
@@ -54,9 +56,15 @@ public class Game {
 			return Creatures.Wall;
 		case "-":
 			return Creatures.Point;
+		default:
+			return Creatures.Null;
 		}
-		return Creatures.Null;
 	}
 	
-
+	private String[] reverseLine(String[] line){
+		String newLine[] = new String[line.length];
+		for (int i = 0; i < line.length; i++)
+			newLine[i] = line[line.length - 1 - i];
+		return newLine;
+	}
 }
