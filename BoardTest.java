@@ -24,7 +24,7 @@ public class BoardTest {
 	}
 	
 	@Test
-	public void testPacman(){
+	public void testPacman() throws Exception{
 		// arrange
 		
 		// action
@@ -35,7 +35,7 @@ public class BoardTest {
 	}
 	
 	@Test
-	public void testGhosts(){
+	public void testGhosts() throws Exception{
 		// arrange
 		
 		// action
@@ -43,6 +43,39 @@ public class BoardTest {
 		
 		// assert
 		assertEquals(4, ghosts);
+	}
+	
+	@Test
+	public void testPoints() throws Exception{
+		// arrange
+		
+		// action
+		int points = game.count(Game.Creatures.Point);
+		
+		// assert
+		assertEquals(330, points);
+	}
+	
+	@Test
+	public void testNulls() throws Exception{
+		// arrange
+		
+		// action
+		int nulls = game.count(Game.Creatures.Null);
+		
+		// assert
+		assertEquals(148, nulls);
+	}
+	
+	@Test
+	public void testWalls() throws Exception{
+		// arrange
+		
+		// action
+		int walls = game.count(Game.Creatures.Wall);
+		
+		// assert
+		assertEquals(417, walls);
 	}
 	
 }
