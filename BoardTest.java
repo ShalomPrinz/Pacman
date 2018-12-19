@@ -41,11 +41,16 @@ public class BoardTest {
 		// arrange
 		
 		// action
-		int ghosts = count(Game.Creatures.Ghost1) + count(Game.Creatures.Ghost2) +
-					 count(Game.Creatures.Ghost3) + count(Game.Creatures.Ghost4);
+		int Ghost1 = count(Game.Creatures.Ghost1);
+		int Ghost2 = count(Game.Creatures.Ghost2);
+		int Ghost3 = count(Game.Creatures.Ghost3);
+		int Ghost4 = count(Game.Creatures.Ghost4);
 		
 		// assert
-		assertEquals(4, ghosts);
+		assertEquals(1, Ghost1);
+		assertEquals(1, Ghost2);
+		assertEquals(1, Ghost3);
+		assertEquals(1, Ghost4);
 	}
 	
 	@Test
@@ -93,8 +98,30 @@ public class BoardTest {
 	}	
 	
 	@Test
-	public void moveCreature(){
+	public void CheckMoveFunction(){
 		// arrange
+		Game.Creatures[] movingCreatures = new Game.Creatures[]{Game.Creatures.Ghost1,
+				Game.Creatures.Ghost2, Game.Creatures.Ghost3, 
+				Game.Creatures.Ghost4, Game.Creatures.Pacman};
+		
+		for (Game.Creatures c : movingCreatures){
+			for (Game.Directions d : Game.Directions.values()){
+				int line = game.find(c)[0];
+				int column = game.find(c)[1];
+				int Nline = game.changeLocationByDirection(d, line, column)[0];
+				int Ncolumn = game.changeLocationByDirection(d, line, column)[1];
+				Game.Creatures replaced = this.board[Nline][Ncolumn];
+				
+				boolean possibleMove = game.move(c, d);
+				boolean result = true;
+				
+				if (possibleMove)
+					result = (this.board[Nline][Ncolumn] == c &&
+					this.board[line][column] == replaced);
+				
+				assertTrue(result);
+			}
+		}
 		
 		// action
 		boolean result = game.move(Game.Creatures.Pacman, Game.Directions.RIGHT);
