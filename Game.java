@@ -40,7 +40,7 @@ public class Game {
 		return board.length * 100 + board[0].length;
 	}
 	
-	public Creatures[][] setBoard() throws FileNotFoundException{
+	private Creatures[][] setBoard() throws FileNotFoundException{
 		this.ghostNum = 0;
 		Scanner sc = new Scanner(new BufferedReader(new FileReader("./Board.txt")));
 	    while(sc.hasNextLine()) {
@@ -95,7 +95,7 @@ public class Game {
 		return true;
 	}
 	
-	private int[] changeLocationByDirection(Directions d, int line, int column){
+	public int[] changeLocationByDirection(Directions d, int line, int column){
 		switch (d){
 			case DOWN:
 				line++;
@@ -113,7 +113,7 @@ public class Game {
 		return new int[]{line, column};
 	}
 	
-	private int[] find(Creatures c){
+	public int[] find(Creatures c){
 		for (int i = 0; i < this.board.length; i++){
 			for (int j = 0; j < this.board[0].length; j++){
 				if (this.board[i][j] == c)
