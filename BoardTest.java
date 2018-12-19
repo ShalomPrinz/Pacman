@@ -104,6 +104,7 @@ public class BoardTest {
 				Game.Creatures.Ghost2, Game.Creatures.Ghost3, 
 				Game.Creatures.Ghost4, Game.Creatures.Pacman};
 		
+		// action 
 		for (Game.Creatures c : movingCreatures){
 			for (Game.Directions d : Game.Directions.values()){
 				int line = game.find(c)[0];
@@ -112,21 +113,16 @@ public class BoardTest {
 				int Ncolumn = game.changeLocationByDirection(d, line, column)[1];
 				Game.Creatures replaced = this.board[Nline][Ncolumn];
 				
-				boolean possibleMove = game.move(c, d);
+				boolean moved = game.move(c, d);
 				boolean result = true;
 				
-				if (possibleMove)
+				if (moved)
 					result = (this.board[Nline][Ncolumn] == c &&
 					this.board[line][column] == replaced);
 				
+				// assert
 				assertTrue(result);
 			}
 		}
-		
-		// action
-		boolean result = game.move(Game.Creatures.Pacman, Game.Directions.RIGHT);
-		
-		// assert	
-		assertTrue(result);	
 	}
 }
