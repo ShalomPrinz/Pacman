@@ -5,13 +5,13 @@ import org.junit.Test;
 
 public class BoardTest {
 	
-	Game game;
-	Game.Creatures[][] board;
+	Board mBoard;
+	Board.Creatures[][] board;
 	
 	@Before
 	public void setup(){
-		game = new Game();
-		board = game.getBoard();
+		mBoard = new Board();
+		board = mBoard.getBoard();
 	}
 	
 	@Test
@@ -19,7 +19,7 @@ public class BoardTest {
 		// arrange
 		
 		// action
-		int dimensions = game.getBoardDimensions();
+		int dimensions = mBoard.getBoardDimensions();
 		
 		// assert
 		assertEquals(3030, dimensions);
@@ -30,7 +30,7 @@ public class BoardTest {
 		// arrange
 		
 		// action
-		int pacmans = count(Game.Creatures.Pacman);
+		int pacmans = count(Board.Creatures.Pacman);
 		
 		// assert
 		assertEquals(1, pacmans);
@@ -41,10 +41,10 @@ public class BoardTest {
 		// arrange
 		
 		// action
-		int Ghost1 = count(Game.Creatures.Ghost1);
-		int Ghost2 = count(Game.Creatures.Ghost2);
-		int Ghost3 = count(Game.Creatures.Ghost3);
-		int Ghost4 = count(Game.Creatures.Ghost4);
+		int Ghost1 = count(Board.Creatures.Ghost1);
+		int Ghost2 = count(Board.Creatures.Ghost2);
+		int Ghost3 = count(Board.Creatures.Ghost3);
+		int Ghost4 = count(Board.Creatures.Ghost4);
 		
 		// assert
 		assertEquals(1, Ghost1);
@@ -58,7 +58,7 @@ public class BoardTest {
 		// arrange
 		
 		// action
-		int points = count(Game.Creatures.Point);
+		int points = count(Board.Creatures.Point);
 		
 		// assert
 		assertEquals(330, points);
@@ -69,7 +69,7 @@ public class BoardTest {
 		// arrange
 		
 		// action
-		int nulls = count(Game.Creatures.Null);
+		int nulls = count(Board.Creatures.Null);
 		
 		// assert
 		assertEquals(148, nulls);
@@ -80,13 +80,13 @@ public class BoardTest {
 		// arrange
 		
 		// action
-		int walls = count(Game.Creatures.Wall);
+		int walls = count(Board.Creatures.Wall);
 		
 		// assert
 		assertEquals(417, walls);
 	}
 	
-	private int count(Game.Creatures c){
+	private int count(Board.Creatures c){
 		int cNum = 0;
 		for (int i = 0; i < board.length; i++){
 			for (int j = 0; j < board[0].length; j++){
@@ -98,31 +98,15 @@ public class BoardTest {
 	}	
 	
 	@Test
-	public void CheckMoveFunction(){
+	public void movePacmanToWall(){
 		// arrange
-		Game.Creatures[] movingCreatures = new Game.Creatures[]{Game.Creatures.Ghost1,
-				Game.Creatures.Ghost2, Game.Creatures.Ghost3, 
-				Game.Creatures.Ghost4, Game.Creatures.Pacman};
+		board = mBoard.setBoard("PW");
 		
-		// action 
-		for (Game.Creatures c : movingCreatures){
-			for (Game.Directions d : Game.Directions.values()){
-				int line = game.find(c)[0];
-				int column = game.find(c)[1];
-				int Nline = game.changeLocationByDirection(d, line, column)[0];
-				int Ncolumn = game.changeLocationByDirection(d, line, column)[1];
-				Game.Creatures replaced = this.board[Nline][Ncolumn];
-				
-				boolean moved = game.move(c, d);
-				boolean result = true;
-				
-				if (moved)
-					result = (this.board[Nline][Ncolumn] == c &&
-					this.board[line][column] == replaced);
-				
-				// assert
-				assertTrue(result);
-			}
-		}
+		// action
+		boolean result = mBoard.moveRight(Board.Creatures.Pacman);
+		
+		// assert
+		assertFalse(result);
 	}
+
 }
