@@ -97,39 +97,4 @@ public class BoardTest {
 		return cNum;
 	}	
 	
-	@Test
-	public void movePacmanToWall(){
-		// arrange
-		board = mBoard.setBoard("PW");
-		
-		// action
-		boolean result = mBoard.movePacmanRight();
-		
-		// assert
-		assertFalse(result);
-	}
-
-	@Test
-	public void movePacmanToPoint(){
-		// arrange
-		board = mBoard.setBoard("P-");
-		
-		// action
-		boolean result = mBoard.movePacmanRight();
-		
-		// assert
-		assertTrue(result);
-	}
-
-	@Test
-	public void movePacmanToGhost(){
-		// arrange
-		board = mBoard.setBoard("PG");
-		
-		// action
-		boolean result = mBoard.movePacmanRight();
-		
-		// assert
-		assertTrue(result);
-	}
 }
