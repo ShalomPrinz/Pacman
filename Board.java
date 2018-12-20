@@ -83,19 +83,4 @@ public class Board {
 		return this.board;
 	}
 
-	public boolean movePacmanRight(){
-		if (this.board[0][1] == Creatures.Wall)
-			return false;
-		
-		if (this.board[0][1] == Creatures.Point){
-			this.board[0][1] = Creatures.Pacman;
-			this.board[0][0] = Creatures.Null;
-		}
-		
-		for (Creatures c : ghosts){
-			if (this.board[0][1] == c)
-				this.board[0][0] = Creatures.Null;
-		}
-		return true;
-	}
 }
