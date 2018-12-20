@@ -3,9 +3,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Scanner;
 
-public class Game {
+public class Board {
 	
-	public Game(){
+	public Board(){
 		try{
 			this.board = setBoard();
 		}
@@ -14,19 +14,12 @@ public class Game {
 		}
 	}
 	
-	enum Creatures {
+	public enum Creatures {
 		Pacman,
 		Ghost1, Ghost2, Ghost3, Ghost4,
 		Point,
 		Wall,
 		Null
-	}
-	
-	enum Directions {
-		RIGHT,
-		LEFT,
-		UP,
-		DOWN
 	}
 	
 	private Creatures[][] board = new Creatures[30][30];
@@ -80,47 +73,16 @@ public class Game {
 		}
 	}
 
-	public boolean move(Creatures c, Directions d){
-		int line = find(c)[0];
-		int column = find(c)[1];
-		int Nline = changeLocationByDirection(d, line, column)[0];
-		int Ncolumn = changeLocationByDirection(d, line, column)[1];
+	public Creatures[][] setBoard(String newBoard){
+		this.board = new Creatures[1][newBoard.length()];
+		for (int i = 0; i < newBoard.length(); i++)
+			this.board[0][i] = StringToCreature(newBoard.charAt(i) + "");
+		return this.board;
+	}
 
-		if (this.board[Nline][Ncolumn] == Creatures.Wall)
+	public boolean moveRight(Creatures c){
+		if (this.board[0][1] == Creatures.Wall)
 			return false;
-		
-		Creatures temp = this.board[Nline][Ncolumn];
-		this.board[Nline][Ncolumn] = c;
-		this.board[line][column] = temp;
 		return true;
 	}
-	
-	public int[] changeLocationByDirection(Directions d, int line, int column){
-		switch (d){
-			case DOWN:
-				line++;
-				break;
-			case UP:
-				line--;
-				break;
-			case RIGHT:
-				column++;
-				break;
-			case LEFT:
-				column--;
-				break;
-		}
-		return new int[]{line, column};
-	}
-	
-	public int[] find(Creatures c){
-		for (int i = 0; i < this.board.length; i++){
-			for (int j = 0; j < this.board[0].length; j++){
-				if (this.board[i][j] == c)
-					return new int[]{i, j};
-			}
-		}
-		return null;
-	}
-
 }
