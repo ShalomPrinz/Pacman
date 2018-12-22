@@ -97,4 +97,34 @@ public class BoardTest {
 		return cNum;
 	}	
 	
+	@Test
+	public void setBoardWithString(){
+		// arrange
+		String stringBoard = "PWG-.";
+		Board.Creatures[] expected= {Board.Creatures.Pacman, Board.Creatures.Wall,
+				Board.Creatures.Ghost1, Board.Creatures.Point, Board.Creatures.Null};
+		
+		// action
+		this.board = mBoard.setBoardWithString(stringBoard);
+		
+		// assert
+		assertEquals(expected, this.board[0]);
+	}
+
+	@Test
+	public void setBoardWithStringArray(){
+		// arrange
+		String[] stringsBoard = {"PW", "-G", "W."};
+		Board.Creatures[][] expected = {
+			{Board.Creatures.Pacman, Board.Creatures.Wall},
+			{Board.Creatures.Point, Board.Creatures.Ghost1},
+			{Board.Creatures.Wall, Board.Creatures.Null} 
+		};
+		
+		// action
+		this.board = mBoard.setBoardWithStringArray(stringsBoard);
+		
+		// assert
+		assertEquals(expected, this.board);
+	}
 }
