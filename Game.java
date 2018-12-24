@@ -1,8 +1,7 @@
 
 public class Game {
 	
-	Board mBoard = new Board();
-	Board.Creatures[][] board = mBoard.getBoard();
+	Board.Creatures[][] board = new Board().getBoard();
 	
 	enum Directions{
 		Right,
@@ -11,9 +10,10 @@ public class Game {
 		Down
 	}
 
-	public void movePacman(int[] location, Directions d){
-		int x = location[0], y = location[1];
-		int nX = changeLocationByDirection(location, d)[0], nY = changeLocationByDirection(location, d)[1];
+	public void movePacman(Location l, Directions d){
+		int x = l.getX(), y = l.getY();
+		int nX = changeLocationByDirection(x, y, d).getX(), 
+				nY = changeLocationByDirection(x, y, d).getY();
 		
 		switch (this.board[nX][nY]){
 		case Point:
@@ -30,28 +30,28 @@ public class Game {
 			this.board[x][y] = Board.Creatures.Null;
 			// pacman eaten - game over
 			break;
+			
 		default:
 			break;
 		}
 
 	}
 	
-	public int[] changeLocationByDirection(int[] location, Directions d){
-		int[] newLocation = location.clone();
+	public Location changeLocationByDirection(int x, int y, Directions d){
 		switch (d){
 		case Right:
-			newLocation[1] ++;
+			y ++;
 			break;
 		case Left:
-			newLocation[1] --;
+			y --;
 			break;
 		case Down:
-			newLocation[0] ++;
+			x ++;
 			break;
 		case Up:
-			newLocation[0] --;
+			x --;
 			break;
 		}
-		return newLocation;
+		return new Location(x, y);
 	}
 }
