@@ -5,13 +5,11 @@ import org.junit.Test;
 
 public class BoardTest {
 	
-	Board mBoard;
 	Board.Creatures[][] board;
 	
 	@Before
 	public void setup(){
-		mBoard = new Board();
-		board = mBoard.getBoard();
+		board = new Board().getBoard();
 	}
 	
 	@Test
@@ -19,7 +17,7 @@ public class BoardTest {
 		// arrange
 		
 		// action
-		int dimensions = mBoard.getBoardDimensions();
+		int dimensions = new Board().getBoardDimensions();
 		
 		// assert
 		assertEquals(3030, dimensions);
@@ -100,12 +98,11 @@ public class BoardTest {
 	@Test
 	public void setBoardWithString(){
 		// arrange
-		String stringBoard = "PWG-.";
 		Board.Creatures[] expected= {Board.Creatures.Pacman, Board.Creatures.Wall,
 				Board.Creatures.Ghost1, Board.Creatures.Point, Board.Creatures.Null};
 		
 		// action
-		this.board = mBoard.setBoardWithString(stringBoard);
+		this.board = new Board(new String[]{"PWG-."}).getBoard();
 		
 		// assert
 		assertEquals(expected, this.board[0]);
@@ -114,7 +111,6 @@ public class BoardTest {
 	@Test
 	public void setBoardWithStringArray(){
 		// arrange
-		String[] stringsBoard = {"PW", "-G", "W."};
 		Board.Creatures[][] expected = {
 			{Board.Creatures.Pacman, Board.Creatures.Wall},
 			{Board.Creatures.Point, Board.Creatures.Ghost1},
@@ -122,7 +118,7 @@ public class BoardTest {
 		};
 		
 		// action
-		this.board = mBoard.setBoardWithStringArray(stringsBoard);
+		this.board = new Board(new String[] {"PW", "-G", "W."}).getBoard();
 		
 		// assert
 		assertEquals(expected, this.board);
