@@ -14,6 +14,10 @@ public class Board {
 		}
 	}
 	
+	public Board(String[] strArr){
+		this.board = setBoardWithStringArray(strArr);
+	}
+
 	enum Creatures {
 		Pacman,
 		Ghost1, Ghost2, Ghost3, Ghost4,
@@ -21,9 +25,6 @@ public class Board {
 		Wall,
 		Null
 	}
-
-	Creatures[] ghosts = new Creatures[]{Creatures.Ghost1, Creatures.Ghost2,
-			Creatures.Ghost3, Creatures.Ghost4};
 	
 	private Creatures[][] board = new Creatures[30][30];
 	int ghostNum;
@@ -76,20 +77,14 @@ public class Board {
 		}
 	}
 
-	public Creatures[][] setBoardWithString(String newBoard){
-		this.board = new Creatures[1][newBoard.length()];
-		for (int i = 0; i < newBoard.length(); i++)
-			this.board[0][i] = StringToCreature(newBoard.charAt(i) + "");
-		return this.board;
-	}
-
-	public Creatures[][] setBoardWithStringArray(String[] sts) {
-		// assuming second dimension of array doesn't change!
+	private Creatures[][] setBoardWithStringArray(String[] sts) {
 		this.board = new Creatures[sts.length][sts[0].length()];
+		
 		for (int i = 0; i < sts.length; i++){
-			for (int j = 0; j < sts[0].length(); j++)
+			for (int j = 0; j < sts[i].length(); j++)
 				this.board[i][j] = StringToCreature(sts[i].charAt(j) + "");
 		}
+		
 		return this.board;
 	}
 
