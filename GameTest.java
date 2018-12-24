@@ -120,4 +120,34 @@ public class GameTest {
 		assertEquals(Board.Creatures.Wall , this.game.board[l.getX() + 1] [l.getY()]);
 	}
 	
+	// - Ghosts -
+	// Right
+	
+	@Test
+	public void GhostRightWall(){
+		// arrange
+		this.game.board = new Board(new String[]{"GW"}).getBoard();
+		Location l = new Location(0, 0);
+		
+		// action
+		game.moveGhost(l, Game.Directions.Right);
+		
+		// assert
+		assertEquals(Board.Creatures.Ghost1, this.game.board[l.getX()] [l.getY()]);
+		assertEquals(Board.Creatures.Wall, this.game.board[l.getX()] [l.getY() + 1]);
+	}
+
+	@Test
+	public void GhostRightPoint(){
+		// arrange
+		this.game.board = new Board(new String[]{"G-"}).getBoard();
+		Location l = new Location(0, 0);
+		
+		// action
+		game.moveGhost(l, Game.Directions.Right);
+		
+		// assert
+		assertEquals(Board.Creatures.Ghost1, this.game.board[l.getX()] [l.getY() + 1]);
+		assertEquals(Board.Creatures.Null, this.game.board[l.getX()] [l.getY()]);
+	}
 }
