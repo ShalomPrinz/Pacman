@@ -120,4 +120,81 @@ public class GameTest {
 		assertEquals(Board.Creatures.Wall , this.game.board[l.getX() + 1] [l.getY()]);
 	}
 	
+	// - Ghosts -
+	// Right
+	
+	@Test
+	public void GhostRightWall(){
+		// arrange
+		this.game.board = new Board(new String[]{"GW"}).getBoard();
+		Location l = new Location(0, 0);
+		
+		// action
+		game.moveGhost(l, Game.Directions.Right);
+		
+		// assert
+		assertEquals(Board.Creatures.Ghost1, this.game.board[l.getX()] [l.getY()]);
+		assertEquals(Board.Creatures.Wall, this.game.board[l.getX()] [l.getY() + 1]);
+	}
+
+	@Test
+	public void GhostRightPoint_FirstTurn(){
+		// arrange
+		this.game.board = new Board(new String[]{"G-"}).getBoard();
+		Location l = new Location(0, 0);
+		
+		// action
+		game.moveGhost(l, Game.Directions.Right);
+		
+		// assert
+		assertEquals(Board.Creatures.Ghost1, this.game.board[l.getX()] [l.getY() + 1]);
+		assertEquals(Board.Creatures.Null, this.game.board[l.getX()] [l.getY()]);
+	}
+
+	@Test
+	public void GhostRightPoint_SecondTurn(){
+		// arrange
+		this.game.board = new Board(new String[]{"G-."}).getBoard();
+		Location l = new Location(0, 0);
+		
+		// action
+		game.moveGhost(l, Game.Directions.Right);
+		game.moveGhost(new Location(0, 1), Game.Directions.Right);
+		
+		// assert
+		assertEquals(Board.Creatures.Ghost1, this.game.board[l.getX()] [l.getY() + 2]);
+		assertEquals(Board.Creatures.Point, this.game.board[l.getX()] [l.getY() + 1]);
+		assertEquals(Board.Creatures.Null, this.game.board[l.getX()] [l.getY()]);
+	}
+
+	@Test
+	public void Sorter(){
+		// arrange
+		this.game.board = new Board(new String[]{".G."}).getBoard();
+		this.game.savePoints = new Location[]{
+				null, new Location(0, 0), null, new Location(0, 2) };
+		
+		// action
+		this.game.sortNullsOnArray();
+		
+		// assert
+		assertEquals(null, this.game.savePoints[2]);
+		assertEquals(null, this.game.savePoints[3]);
+	}
+
+	@Test
+	public void Relocator(){
+		// arrange
+		this.game.board = new Board(new String[]{".G."}).getBoard();
+		this.game.savePoints = new Location[]{
+				new Location(0, 0), new Location(0, 2), null, null };
+		this.game.pointsSavedNum = 2; // 2 points to relocate
+		
+		// action
+		game.relocatePoints();
+		
+		// assert
+		assertEquals(Board.Creatures.Point, this.game.board[0][0]);
+		assertEquals(Board.Creatures.Point, this.game.board[0][2]);
+	}
 }
