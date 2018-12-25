@@ -46,22 +46,25 @@ public class Game {
 		}
 	}
 	
-	public void moveGhost(Location l, Directions d){
+	public void moveGhost1(Location l, Directions d){ // moves Ghost1. need change for others
 		// wall - nothing
 		int x = l.getX(), y = l.getY();
 		int nX = changeLocationByDirection(x, y, d).getX(),
 				nY = changeLocationByDirection(x, y, d).getY();
 		
-
-		if (this.board[nX][nY] == Board.Creatures.Point || 
-				this.board[nX][nY] == Board.Creatures.Null){
-			
-			this.board[x][y] = Board.Creatures.Null;
-			this.board[nX][nY] = Board.Creatures.Ghost1;
-			
-			// if point - add to save array
-			this.savePoints[pointsSavedNum] = new Location(nX, nY);
-			pointsSavedNum ++;
+		switch (this.board[nX][nY]){
+			case Point:
+				this.savePoints[pointsSavedNum] = new Location(nX, nY);
+				pointsSavedNum ++;
+			case Null:
+				this.board[x][y] = Board.Creatures.Null;
+				this.board[nX][nY] = Board.Creatures.Ghost1;
+				break;
+			case Pacman:
+				this.board[x][y] = Board.Creatures.Null;
+				this.board[nX][nY] = Board.Creatures.Ghost1;
+				// pacman eaten - game over 
+				break;
 		}
 		
 		relocatePoints();
