@@ -56,6 +56,7 @@ public class GameTest {
 		
 		// assert
 		assertEquals(Board.Creatures.Ghost1, this.game.board[l.getX()][l.getY() + 1]);
+		assertEquals(Board.Creatures.Null, this.game.board[l.getX()][l.getY()]);
 	}
 	
 	@Test
@@ -130,7 +131,7 @@ public class GameTest {
 		Location l = new Location(0, 0);
 		
 		// action
-		game.moveGhost(l, Game.Directions.Right);
+		game.moveGhost1(l, Game.Directions.Right);
 		
 		// assert
 		assertEquals(Board.Creatures.Ghost1, this.game.board[l.getX()] [l.getY()]);
@@ -144,7 +145,7 @@ public class GameTest {
 		Location l = new Location(0, 0);
 		
 		// action
-		game.moveGhost(l, Game.Directions.Right);
+		game.moveGhost1(l, Game.Directions.Right);
 		
 		// assert
 		assertEquals(Board.Creatures.Ghost1, this.game.board[l.getX()] [l.getY() + 1]);
@@ -158,8 +159,8 @@ public class GameTest {
 		Location l = new Location(0, 0);
 		
 		// action
-		game.moveGhost(l, Game.Directions.Right);
-		game.moveGhost(new Location(0, 1), Game.Directions.Right);
+		game.moveGhost1(l, Game.Directions.Right);
+		game.moveGhost1(new Location(0, 1), Game.Directions.Right);
 		
 		// assert
 		assertEquals(Board.Creatures.Ghost1, this.game.board[l.getX()] [l.getY() + 2]);
@@ -198,4 +199,17 @@ public class GameTest {
 		assertEquals(Board.Creatures.Point, this.game.board[0][2]);
 	}
   
+	@Test
+	public void GhostRightPacman(){
+		// arrange
+		this.game.board = new Board(new String[]{"GP"}).getBoard();
+		Location l = new Location(0, 0);
+
+		// action
+		game.moveGhost1(l, Game.Directions.Right);
+		
+		// assert
+		assertEquals(Board.Creatures.Ghost1, this.game.board[l.getX()][l.getY() + 1]);
+		assertEquals(Board.Creatures.Null, this.game.board[l.getX()][l.getY()]);
+	}
 }
