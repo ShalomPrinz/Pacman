@@ -96,7 +96,7 @@ public class BoardTest {
 	}	
 	
 	@Test
-	public void setBoardWithString(){
+	public void setBoardWithSingleString(){
 		// arrange
 		Board.Creatures[] expected= {Board.Creatures.Pacman, Board.Creatures.Wall,
 				Board.Creatures.Ghost1, Board.Creatures.Point, Board.Creatures.Null};
@@ -109,7 +109,7 @@ public class BoardTest {
 	}
 
 	@Test
-	public void setBoardWithStringArray(){
+	public void setBoardWithArrayString(){
 		// arrange
 		Board.Creatures[][] expected = {
 			{Board.Creatures.Pacman, Board.Creatures.Wall},
