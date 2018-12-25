@@ -197,4 +197,5 @@ public class GameTest {
 		assertEquals(Board.Creatures.Point, this.game.board[0][0]);
 		assertEquals(Board.Creatures.Point, this.game.board[0][2]);
 	}
+  
 }

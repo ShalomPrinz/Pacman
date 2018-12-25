@@ -44,7 +44,6 @@ public class Game {
 		default:
 			break;
 		}
-
 	}
 	
 	public void moveGhost(Location l, Directions d){
@@ -53,6 +52,7 @@ public class Game {
 		int nX = changeLocationByDirection(x, y, d).getX(),
 				nY = changeLocationByDirection(x, y, d).getY();
 		
+
 		if (this.board[nX][nY] == Board.Creatures.Point || 
 				this.board[nX][nY] == Board.Creatures.Null){
 			
