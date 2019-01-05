@@ -3,13 +3,14 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.lang.Runnable;
+
 public class GameTest {
 
 	Game game;
 	
-	@Before
-	public void setup(){
-		game = new Game();
+	public void setGameBoardByStringArray(final String[] board){
+		this.game = new Game(board);
 	}
 	
 	// In each test which checked the moving function, I asserted both changing places
@@ -20,57 +21,56 @@ public class GameTest {
 	@Test
 	public void PacmanRightWall(){
 		// arrange
-		this.game.board = new Board(new String[]{"PW"}).getBoard();
-		Location l = new Location(0, 0);
+		setGameBoardByStringArray(new String[]{"PW"});
+		Location l1 = new Location(0, 0), l2 = new Location(0, 1);
 		
 		// action
-		game.movePacman(l, Game.Directions.Right);
+		game.movePacman(l1, Game.Directions.Right);
 		
 		// assert
-		assertEquals(Board.Creatures.Pacman, this.game.board[l.getX()] [l.getY()]);
-		assertEquals(Board.Creatures.Wall, this.game.board[l.getX()] [l.getY() + 1]);
+		assertEquals(Board.Creatures.Pacman, this.game.getCreatureAt(l1));
+		assertEquals(Board.Creatures.Wall, this.game.getCreatureAt(l2));
 	}
 
 	@Test
 	public void PacmanRightPoint(){
 		// arrange
-		this.game.board = new Board(new String[]{"P-"}).getBoard();
-		Location l = new Location(0, 0);
+		setGameBoardByStringArray(new String[]{"P-"});
+		Location l1 = new Location(0, 0), l2 = new Location(0, 1);
 		
 		// action
-		game.movePacman(l, Game.Directions.Right);
+		game.movePacman(l1, Game.Directions.Right);
 		
 		// assert
-		assertEquals(Board.Creatures.Null , this.game.board[l.getX()] [l.getY()]);
-		assertEquals(Board.Creatures.Pacman , this.game.board[l.getX()] [l.getY() + 1]);
+		assertEquals(Board.Creatures.Null , this.game.getCreatureAt(l1));
+		assertEquals(Board.Creatures.Pacman , this.game.getCreatureAt(l2));
 	}
 
 	@Test
 	public void PacmanRightGhost(){
 		// arrange
-		this.game.board = new Board(new String[]{"PG"}).getBoard();
-		Location l = new Location(0, 0);
-
+		setGameBoardByStringArray(new String[]{"PG"});
+		Location l1 = new Location(0, 0);
+		
 		// action
-		game.movePacman(l, Game.Directions.Right);
+		game.movePacman(l1, Game.Directions.Right);
 		
 		// assert
-		assertEquals(Board.Creatures.Ghost1, this.game.board[l.getX()][l.getY() + 1]);
-		assertEquals(Board.Creatures.Null, this.game.board[l.getX()][l.getY()]);
+		assertFalse(this.game.gameOn);
 	}
 	
 	@Test
 	public void PacmanRightNull(){
 		// arrange
-		this.game.board = new Board(new String[]{"P."}).getBoard();
-		Location l = new Location(0, 0);
+		setGameBoardByStringArray(new String[]{"P."});
+		Location l1 = new Location(0, 0), l2 = new Location(0, 1);
 		
 		// action
-		game.movePacman(l, Game.Directions.Right);
+		game.movePacman(l1, Game.Directions.Right);
 		
 		// assert
-		assertEquals(Board.Creatures.Null, this.game.board[l.getX()] [l.getY()]);
-		assertEquals(Board.Creatures.Pacman , this.game.board[l.getX()] [l.getY() + 1]);
+		assertEquals(Board.Creatures.Null , this.game.getCreatureAt(l1));
+		assertEquals(Board.Creatures.Pacman , this.game.getCreatureAt(l2));
 	}
 
 	// Left
@@ -78,15 +78,15 @@ public class GameTest {
 	@Test
 	public void PacmanLeftPoint(){
 		// arrange
-		this.game.board = new Board(new String[]{"-P"}).getBoard();
-		Location l = new Location(0, 1);	
+		setGameBoardByStringArray(new String[]{"-P"});
+		Location l1 = new Location(0, 0), l2 = new Location(0, 1);
 		
 		// action
-		game.movePacman(l, Game.Directions.Left);
+		game.movePacman(l2, Game.Directions.Left);
 		
 		// assert
-		assertEquals(Board.Creatures.Null , this.game.board[l.getX()] [l.getY()]);
-		assertEquals(Board.Creatures.Pacman , this.game.board[l.getX()] [l.getY() - 1]);
+		assertEquals(Board.Creatures.Pacman, this.game.getCreatureAt(l1));
+		assertEquals(Board.Creatures.Null, this.game.getCreatureAt(l2));
 	}
 
 	// Up
@@ -94,15 +94,14 @@ public class GameTest {
 	@Test
 	public void PacmanUpGhost(){
 		// arrange
-		this.game.board = new Board(new String[]{"G-", "PW"}).getBoard();
-		Location l = new Location(1, 0);
+		setGameBoardByStringArray(new String[]{"G-", "PW"});
+		Location l1 = new Location(1, 0);
 		
 		// action
-		game.movePacman(l, Game.Directions.Up);
+		game.movePacman(l1, Game.Directions.Up);
 		
 		// assert
-		assertEquals(Board.Creatures.Null , this.game.board[l.getX()] [l.getY()]);
-		assertEquals(Board.Creatures.Ghost1 , this.game.board[l.getX() - 1] [l.getY()]);
+		assertFalse(this.game.gameOn);
 	}
 
 	// Down
@@ -110,15 +109,15 @@ public class GameTest {
 	@Test
 	public void PacmanDownWall(){
 		// arrange
-		this.game.board = new Board(new String[]{"PW", "WG"}).getBoard();
-		Location l = new Location(0, 0);
+		setGameBoardByStringArray(new String[]{"PW", "WG"});
+		Location l1 = new Location(0, 0), l2 = new Location(1, 0);
 		
 		// action
-		game.movePacman(l, Game.Directions.Down);
+		game.movePacman(l1, Game.Directions.Down);
 		
 		// assert
-		assertEquals(Board.Creatures.Pacman , this.game.board[l.getX()] [l.getY()]);
-		assertEquals(Board.Creatures.Wall , this.game.board[l.getX() + 1] [l.getY()]);
+		assertEquals(Board.Creatures.Pacman , this.game.getCreatureAt(l1));
+		assertEquals(Board.Creatures.Wall , this.game.getCreatureAt(l2));
 	}
 	
 	// - Ghosts -
@@ -127,89 +126,135 @@ public class GameTest {
 	@Test
 	public void GhostRightWall(){
 		// arrange
-		this.game.board = new Board(new String[]{"GW"}).getBoard();
-		Location l = new Location(0, 0);
+		setGameBoardByStringArray(new String[]{"GW"});
+		Location l1 = new Location(0, 0), l2 = new Location(0, 1);
 		
 		// action
-		game.moveGhost1(l, Game.Directions.Right);
+		game.moveGhost(l1, Game.Directions.Right, 1);
 		
 		// assert
-		assertEquals(Board.Creatures.Ghost1, this.game.board[l.getX()] [l.getY()]);
-		assertEquals(Board.Creatures.Wall, this.game.board[l.getX()] [l.getY() + 1]);
+		assertEquals(Board.Creatures.Ghost1, this.game.getCreatureAt(l1));
+		assertEquals(Board.Creatures.Wall, this.game.getCreatureAt(l2));
 	}
 
 	@Test
-	public void GhostRightPoint_FirstTurn(){
+	public void GhostRightPoint(){
 		// arrange
-		this.game.board = new Board(new String[]{"G-"}).getBoard();
-		Location l = new Location(0, 0);
+		setGameBoardByStringArray(new String[]{"G-"});
+		Location l1 = new Location(0, 0), l2 = new Location(0, 1);
 		
 		// action
-		game.moveGhost1(l, Game.Directions.Right);
+		game.moveGhost(l1, Game.Directions.Right, 1);
 		
 		// assert
-		assertEquals(Board.Creatures.Ghost1, this.game.board[l.getX()] [l.getY() + 1]);
-		assertEquals(Board.Creatures.Null, this.game.board[l.getX()] [l.getY()]);
+		assertEquals(Board.Creatures.Null, this.game.getCreatureAt(l1));
+		assertEquals(Board.Creatures.Ghost1, this.game.getCreatureAt(l2));
 	}
 
 	@Test
-	public void GhostRightPoint_SecondTurn(){
+	public void GhostRightPoint_SecondTurn() {
 		// arrange
-		this.game.board = new Board(new String[]{"G-."}).getBoard();
-		Location l = new Location(0, 0);
+		setGameBoardByStringArray(new String[]{"G-."});
+		Location l1 = new Location(0, 0), l2 = new Location(0, 1), l3 = new Location(0, 2);
 		
 		// action
-		game.moveGhost1(l, Game.Directions.Right);
-		game.moveGhost1(new Location(0, 1), Game.Directions.Right);
+		game.moveGhost(l1, Game.Directions.Right, 1);
+		game.moveGhost(l2, Game.Directions.Right, 1);
 		
 		// assert
-		assertEquals(Board.Creatures.Ghost1, this.game.board[l.getX()] [l.getY() + 2]);
-		assertEquals(Board.Creatures.Point, this.game.board[l.getX()] [l.getY() + 1]);
-		assertEquals(Board.Creatures.Null, this.game.board[l.getX()] [l.getY()]);
+		assertEquals(Board.Creatures.Null, this.game.getCreatureAt ( l1 ) );
+		assertEquals(Board.Creatures.Point, this.game.getCreatureAt ( l2 ) );
+		assertEquals(Board.Creatures.Ghost1, this.game.getCreatureAt ( l3 ) );
 	}
 
-	@Test
-	public void Sorter(){
-		// arrange
-		this.game.board = new Board(new String[]{".G."}).getBoard();
-		this.game.savePoints = new Location[]{
-				null, new Location(0, 0), null, new Location(0, 2) };
-		
-		// action
-		this.game.sortNullsOnArray();
-		
-		// assert
-		assertEquals(null, this.game.savePoints[2]);
-		assertEquals(null, this.game.savePoints[3]);
-	}
-
-	@Test
-	public void Relocator(){
-		// arrange
-		this.game.board = new Board(new String[]{".G."}).getBoard();
-		this.game.savePoints = new Location[]{
-				new Location(0, 0), new Location(0, 2), null, null };
-		this.game.pointsSavedNum = 2; // 2 points to relocate
-		
-		// action
-		game.relocatePoints();
-		
-		// assert
-		assertEquals(Board.Creatures.Point, this.game.board[0][0]);
-		assertEquals(Board.Creatures.Point, this.game.board[0][2]);
-	}
-  
 	@Test
 	public void GhostRightPacman(){
 		// arrange
-		this.game.board = new Board(new String[]{"GP"}).getBoard();
-		Location l = new Location(0, 0);
+		setGameBoardByStringArray(new String[]{"GP"});
+		Location l1 = new Location(0, 0);
 
 		// action
-		game.moveGhost1(l, Game.Directions.Right);
+		game.moveGhost(l1, Game.Directions.Right, 1);
 		
 		// assert
-		assertEquals(Board.Creatures.Ghost1, this.game.board[l.getX()][l.getY() + 1]);
-		assertEquals(Board.Creatures.Null, this.game.board[l.getX()][l.getY()]);
+		assertFalse(this.game.gameOn);
+	}
+
+	@Test
+	public void GhostRightGhost(){
+		// arrange
+		setGameBoardByStringArray(new String[]{"GG"});
+		Location l1 = new Location(0, 0), l2 = new Location(0, 1);
+		
+		// action
+		game.moveGhost(l1, Game.Directions.Right, 1);
+		
+		// assert
+		assertEquals(Board.Creatures.Ghost1, this.game.getCreatureAt(l1));
+		assertEquals(Board.Creatures.Ghost2, this.game.getCreatureAt(l2));
+	}
+
+	// Left
+	
+	@Test
+	public void GhostLeftGhost(){
+		// arrange
+		setGameBoardByStringArray(new String[]{"GG"});
+		Location l1 = new Location(0, 0), l2 = new Location(0, 1);
+		
+		// action
+		game.moveGhost(l2, Game.Directions.Left, 2);
+		
+		// assert
+		assertEquals(Board.Creatures.Ghost1, this.game.getCreatureAt(l1));
+		assertEquals(Board.Creatures.Ghost2, this.game.getCreatureAt(l2));
+	}
+
+	// Up
+	
+	@Test
+	public void GhostUpNull(){
+		// arrange
+		setGameBoardByStringArray(new String[]{".", "G"});
+		Location l1 = new Location(0, 0), l2 = new Location(1, 0);
+		
+		// action
+		game.moveGhost(l2, Game.Directions.Up, 1);
+		
+		// assert
+		assertEquals(Board.Creatures.Ghost1, this.game.getCreatureAt(l1));
+		assertEquals(Board.Creatures.Null, this.game.getCreatureAt(l2));
+	}
+
+	// Down
+
+	@Test
+	public void GhostDownPoint(){
+		// arrange
+		setGameBoardByStringArray(new String[]{"G", "-"});
+		Location l1 = new Location(0, 0), l2 = new Location(1, 0);
+		
+		// action
+		game.moveGhost(l1, Game.Directions.Down, 1);
+		
+		// assert
+		assertEquals(Board.Creatures.Null, this.game.getCreatureAt(l1));
+		assertEquals(Board.Creatures.Ghost1, this.game.getCreatureAt(l2));
+	}
+
+	// - General Move function -
+	
+	@Test
+	public void GeneralMove_Pacman(){
+		// arrange
+		setGameBoardByStringArray(new String[]{".P"});
+		Location l1 = new Location(0, 1), l2 = new Location(0, 0);
+		
+		// action
+		game.move();
+		
+		// assert
+		assertEquals(game.getCreatureAt(l1), Board.Creatures.Null);
+		assertEquals(game.getCreatureAt(l2), Board.Creatures.Pacman);
 	}
 }

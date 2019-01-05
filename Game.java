@@ -1,16 +1,34 @@
 
-public class Game {
+public class Game{
 	
-	Board.Creatures[][] board;
+	private Board boardCreator;
 	
-	Location[] savePoints;
+	private Board.Creatures[][] board;
 	
-	int pointsSavedNum;
+	private Location[] savePoints;
 	
+	private int pointsSavedNum;
+	
+	boolean gameOn;
+	
+	Directions pacmanDirection;
+		
 	public Game(){
-		this.board = new Board().getBoard();
+		this(null); // prevents duplicate constructors and mistakes
+	}
+	
+	public Game(final String[] b){
 		this.savePoints = new Location[]{null, null, null, null}; // 4 - Ghosts number
 		this.pointsSavedNum = 0;
+		this.gameOn = true;
+		this.pacmanDirection = Directions.Left;
+		
+		if (b == null) // no specific board
+			this.boardCreator = new Board();
+		else
+			this.boardCreator = new Board(b);
+		
+		this.board = boardCreator.getBoard();
 	}
 	
 	enum Directions{
@@ -19,7 +37,7 @@ public class Game {
 		Up,
 		Down
 	}
-
+	
 	public void movePacman(Location l, Directions d){
 		int x = l.getX(), y = l.getY();
 		int nX = changeLocationByDirection(x, y, d).getX(), 
@@ -37,8 +55,7 @@ public class Game {
 		case Ghost2:
 		case Ghost3:
 		case Ghost4:
-			this.board[x][y] = Board.Creatures.Null;
-			// pacman eaten - game over
+			stopGame(Board.Creatures.Pacman);
 			break;
 			
 		default:
@@ -46,8 +63,7 @@ public class Game {
 		}
 	}
 	
-	public void moveGhost1(Location l, Directions d){ // moves Ghost1. need change for others
-		// wall - nothing
+	public void moveGhost(Location l, Directions d, int ghostNum){
 		int x = l.getX(), y = l.getY();
 		int nX = changeLocationByDirection(x, y, d).getX(),
 				nY = changeLocationByDirection(x, y, d).getY();
@@ -58,13 +74,14 @@ public class Game {
 				pointsSavedNum ++;
 			case Null:
 				this.board[x][y] = Board.Creatures.Null;
-				this.board[nX][nY] = Board.Creatures.Ghost1;
+				this.board[nX][nY] = getGhostCreatureByNum(ghostNum);
 				break;
 			case Pacman:
-				this.board[x][y] = Board.Creatures.Null;
-				this.board[nX][nY] = Board.Creatures.Ghost1;
-				// pacman eaten - game over 
+				stopGame(getGhostCreatureByNum(ghostNum));
 				break;
+
+			default:
+				break;					
 		}
 		
 		relocatePoints();
@@ -72,7 +89,23 @@ public class Game {
 		sortNullsOnArray();
 	}
 
-	public void sortNullsOnArray() {	
+	private Board.Creatures getGhostCreatureByNum(int num){
+		switch (num){
+			case 1:
+				return Board.Creatures.Ghost1;
+			case 2:
+				return Board.Creatures.Ghost2;
+			case 3:
+				return Board.Creatures.Ghost3;
+			case 4:
+				return Board.Creatures.Ghost4;
+				
+			default:
+				return null; // might cause problems
+		}
+	}
+	
+	private void sortNullsOnArray() {
 		for (int i = 0; i < savePoints.length; i++){
 			for (int j = savePoints.length - 1; j > i; j--){
 				if (savePoints[i] == null){
@@ -85,7 +118,7 @@ public class Game {
 		}
 	}
 
-	public void relocatePoints() {
+	private void relocatePoints() {
 		int originalSaves = this.pointsSavedNum;
 		
 		for (int i = 0; i < originalSaves; i++){
@@ -94,12 +127,13 @@ public class Game {
 			if (this.board[x][y] != Board.Creatures.Null) // checks if can relocate point
 				continue;
 			
+			this.savePoints[i] = null;
 			this.board[x][y] = Board.Creatures.Point;
 			this.pointsSavedNum --;
 		}
 	}
 	
-	public Location changeLocationByDirection(int x, int y, Directions d){
+	private Location changeLocationByDirection(int x, int y, Directions d){
 		switch (d){
 		case Right:
 			y ++;
@@ -116,4 +150,43 @@ public class Game {
 		}
 		return new Location(x, y);
 	}
+
+	public Board.Creatures getCreatureAt(Location l){
+		return this.board[l.getX()][l.getY()];
+	}
+
+	private void stopGame(Board.Creatures gameStopper){
+		// in actual game, I will stop the game using this function
+		
+		System.out.print("game stopped - ");
+		if (gameStopper == Board.Creatures.Pacman)
+			System.out.println("pacman commited suicide");
+		else
+			System.out.println(gameStopper.toString() + " ate pacman");
+		
+		this.gameOn = false;
+	}		
+
+	private Location getCreatureLocation(Board.Creatures c){
+		switch (c){
+			case Pacman:
+				return boardCreator.getLocations()[0];
+			case Ghost1:
+				return boardCreator.getLocations()[1];
+			case Ghost2:
+				return boardCreator.getLocations()[2];
+			case Ghost3:
+				return boardCreator.getLocations()[3];
+			case Ghost4:
+				return boardCreator.getLocations()[4];
+		}
+		// I won't send any other Creature. This is a mistake
+		return null;
+	}
+	
+	public void move(){
+		movePacman( getCreatureLocation(Board.Creatures.Pacman), pacmanDirection );
+		// in the next change I will add ghost moving
+	}
+	
 }

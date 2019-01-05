@@ -6,16 +6,29 @@ import java.util.Scanner;
 public class Board {
 	
 	public Board(){
-		try{
-			this.board = setBoard();
-		}
-		catch(FileNotFoundException e){
-			// no such file
-		}
+		this(null);
 	}
 	
 	public Board(String[] strArr){
-		this.board = setBoardWithStringArray(strArr);
+		this.ghostNum = 0;
+		
+		if (strArr == null){
+			this.board = new Creatures[30][30];
+			try{
+				this.board = setBoard();
+			} catch (FileNotFoundException e){
+				// no such file
+			}
+		}
+		else {
+			this.board = new Creatures[strArr.length][strArr[0].length()];
+			this.board = setBoardWithStringArray(strArr);
+		}
+		
+		locations = new Location[]{ find(Board.Creatures.Pacman),
+				find(Board.Creatures.Ghost1), find(Board.Creatures.Ghost2),
+				find(Board.Creatures.Ghost3), find(Board.Creatures.Ghost4)
+		};
 	}
 
 	enum Creatures {
@@ -26,7 +39,8 @@ public class Board {
 		Null
 	}
 	
-	private Creatures[][] board = new Creatures[30][30];
+	private Creatures[][] board;
+	private Location[] locations; 
 	int ghostNum;
 	
 	public Creatures[][] getBoard() {
@@ -38,7 +52,6 @@ public class Board {
 	}
 	
 	private Creatures[][] setBoard() throws FileNotFoundException{
-		this.ghostNum = 0;
 		Scanner sc = new Scanner(new BufferedReader(new FileReader("./Board.txt")));
 	    while(sc.hasNextLine()) {
 	    	for (int i = 0; i < board.length && sc.hasNextLine(); i++) {
@@ -78,7 +91,6 @@ public class Board {
 	}
 
 	private Creatures[][] setBoardWithStringArray(String[] sts) {
-		this.board = new Creatures[sts.length][sts[0].length()];
 		
 		for (int i = 0; i < sts.length; i++){
 			for (int j = 0; j < sts[i].length(); j++)
@@ -88,4 +100,18 @@ public class Board {
 		return this.board;
 	}
 
+	private Location find(Board.Creatures c){
+		for (int i = 0; i < this.board.length; i++){
+			for (int j = 0; j < this.board[i].length; j++){
+				if (this.board[i][j] == c)
+					return new Location(i, j);
+			}
+		}
+		
+		return null;
+	}
+
+	public Location[] getLocations(){
+		return this.locations;
+	}
 }

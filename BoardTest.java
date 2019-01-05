@@ -1,5 +1,7 @@
 import static org.junit.Assert.*;
 
+import java.util.Arrays;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -122,5 +124,20 @@ public class BoardTest {
 		
 		// assert
 		assertEquals(expected, this.board);
+	}
+	
+	@Test
+	public void checkBoardLocations(){
+		// arrange
+		Location[] expected = new Location[]{ new Location(1,1), new Location(0, 0),
+				new Location(0, 2), new Location(2, 0), new Location(2, 2) };
+		
+		// action
+		Board b = new Board(new String[]{ "GWG", "-P-", "G.G" });
+		this.board = b.getBoard();
+		
+		// assert
+		assertEquals(Arrays.toString(expected), Arrays.toString(b.getLocations()));
+		
 	}
 }
