@@ -25,11 +25,11 @@ public class GameTest {
 		Location l1 = new Location(0, 0), l2 = new Location(0, 1);
 		
 		// action
-		game.movePacman(l1, Game.Directions.Right);
+		game.movePacman(l1, Game.Direction.Right);
 		
 		// assert
-		assertEquals(Board.Creatures.Pacman, this.game.getCreatureAt(l1));
-		assertEquals(Board.Creatures.Wall, this.game.getCreatureAt(l2));
+		assertEquals(Board.Creature.Pacman, this.game.getCreatureAt(l1));
+		assertEquals(Board.Creature.Wall, this.game.getCreatureAt(l2));
 	}
 
 	@Test
@@ -39,11 +39,11 @@ public class GameTest {
 		Location l1 = new Location(0, 0), l2 = new Location(0, 1);
 		
 		// action
-		game.movePacman(l1, Game.Directions.Right);
+		game.movePacman(l1, Game.Direction.Right);
 		
 		// assert
-		assertEquals(Board.Creatures.Null , this.game.getCreatureAt(l1));
-		assertEquals(Board.Creatures.Pacman , this.game.getCreatureAt(l2));
+		assertEquals(Board.Creature.Null , this.game.getCreatureAt(l1));
+		assertEquals(Board.Creature.Pacman , this.game.getCreatureAt(l2));
 	}
 
 	@Test
@@ -53,7 +53,7 @@ public class GameTest {
 		Location l1 = new Location(0, 0);
 		
 		// action
-		game.movePacman(l1, Game.Directions.Right);
+		game.movePacman(l1, Game.Direction.Right);
 		
 		// assert
 		assertFalse(this.game.gameOn);
@@ -66,11 +66,11 @@ public class GameTest {
 		Location l1 = new Location(0, 0), l2 = new Location(0, 1);
 		
 		// action
-		game.movePacman(l1, Game.Directions.Right);
+		game.movePacman(l1, Game.Direction.Right);
 		
 		// assert
-		assertEquals(Board.Creatures.Null , this.game.getCreatureAt(l1));
-		assertEquals(Board.Creatures.Pacman , this.game.getCreatureAt(l2));
+		assertEquals(Board.Creature.Null , this.game.getCreatureAt(l1));
+		assertEquals(Board.Creature.Pacman , this.game.getCreatureAt(l2));
 	}
 
 	// Left
@@ -82,11 +82,11 @@ public class GameTest {
 		Location l1 = new Location(0, 0), l2 = new Location(0, 1);
 		
 		// action
-		game.movePacman(l2, Game.Directions.Left);
+		game.movePacman(l2, Game.Direction.Left);
 		
 		// assert
-		assertEquals(Board.Creatures.Pacman, this.game.getCreatureAt(l1));
-		assertEquals(Board.Creatures.Null, this.game.getCreatureAt(l2));
+		assertEquals(Board.Creature.Pacman, this.game.getCreatureAt(l1));
+		assertEquals(Board.Creature.Null, this.game.getCreatureAt(l2));
 	}
 
 	// Up
@@ -98,7 +98,7 @@ public class GameTest {
 		Location l1 = new Location(1, 0);
 		
 		// action
-		game.movePacman(l1, Game.Directions.Up);
+		game.movePacman(l1, Game.Direction.Up);
 		
 		// assert
 		assertFalse(this.game.gameOn);
@@ -113,11 +113,11 @@ public class GameTest {
 		Location l1 = new Location(0, 0), l2 = new Location(1, 0);
 		
 		// action
-		game.movePacman(l1, Game.Directions.Down);
+		game.movePacman(l1, Game.Direction.Down);
 		
 		// assert
-		assertEquals(Board.Creatures.Pacman , this.game.getCreatureAt(l1));
-		assertEquals(Board.Creatures.Wall , this.game.getCreatureAt(l2));
+		assertEquals(Board.Creature.Pacman , this.game.getCreatureAt(l1));
+		assertEquals(Board.Creature.Wall , this.game.getCreatureAt(l2));
 	}
 	
 	// - Ghosts -
@@ -130,11 +130,11 @@ public class GameTest {
 		Location l1 = new Location(0, 0), l2 = new Location(0, 1);
 		
 		// action
-		game.moveGhost(l1, Game.Directions.Right, 1);
+		game.moveGhost(l1, Game.Direction.Right, 1);
 		
 		// assert
-		assertEquals(Board.Creatures.Ghost1, this.game.getCreatureAt(l1));
-		assertEquals(Board.Creatures.Wall, this.game.getCreatureAt(l2));
+		assertEquals(Board.Creature.Ghost1, this.game.getCreatureAt(l1));
+		assertEquals(Board.Creature.Wall, this.game.getCreatureAt(l2));
 	}
 
 	@Test
@@ -144,11 +144,11 @@ public class GameTest {
 		Location l1 = new Location(0, 0), l2 = new Location(0, 1);
 		
 		// action
-		game.moveGhost(l1, Game.Directions.Right, 1);
+		game.moveGhost(l1, Game.Direction.Right, 1);
 		
 		// assert
-		assertEquals(Board.Creatures.Null, this.game.getCreatureAt(l1));
-		assertEquals(Board.Creatures.Ghost1, this.game.getCreatureAt(l2));
+		assertEquals(Board.Creature.Null, this.game.getCreatureAt(l1));
+		assertEquals(Board.Creature.Ghost1, this.game.getCreatureAt(l2));
 	}
 
 	@Test
@@ -158,13 +158,13 @@ public class GameTest {
 		Location l1 = new Location(0, 0), l2 = new Location(0, 1), l3 = new Location(0, 2);
 		
 		// action
-		game.moveGhost(l1, Game.Directions.Right, 1);
-		game.moveGhost(l2, Game.Directions.Right, 1);
+		game.moveGhost(l1, Game.Direction.Right, 1);
+		game.moveGhost(l2, Game.Direction.Right, 1);
 		
 		// assert
-		assertEquals(Board.Creatures.Null, this.game.getCreatureAt ( l1 ) );
-		assertEquals(Board.Creatures.Point, this.game.getCreatureAt ( l2 ) );
-		assertEquals(Board.Creatures.Ghost1, this.game.getCreatureAt ( l3 ) );
+		assertEquals(Board.Creature.Null, this.game.getCreatureAt ( l1 ) );
+		assertEquals(Board.Creature.Point, this.game.getCreatureAt ( l2 ) );
+		assertEquals(Board.Creature.Ghost1, this.game.getCreatureAt ( l3 ) );
 	}
 
 	@Test
@@ -174,7 +174,7 @@ public class GameTest {
 		Location l1 = new Location(0, 0);
 
 		// action
-		game.moveGhost(l1, Game.Directions.Right, 1);
+		game.moveGhost(l1, Game.Direction.Right, 1);
 		
 		// assert
 		assertFalse(this.game.gameOn);
@@ -187,11 +187,11 @@ public class GameTest {
 		Location l1 = new Location(0, 0), l2 = new Location(0, 1);
 		
 		// action
-		game.moveGhost(l1, Game.Directions.Right, 1);
+		game.moveGhost(l1, Game.Direction.Right, 1);
 		
 		// assert
-		assertEquals(Board.Creatures.Ghost1, this.game.getCreatureAt(l1));
-		assertEquals(Board.Creatures.Ghost2, this.game.getCreatureAt(l2));
+		assertEquals(Board.Creature.Ghost1, this.game.getCreatureAt(l1));
+		assertEquals(Board.Creature.Ghost2, this.game.getCreatureAt(l2));
 	}
 
 	// Left
@@ -203,11 +203,11 @@ public class GameTest {
 		Location l1 = new Location(0, 0), l2 = new Location(0, 1);
 		
 		// action
-		game.moveGhost(l2, Game.Directions.Left, 2);
+		game.moveGhost(l2, Game.Direction.Left, 2);
 		
 		// assert
-		assertEquals(Board.Creatures.Ghost1, this.game.getCreatureAt(l1));
-		assertEquals(Board.Creatures.Ghost2, this.game.getCreatureAt(l2));
+		assertEquals(Board.Creature.Ghost1, this.game.getCreatureAt(l1));
+		assertEquals(Board.Creature.Ghost2, this.game.getCreatureAt(l2));
 	}
 
 	// Up
@@ -219,11 +219,11 @@ public class GameTest {
 		Location l1 = new Location(0, 0), l2 = new Location(1, 0);
 		
 		// action
-		game.moveGhost(l2, Game.Directions.Up, 1);
+		game.moveGhost(l2, Game.Direction.Up, 1);
 		
 		// assert
-		assertEquals(Board.Creatures.Ghost1, this.game.getCreatureAt(l1));
-		assertEquals(Board.Creatures.Null, this.game.getCreatureAt(l2));
+		assertEquals(Board.Creature.Ghost1, this.game.getCreatureAt(l1));
+		assertEquals(Board.Creature.Null, this.game.getCreatureAt(l2));
 	}
 
 	// Down
@@ -235,26 +235,11 @@ public class GameTest {
 		Location l1 = new Location(0, 0), l2 = new Location(1, 0);
 		
 		// action
-		game.moveGhost(l1, Game.Directions.Down, 1);
+		game.moveGhost(l1, Game.Direction.Down, 1);
 		
 		// assert
-		assertEquals(Board.Creatures.Null, this.game.getCreatureAt(l1));
-		assertEquals(Board.Creatures.Ghost1, this.game.getCreatureAt(l2));
+		assertEquals(Board.Creature.Null, this.game.getCreatureAt(l1));
+		assertEquals(Board.Creature.Ghost1, this.game.getCreatureAt(l2));
 	}
 
-	// - General Move function -
-	
-	@Test
-	public void GeneralMove_Pacman(){
-		// arrange
-		setGameBoardByStringArray(new String[]{".P"});
-		Location l1 = new Location(0, 1), l2 = new Location(0, 0);
-		
-		// action
-		game.move();
-		
-		// assert
-		assertEquals(game.getCreatureAt(l1), Board.Creatures.Null);
-		assertEquals(game.getCreatureAt(l2), Board.Creatures.Pacman);
-	}
 }
