@@ -9,29 +9,26 @@ public class Board {
 		this(null);
 	}
 	
-	public Board(String[] strArr){
+	public Board(String[] rowsArray){
 		this.ghostNum = 0;
 		
-		if (strArr == null){
-			this.board = new Creatures[30][30];
-			try{
+		if (rowsArray == null){
+			this.board = new Creature[30][30];
+			
+			try {
 				this.board = setBoard();
-			} catch (FileNotFoundException e){
+			} catch (FileNotFoundException e) {
 				// no such file
 			}
 		}
 		else {
-			this.board = new Creatures[strArr.length][strArr[0].length()];
-			this.board = setBoardWithStringArray(strArr);
+			this.board = new Creature[rowsArray.length][rowsArray[0].length()];
+			this.board = setBoardWithStringArray(rowsArray);
 		}
 		
-		locations = new Location[]{ find(Board.Creatures.Pacman),
-				find(Board.Creatures.Ghost1), find(Board.Creatures.Ghost2),
-				find(Board.Creatures.Ghost3), find(Board.Creatures.Ghost4)
-		};
 	}
 
-	enum Creatures {
+	enum Creature {
 		Pacman,
 		Ghost1, Ghost2, Ghost3, Ghost4,
 		Point,
@@ -39,19 +36,35 @@ public class Board {
 		Null
 	}
 	
-	private Creatures[][] board;
-	private Location[] locations; 
+	private Creature[][] board;
 	int ghostNum;
 	
-	public Creatures[][] getBoard() {
-		return board;
+	public Creature[][] get() {
+		return board.clone();
 	}
 
+	public Creature get(Location l){
+		return board[l.getX()][l.getY()];
+	}
+	
+	public void set(Location l, Creature c){
+		board[l.getX()][l.getY()] = c;
+	}
+	
+	public void limitToSpecificCreatures(Creature[] CreaturesForThisBoard){
+		for (int i = 0; i < board.length; i++){
+			for (int j = 0; j < board[0].length; j++){
+				if (!isCreatureAllowed( get(new Location(i, j) ), CreaturesForThisBoard ))
+					set( new Location(i, j), Creature.Null );
+			}
+		}
+	}
+	
 	public int getBoardDimensions(){
 		return board.length * 100 + board[0].length;
 	}
 	
-	private Creatures[][] setBoard() throws FileNotFoundException{
+	private Creature[][] setBoard() throws FileNotFoundException{
 		Scanner sc = new Scanner(new BufferedReader(new FileReader("./Board.txt")));
 	    while(sc.hasNextLine()) {
 	    	for (int i = 0; i < board.length && sc.hasNextLine(); i++) {
@@ -65,32 +78,32 @@ public class Board {
 	    return board;
 	}
 	
-	private Creatures StringToCreature(String st){
+	private Creature StringToCreature(String st){
 		switch(st){
 			case "P":
-				return Creatures.Pacman;
+				return Creature.Pacman;
 			case "W":
-				return Creatures.Wall;
+				return Creature.Wall;
 			case "-":
-				return Creatures.Point;
+				return Creature.Point;
 			case "G":
 				this.ghostNum++;
 				switch(this.ghostNum){
 					case 1:
-						return Creatures.Ghost1;
+						return Creature.Ghost1;
 					case 2:
-						return Creatures.Ghost2;
+						return Creature.Ghost2;
 					case 3:
-						return Creatures.Ghost3;
+						return Creature.Ghost3;
 					case 4:
-						return Creatures.Ghost4;
+						return Creature.Ghost4;
 				}
 			default:
-				return Creatures.Null;
+				return Creature.Null;
 		}
 	}
 
-	private Creatures[][] setBoardWithStringArray(String[] sts) {
+	private Creature[][] setBoardWithStringArray(String[] sts) {
 		
 		for (int i = 0; i < sts.length; i++){
 			for (int j = 0; j < sts[i].length(); j++)
@@ -100,18 +113,14 @@ public class Board {
 		return this.board;
 	}
 
-	private Location find(Board.Creatures c){
-		for (int i = 0; i < this.board.length; i++){
-			for (int j = 0; j < this.board[i].length; j++){
-				if (this.board[i][j] == c)
-					return new Location(i, j);
-			}
+	private boolean isCreatureAllowed(Board.Creature isAllowed, Board.Creature[] allowedArray){
+		
+		for (Board.Creature cre : allowedArray){
+			if (isAllowed == cre)
+				return true;
 		}
 		
-		return null;
+		return false;
 	}
 
-	public Location[] getLocations(){
-		return this.locations;
-	}
 }
