@@ -1,17 +1,15 @@
 import static org.junit.Assert.*;
 
-import java.util.Arrays;
-
 import org.junit.Before;
 import org.junit.Test;
 
 public class BoardTest {
 	
-	Board.Creatures[][] board;
+	Board.Creature[][] board;
 	
 	@Before
 	public void setup(){
-		board = new Board().getBoard();
+		board = new Board().get();
 	}
 	
 	@Test
@@ -30,7 +28,7 @@ public class BoardTest {
 		// arrange
 		
 		// action
-		int pacmans = count(Board.Creatures.Pacman);
+		int pacmans = count(Board.Creature.Pacman);
 		
 		// assert
 		assertEquals(1, pacmans);
@@ -41,10 +39,10 @@ public class BoardTest {
 		// arrange
 		
 		// action
-		int Ghost1 = count(Board.Creatures.Ghost1);
-		int Ghost2 = count(Board.Creatures.Ghost2);
-		int Ghost3 = count(Board.Creatures.Ghost3);
-		int Ghost4 = count(Board.Creatures.Ghost4);
+		int Ghost1 = count(Board.Creature.Ghost1);
+		int Ghost2 = count(Board.Creature.Ghost2);
+		int Ghost3 = count(Board.Creature.Ghost3);
+		int Ghost4 = count(Board.Creature.Ghost4);
 		
 		// assert
 		assertEquals(1, Ghost1);
@@ -58,7 +56,7 @@ public class BoardTest {
 		// arrange
 		
 		// action
-		int points = count(Board.Creatures.Point);
+		int points = count(Board.Creature.Point);
 		
 		// assert
 		assertEquals(330, points);
@@ -69,7 +67,7 @@ public class BoardTest {
 		// arrange
 		
 		// action
-		int nulls = count(Board.Creatures.Null);
+		int nulls = count(Board.Creature.Null);
 		
 		// assert
 		assertEquals(148, nulls);
@@ -80,13 +78,13 @@ public class BoardTest {
 		// arrange
 		
 		// action
-		int walls = count(Board.Creatures.Wall);
+		int walls = count(Board.Creature.Wall);
 		
 		// assert
 		assertEquals(417, walls);
 	}
 	
-	private int count(Board.Creatures c){
+	private int count(Board.Creature c){
 		int cNum = 0;
 		for (int i = 0; i < board.length; i++){
 			for (int j = 0; j < board[0].length; j++){
@@ -100,11 +98,11 @@ public class BoardTest {
 	@Test
 	public void setBoardWithSingleString(){
 		// arrange
-		Board.Creatures[] expected= {Board.Creatures.Pacman, Board.Creatures.Wall,
-				Board.Creatures.Ghost1, Board.Creatures.Point, Board.Creatures.Null};
+		Board.Creature[] expected= {Board.Creature.Pacman, Board.Creature.Wall,
+				Board.Creature.Ghost1, Board.Creature.Point, Board.Creature.Null};
 		
 		// action
-		this.board = new Board(new String[]{"PWG-."}).getBoard();
+		this.board = new Board(new String[]{"PWG-."}).get();
 		
 		// assert
 		assertEquals(expected, this.board[0]);
@@ -113,31 +111,17 @@ public class BoardTest {
 	@Test
 	public void setBoardWithArrayString(){
 		// arrange
-		Board.Creatures[][] expected = {
-			{Board.Creatures.Pacman, Board.Creatures.Wall},
-			{Board.Creatures.Point, Board.Creatures.Ghost1},
-			{Board.Creatures.Wall, Board.Creatures.Null} 
+		Board.Creature[][] expected = {
+			{Board.Creature.Pacman, Board.Creature.Wall},
+			{Board.Creature.Point, Board.Creature.Ghost1},
+			{Board.Creature.Wall, Board.Creature.Null} 
 		};
 		
 		// action
-		this.board = new Board(new String[] {"PW", "-G", "W."}).getBoard();
+		this.board = new Board(new String[] {"PW", "-G", "W."}).get();
 		
 		// assert
 		assertEquals(expected, this.board);
 	}
 	
-	@Test
-	public void checkBoardLocations(){
-		// arrange
-		Location[] expected = new Location[]{ new Location(1,1), new Location(0, 0),
-				new Location(0, 2), new Location(2, 0), new Location(2, 2) };
-		
-		// action
-		Board b = new Board(new String[]{ "GWG", "-P-", "G.G" });
-		this.board = b.getBoard();
-		
-		// assert
-		assertEquals(Arrays.toString(expected), Arrays.toString(b.getLocations()));
-		
-	}
 }
