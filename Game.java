@@ -1,61 +1,53 @@
 
 public class Game{
 	
-	private Board boardCreator;
-	
-	private Board.Creatures[][] board;
-	
-	private Location[] savePoints;
-	
-	private int pointsSavedNum;
+	private Board topBoard, botBoard;
 	
 	boolean gameOn;
-	
-	Directions pacmanDirection;
 		
 	public Game(){
 		this(null); // prevents duplicate constructors and mistakes
 	}
 	
 	public Game(final String[] b){
-		this.savePoints = new Location[]{null, null, null, null}; // 4 - Ghosts number
-		this.pointsSavedNum = 0;
 		this.gameOn = true;
-		this.pacmanDirection = Directions.Left;
+				
+		this.topBoard = new Board(b);
+		this.topBoard.limitToSpecificCreatures(new Board.Creature[]{
+				Board.Creature.Ghost1, Board.Creature.Ghost2, Board.Creature.Ghost3,
+				Board.Creature.Ghost4, Board.Creature.Pacman});
 		
-		if (b == null) // no specific board
-			this.boardCreator = new Board();
-		else
-			this.boardCreator = new Board(b);
+		this.botBoard = new Board(b);
+		this.botBoard.limitToSpecificCreatures(new Board.Creature[]{
+				Board.Creature.Wall, Board.Creature.Point, Board.Creature.Null} );
 		
-		this.board = boardCreator.getBoard();
-	}
+	}	
 	
-	enum Directions{
+	enum Direction{
 		Right,
 		Left,
 		Up,
 		Down
 	}
 	
-	public void movePacman(Location l, Directions d){
-		int x = l.getX(), y = l.getY();
-		int nX = changeLocationByDirection(x, y, d).getX(), 
-				nY = changeLocationByDirection(x, y, d).getY();
+	
+	public void movePacman(Location l, Direction d){
+		Location nL = changeLocationByDirection(l.getX(), l.getY(), d);
 		
-		switch (this.board[nX][nY]){
+		switch ( getCreatureAt(nL) ){
 		case Point:
 			// score ++
 		case Null:
-			this.board[x][y] = Board.Creatures.Null;
-			this.board[nX][nY] = Board.Creatures.Pacman;
+			topBoard.set(l, Board.Creature.Null);
+			topBoard.set(nL, Board.Creature.Pacman);
+			botBoard.set(nL, Board.Creature.Null);
 			break;
 			
 		case Ghost1:
 		case Ghost2:
 		case Ghost3:
 		case Ghost4:
-			stopGame(Board.Creatures.Pacman);
+			stopGame(Board.Creature.Pacman);
 			break;
 			
 		default:
@@ -63,77 +55,46 @@ public class Game{
 		}
 	}
 	
-	public void moveGhost(Location l, Directions d, int ghostNum){
-		int x = l.getX(), y = l.getY();
-		int nX = changeLocationByDirection(x, y, d).getX(),
-				nY = changeLocationByDirection(x, y, d).getY();
+	
+	public void moveGhost(Location l, Direction d, int ghostNum){
+		Location nL = changeLocationByDirection(l.getX(), l.getY(), d);
 		
-		switch (this.board[nX][nY]){
+		switch ( getCreatureAt(nL)){
 			case Point:
-				this.savePoints[pointsSavedNum] = new Location(nX, nY);
-				pointsSavedNum ++;
 			case Null:
-				this.board[x][y] = Board.Creatures.Null;
-				this.board[nX][nY] = getGhostCreatureByNum(ghostNum);
+				topBoard.set(l, Board.Creature.Null);
+				topBoard.set( nL, getGhostCreatureByNum(ghostNum) );
 				break;
 			case Pacman:
-				stopGame(getGhostCreatureByNum(ghostNum));
+				stopGame( getGhostCreatureByNum(ghostNum) );
 				break;
 
 			default:
 				break;					
 		}
 		
-		relocatePoints();
 		
-		sortNullsOnArray();
 	}
 
-	private Board.Creatures getGhostCreatureByNum(int num){
+	
+	private Board.Creature getGhostCreatureByNum(int num){
 		switch (num){
 			case 1:
-				return Board.Creatures.Ghost1;
+				return Board.Creature.Ghost1;
 			case 2:
-				return Board.Creatures.Ghost2;
+				return Board.Creature.Ghost2;
 			case 3:
-				return Board.Creatures.Ghost3;
+				return Board.Creature.Ghost3;
 			case 4:
-				return Board.Creatures.Ghost4;
+				return Board.Creature.Ghost4;
 				
 			default:
 				return null; // might cause problems
 		}
 	}
 	
-	private void sortNullsOnArray() {
-		for (int i = 0; i < savePoints.length; i++){
-			for (int j = savePoints.length - 1; j > i; j--){
-				if (savePoints[i] == null){
-					savePoints[i] = savePoints[j];
-					savePoints[j] = null;
-				}
-				else
-					break;
-			}
-		}
-	}
-
-	private void relocatePoints() {
-		int originalSaves = this.pointsSavedNum;
-		
-		for (int i = 0; i < originalSaves; i++){
-			int x = savePoints[i].getX(), y = savePoints[i].getY();
-			
-			if (this.board[x][y] != Board.Creatures.Null) // checks if can relocate point
-				continue;
-			
-			this.savePoints[i] = null;
-			this.board[x][y] = Board.Creatures.Point;
-			this.pointsSavedNum --;
-		}
-	}
 	
-	private Location changeLocationByDirection(int x, int y, Directions d){
+	private Location changeLocationByDirection(int x, int y, Direction d){
 		switch (d){
 		case Right:
 			y ++;
@@ -151,42 +112,32 @@ public class Game{
 		return new Location(x, y);
 	}
 
-	public Board.Creatures getCreatureAt(Location l){
-		return this.board[l.getX()][l.getY()];
+	
+	public Board.Creature getCreatureAt(Location l){
+		
+		// If the creature is null on the top, it will return the creature on the bottom board
+		// Otherwise method returns pacman / ghost from top board
+		
+		Board.Creature topBoardCreature = this.topBoard.get(l);
+		
+		if (topBoardCreature == Board.Creature.Null) 
+			return this.botBoard.get(l);
+		else
+			return topBoardCreature;
 	}
-
-	private void stopGame(Board.Creatures gameStopper){
+	
+	private void stopGame(Board.Creature gameStopper){
 		// in actual game, I will stop the game using this function
 		
 		System.out.print("game stopped - ");
-		if (gameStopper == Board.Creatures.Pacman)
+		if (gameStopper == Board.Creature.Pacman)
 			System.out.println("pacman commited suicide");
 		else
 			System.out.println(gameStopper.toString() + " ate pacman");
 		
 		this.gameOn = false;
-	}		
-
-	private Location getCreatureLocation(Board.Creatures c){
-		switch (c){
-			case Pacman:
-				return boardCreator.getLocations()[0];
-			case Ghost1:
-				return boardCreator.getLocations()[1];
-			case Ghost2:
-				return boardCreator.getLocations()[2];
-			case Ghost3:
-				return boardCreator.getLocations()[3];
-			case Ghost4:
-				return boardCreator.getLocations()[4];
-		}
-		// I won't send any other Creature. This is a mistake
-		return null;
 	}
 	
-	public void move(){
-		movePacman( getCreatureLocation(Board.Creatures.Pacman), pacmanDirection );
-		// in the next change I will add ghost moving
-	}
+	
 	
 }
