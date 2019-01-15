@@ -6,10 +6,10 @@ import java.util.TimerTask;
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 
 public class Program extends JFrame{
+		
+	Game game;
 	
 	public Program(){
 				
@@ -19,8 +19,10 @@ public class Program extends JFrame{
 		
 		setLayout(new FlowLayout());
 		
+		game = new Game();
+		
 		for (Game.Direction d : Game.Direction.values()){
-			DirectionChanger change = new DirectionChanger(d.name());
+			DirectionChanger change = new DirectionChanger(d.name(), game);
 			add(new JButton(change));
 		}
 		
@@ -49,7 +51,6 @@ public class Program extends JFrame{
 	int round = 1;
 	
 	public static void main(String[] args){
-		Game game = new Game();
 		Program program = new Program();
 		Timer show = new Timer();
 			
@@ -60,31 +61,40 @@ public class Program extends JFrame{
 		show.scheduleAtFixedRate(new TimerTask() {
 						
 			@Override
-			public void run() {				
+			public void run() {
+				if (!program.game.gameOn)
+					return;
+				
 				for (int i = 0; i < 30; i++){
 					for (int j = 0; j < 30; j++)
-						System.out.print( program.CreatureToString( game.getCreatureAt(new Location(i, j)) ) );
+						System.out.print( program.CreatureToString( program.game.getCreatureAt(new Location(i, j)) ) );
 					
 					System.out.println();
 				}		
 				
 				System.out.println("\nRound: " + program.round);
 				program.round ++;
-				game.move();
+				program.game.move();
 			}
 		}, 0, 1000);
 	}
 	
 	class DirectionChanger extends AbstractAction {
 
-		public DirectionChanger(String str) {
+		Game game;
+		
+		public DirectionChanger(String str, Game game) {
 			super(str);
+			this.game = game;
 		}
 		
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			JOptionPane.showMessageDialog(Program.this, "Boo!");
-			Board.Creature.Pacman.setDirection(Game.Direction.Down);
+			for (Game.Direction d : Game.Direction.values()){
+				if ( arg0.getActionCommand().equals(d.name()) ){
+					this.game.changeDirection( d.valueOf( d.name() ), Board.Creature.Pacman );
+				}
+			}
 		}
 		
 	}
