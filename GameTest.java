@@ -265,7 +265,7 @@ public class GameTest {
 	@Test
 	public void GhostOutOfBoard_Up(){
 		// arrange
-		setGameBoardByStringArray(new String[]{"-G-", "...", "..."});
+		setGameBoardByStringArray(new String[]{"WGW", "...", "..."});
 		Location l1 = new Location(2, 1), l2 = new Location(0, 1);
 		Board.Creature.Ghost1.setDirection(Game.Direction.Up);
 		
@@ -409,8 +409,8 @@ public class GameTest {
 	@Test
 	public void GhostLeftWall_SmartChange(){
 		// arrange
-		setGameBoardByStringArray(new String[]{"-G", "-W"});
-		Location l1 = new Location(0, 0), l2 = new Location(1, 0);
+		setGameBoardByStringArray(new String[]{"W-G", "W-W", "WWW"});
+		Location l1 = new Location(0, 1), l2 = new Location(1, 1);
 		
 		// action
 		game.move();
