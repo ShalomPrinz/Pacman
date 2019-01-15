@@ -48,34 +48,39 @@ public class Program extends JFrame{
 		return ".";
 	}
 	
+	private void showBoard() {
+		for (int i = 0; i < 30; i++){
+			for (int j = 0; j < 30; j++)
+				System.out.print( this.CreatureToString( this.game.getCreatureAt(new Location(i, j)) ) );
+			
+			System.out.println();
+		}
+	}
+	
 	int round = 1;
 	
 	public static void main(String[] args){
 		Program program = new Program();
 		Timer show = new Timer();
-			
+		program.game.gameOn = true;
 		program.setVisible(true);
 		
 		System.out.println("Game Starts.\nOriginal Game:");
-		
+		program.showBoard();		
+
 		show.scheduleAtFixedRate(new TimerTask() {
 						
 			@Override
 			public void run() {
 				if (!program.game.gameOn)
 					return;
-				
-				for (int i = 0; i < 30; i++){
-					for (int j = 0; j < 30; j++)
-						System.out.print( program.CreatureToString( program.game.getCreatureAt(new Location(i, j)) ) );
-					
-					System.out.println();
-				}		
-				
+								
 				System.out.println("\nRound: " + program.round);
 				program.round ++;
 				program.game.move();
+				program.showBoard();		
 			}
+
 		}, 0, 1000);
 	}
 	

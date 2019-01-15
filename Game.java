@@ -41,7 +41,7 @@ public class Game{
 	private void movePacman(){	
 		Board.Creature p = Board.Creature.Pacman;
 		Location currentLocation = p.getLocation();
-		Location nextLocation = getNextLocation(p, currentLocation, p.getDirection());
+		Location nextLocation = getNextLocation(p, p.getDirection());
 		
 		switch ( getCreatureAt(nextLocation) ){
 		case Point:
@@ -64,8 +64,8 @@ public class Game{
 		}
 	}
 
-	private Location getNextLocation(Board.Creature c, Location currentLocation, Direction d) {
-		Location nextLocation = changeLocationByDirection(currentLocation.getX(), currentLocation.getY(), d);
+	private Location getNextLocation(Board.Creature c, Direction d) {
+		Location nextLocation = changeLocationByDirection(c.getLocation().getX(), c.getLocation().getY(), d);
 		
 		int Xdim = topBoard.getDimensions(), Ydim = Xdim;
 		
@@ -94,7 +94,7 @@ public class Game{
 	private void moveGhost(Board.Creature c){
 		
 		Location currentLocation = c.getLocation();
-		Location nextLocation = getNextLocation(c, currentLocation, c.getDirection());
+		Location nextLocation = getNextLocation(c, c.getDirection());
 		
 		switch ( getCreatureAt(nextLocation)){
 			case Point:
@@ -163,13 +163,17 @@ public class Game{
 	private Vector<Direction> findNewPathForGhost(Board.Creature ghost){
 		Vector<Direction> possibleDirections = new Vector<>(0, 1);
 		
+		Direction previousDirection = ghost.getDirection();
+		
 		for (Direction d : Direction.values()){
-			if ( getCreatureAt( getNextLocation(ghost, ghost.getLocation(), d) ) != Board.Creature.Wall )
+			if ( getCreatureAt( getNextLocation(ghost, d) ) != Board.Creature.Wall &&
+					d != previousDirection)
 				possibleDirections.add(d);
 		}
 		
-		if (possibleDirections.capacity() <= 0)		
-			possibleDirections.add(defaultDirection);
+		if (possibleDirections.capacity() == 0)
+			possibleDirections.add( getCreatureAt( getNextLocation( ghost, previousDirection ) )
+					!= Board.Creature.Wall ? previousDirection : defaultDirection);
 		
 		return possibleDirections;
 		
@@ -199,9 +203,8 @@ public class Game{
 			Board.Creature ghost = getGhostCreatureByNum(i + 1);
 			
 			int possibleWays = findNewPathForGhost( ghost ).capacity();
-			if ( possibleWays > 1 && getCreatureAt( getNextLocation(ghost, ghost.getLocation(), ghost.getDirection()) ) == Board.Creature.Wall) {
-				int random = (int) (Math.random() * possibleWays);
-				ghost.setNextDirection( findNewPathForGhost( ghost ).get(random) );
+			if ( possibleWays > 1  && getCreatureAt( getNextLocation(ghost, ghost.getDirection()) ) == Board.Creature.Wall ) {
+				ghost.setNextDirection( findNewPathForGhost( ghost ).get(possibleWays - 1) );
 			}
 			
 			changeDirection( ghost.getNextDirection(), ghost );
@@ -232,10 +235,9 @@ public class Game{
 		if (goThisDirection == null || wantsAnotherDirection.getLocation() == null)
 			return;
 		
-		Location currentLocation = wantsAnotherDirection.getLocation();
-		Location nextLocation = getNextLocation(wantsAnotherDirection, currentLocation, goThisDirection);
+		Location nextLocation = getNextLocation(wantsAnotherDirection, goThisDirection);
 		
-		if (getCreatureAt(nextLocation) != Board.Creature.Wall){
+		if ( getCreatureAt( nextLocation ) != Board.Creature.Wall ){
 			wantsAnotherDirection.setDirection(goThisDirection);
 			wantsAnotherDirection.setNextDirection(null);
 		}
