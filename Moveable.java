@@ -1,11 +1,11 @@
 
 public interface Moveable {
 	
-	public Location getLocation();
+	Location getLocation();
 
-	public void setLocation(Location location);
+	void setLocation(Location location);
 
-	public Game.Direction getDirection();
+	Game.Direction getDirection();
 
-	public void setDirection(Game.Direction direction);
+	void setDirection(Game.Direction direction);
 }

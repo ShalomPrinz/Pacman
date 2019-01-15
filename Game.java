@@ -1,5 +1,6 @@
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.Vector;
 
 public class Game{
 	
@@ -37,19 +38,17 @@ public class Game{
 		Down
 	}
 	
-	private void movePacman(Board.Creature c){
-		Location currentLocation = c.getLocation();
-		Location nextLocation = changeLocationByDirection(currentLocation.getX(), currentLocation.getY(), c.getDirection());
-		
-		nextLocation.setX( setDimensionOutOfBoard( nextLocation.getX(), topBoard.getDimensions() ) );
-		nextLocation.setY( setDimensionOutOfBoard( nextLocation.getY(), topBoard.getDimensions() ) );
+	private void movePacman(){	
+		Board.Creature p = Board.Creature.Pacman;
+		Location currentLocation = p.getLocation();
+		Location nextLocation = getNextLocation(p, p.getDirection());
 		
 		switch ( getCreatureAt(nextLocation) ){
 		case Point:
 			// score ++
 		case Null:
 			topBoard.set(currentLocation, Board.Creature.Null);
-			topBoard.set(nextLocation, Board.Creature.Pacman);
+			topBoard.set(nextLocation, p);
 			botBoard.set(nextLocation, Board.Creature.Null);
 			break;
 			
@@ -57,7 +56,7 @@ public class Game{
 		case Ghost2:
 		case Ghost3:
 		case Ghost4:
-			stopGame(Board.Creature.Pacman);
+			stopGame( p );
 			break;
 			
 		default:
@@ -65,7 +64,23 @@ public class Game{
 		}
 	}
 
-	public int setDimensionOutOfBoard(int location, int dimension) {
+	private Location getNextLocation(Board.Creature c, Direction d) {
+		Location nextLocation = changeLocationByDirection(c.getLocation().getX(), c.getLocation().getY(), d);
+		
+		int Xdim = topBoard.getDimensions(), Ydim = Xdim;
+		
+		if (topBoard.get().length != topBoard.get()[0].length){
+			Xdim = topBoard.get().length;
+			Ydim = topBoard.get()[0].length;
+		}
+		
+		nextLocation.setX( setDimensionOutOfBoard( nextLocation.getX(), Xdim ) );
+		nextLocation.setY( setDimensionOutOfBoard( nextLocation.getY(), Ydim ) );
+		
+		return nextLocation;
+	}
+
+	private int setDimensionOutOfBoard(int location, int dimension) {
 		// This method relies on the equality of the board dimensions
 		if (location >= dimension)
 			return 0;
@@ -78,26 +93,17 @@ public class Game{
 	
 	private void moveGhost(Board.Creature c){
 		
-		int ghostNum = 1;
-		try{
-			ghostNum = Integer.parseInt( c.toString().substring( c.toString().length() - 1, c.toString().length() ) );
-		} catch (NumberFormatException e){
-			e.printStackTrace();
-		}
 		Location currentLocation = c.getLocation();
-		Location nextLocation = changeLocationByDirection(currentLocation.getX(), currentLocation.getY(), c.getDirection());
-		
-		nextLocation.setX( setDimensionOutOfBoard( nextLocation.getX(), topBoard.getDimensions() ) );
-		nextLocation.setY( setDimensionOutOfBoard( nextLocation.getY(), topBoard.getDimensions() ) );
+		Location nextLocation = getNextLocation(c, c.getDirection());
 		
 		switch ( getCreatureAt(nextLocation)){
 			case Point:
 			case Null:
 				topBoard.set( currentLocation, Board.Creature.Null );
-				topBoard.set( nextLocation, getGhostCreatureByNum(ghostNum) );
+				topBoard.set( nextLocation, c );
 				break;
 			case Pacman:
-				stopGame( getGhostCreatureByNum(ghostNum) );
+				stopGame( c );
 				break;
 
 			default:
@@ -140,19 +146,6 @@ public class Game{
 		}
 		return new Location(x, y);
 	}
-
-	public Board.Creature getCreatureAt(Location l){
-		
-		// If the creature is null on the top, it will return the creature on the bottom board
-		// Otherwise method returns pacman / ghost from top board
-		
-		Board.Creature topBoardCreature = this.topBoard.get(l);
-		
-		if (topBoardCreature == Board.Creature.Null) 
-			return this.botBoard.get(l);
-		else
-			return topBoardCreature;
-	}
 	
 	private void stopGame(Board.Creature gameStopper){
 		// in actual game, I will stop the game using this function
@@ -167,13 +160,57 @@ public class Game{
 		this.gameOn = false;
 	}
 	
-	public void move(){
-				
-		if (Board.Creature.Pacman.getLocation() != null)
-			movePacman( Board.Creature.Pacman );
+	private Vector<Direction> findNewPathForGhost(Board.Creature ghost){
+		Vector<Direction> possibleDirections = new Vector<>(0, 1);
 		
-		for (int i = 0; i < this.topBoard.getGhostNum(); i++)
-			moveGhost( getGhostCreatureByNum(i + 1) );
+		Direction previousDirection = ghost.getDirection();
+		
+		for (Direction d : Direction.values()){
+			if ( getCreatureAt( getNextLocation(ghost, d) ) != Board.Creature.Wall &&
+					d != previousDirection)
+				possibleDirections.add(d);
+		}
+		
+		if (possibleDirections.capacity() == 0)
+			possibleDirections.add( getCreatureAt( getNextLocation( ghost, previousDirection ) )
+					!= Board.Creature.Wall ? previousDirection : defaultDirection);
+		
+		return possibleDirections;
+		
+	}
+	
+	public Board.Creature getCreatureAt(Location l){
+		
+		// If the creature is null on the top, it will return the creature on the bottom board
+		// Otherwise method returns pacman / ghost from top board
+		
+		Board.Creature topBoardCreature = this.topBoard.get(l);
+		
+		if (topBoardCreature == Board.Creature.Null) 
+			return this.botBoard.get(l);
+		else
+			return topBoardCreature;
+	}
+	
+	public void move(){
+					
+		if (Board.Creature.Pacman.getLocation() != null){
+			changeDirection(Board.Creature.Pacman.getNextDirection(), Board.Creature.Pacman);
+			movePacman();
+		}
+		
+		for (int i = 0; i < this.topBoard.getGhostNum(); i++){
+			Board.Creature ghost = getGhostCreatureByNum(i + 1);
+			
+			int possibleWays = findNewPathForGhost( ghost ).capacity();
+			if ( possibleWays > 1  && getCreatureAt( getNextLocation(ghost, ghost.getDirection()) ) == Board.Creature.Wall ) {
+				ghost.setNextDirection( findNewPathForGhost( ghost ).get(possibleWays - 1) );
+			}
+			
+			changeDirection( ghost.getNextDirection(), ghost );
+			moveGhost( ghost );
+		}
+		
 	}
 
 	public void startGame(){
@@ -193,4 +230,21 @@ public class Game{
 		
 	}
 
+	public void changeDirection(Direction goThisDirection, Board.Creature wantsAnotherDirection){
+		
+		if (goThisDirection == null || wantsAnotherDirection.getLocation() == null)
+			return;
+		
+		Location nextLocation = getNextLocation(wantsAnotherDirection, goThisDirection);
+		
+		if ( getCreatureAt( nextLocation ) != Board.Creature.Wall ){
+			wantsAnotherDirection.setDirection(goThisDirection);
+			wantsAnotherDirection.setNextDirection(null);
+		}
+		else {
+			wantsAnotherDirection.setNextDirection(goThisDirection);
+		}
+		
+	}
+	
 }

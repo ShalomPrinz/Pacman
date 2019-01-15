@@ -12,8 +12,10 @@ public class Board {
 	public Board(String[] rowsArray){
 		this.ghostsNumber = 0;
 		
-		for (Creature c : Creature.values())
+		for (Creature c : Creature.values()){
 			c.setLocation(null);
+			c.setNextDirection(null);
+		}
 			
 		if (rowsArray == null){
 			this.board = new Creature[30][30];
@@ -40,6 +42,7 @@ public class Board {
 
 		private Location location;
 		private Game.Direction direction;
+		private Game.Direction goHere = Game.defaultDirection;
 		
 		@Override
 		public Location getLocation() {
@@ -59,6 +62,14 @@ public class Board {
 		@Override
 		public void setDirection(Game.Direction direction) {
 			this.direction = direction;
+		}
+
+		public Game.Direction getNextDirection() {
+			return goHere;
+		}
+
+		public void setNextDirection(Game.Direction goHere) {
+			this.goHere = goHere;
 		}
 	}
 	
