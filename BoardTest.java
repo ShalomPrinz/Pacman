@@ -13,14 +13,25 @@ public class BoardTest {
 	}
 	
 	@Test
-	public void testDimensions(){
+	public void testDimensions_Equal(){
 		// arrange
 		
 		// action
-		int dimensions = new Board().getBoardDimensions();
+		int dimensions = new Board().getDimensions();
 		
 		// assert
-		assertEquals(3030, dimensions);
+		assertEquals(30, dimensions);
+	}
+	
+	@Test
+	public void testDimensions_Different(){
+		// arrange
+		
+		// action
+		int dimensions = new Board(new String[]{"---", "---"}).getDimensions();
+		
+		// assert
+		assertEquals(23, dimensions);
 	}
 	
 	@Test
@@ -98,7 +109,7 @@ public class BoardTest {
 	@Test
 	public void setBoardWithSingleString(){
 		// arrange
-		Board.Creature[] expected= {Board.Creature.Pacman, Board.Creature.Wall,
+		Board.Creature[] expected = {Board.Creature.Pacman, Board.Creature.Wall,
 				Board.Creature.Ghost1, Board.Creature.Point, Board.Creature.Null};
 		
 		// action
