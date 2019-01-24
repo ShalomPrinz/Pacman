@@ -301,7 +301,7 @@ public class GameTest {
 	@Test
 	public void GhostOutOfBoard_Down(){
 		// arrange
-		setGameBoardByStringArray(new String[]{"---", "-.-", ".G."});
+		setGameBoardByStringArray(new String[]{"---", "-.-", "WGW"});
 		Location l1 = new Location(2, 1), l2 = new Location(0, 1);
 		Board.Creature.Ghost1.setDirection(Game.Direction.Down);
 		
@@ -382,7 +382,7 @@ public class GameTest {
 	@Test
 	public void GhostLeft_Down_Changing(){
 		// arrange
-		setGameBoardByStringArray(new String[]{"G-", "-W"});
+		setGameBoardByStringArray(new String[]{"GW", "-W"});
 		Location l1 = new Location(0, 0), l2 = new Location(1, 0);
 		
 		// action
@@ -397,7 +397,7 @@ public class GameTest {
 	@Test
 	public void GhostLeft_Down_SaveChange(){
 		// arrange
-		setGameBoardByStringArray(new String[]{"-G", "-W"});
+		setGameBoardByStringArray(new String[]{"-GW", "-WW", "WW-"});
 		Location l1 = new Location(0, 0), l2 = new Location(1, 0);
 		
 		// action

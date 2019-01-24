@@ -1,5 +1,6 @@
 package pacman;
 
+import java.util.Arrays;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
@@ -78,7 +79,6 @@ public class Game{
 	}
 
 	private int setDimensionOutOfBoard(int location, int dimension) {
-		// This method relies on the equality of the board dimensions
 		if (location >= dimension)
 			return 0;
 		
@@ -160,20 +160,39 @@ public class Game{
 	private Vector<Direction> findNewPathForGhost(Board.Creature ghost){
 		Vector<Direction> possibleDirections = new Vector<>(0, 1);
 		
-		Direction previousDirection = ghost.getDirection();
+		Direction oppositeDirection = getOppositeDirection( ghost.getDirection() );
 		
-		for (Direction d : Direction.values()){
-			if ( getCreatureAt( getNextLocation(ghost, d) ) != Board.Creature.Wall &&
-					d != previousDirection)
+		Board.Creature[] dontGoThere = {
+			Board.Creature.Ghost1, Board.Creature.Ghost2, Board.Creature.Wall, 
+			Board.Creature.Ghost3, Board.Creature.Ghost4,
+		};
+		
+		for (Direction d : Direction.values()){			
+			if ( ! Arrays.stream( dontGoThere ).anyMatch( getCreatureAt( getNextLocation(ghost, d) ) :: equals ) &&
+					d != oppositeDirection)
 				possibleDirections.add(d);
 		}
 		
 		if (possibleDirections.capacity() == 0)
-			possibleDirections.add( getCreatureAt( getNextLocation( ghost, previousDirection ) )
-					!= Board.Creature.Wall ? previousDirection : defaultDirection);
+			possibleDirections.add(oppositeDirection);
 		
 		return possibleDirections;
+	}
+	
+	private Direction getOppositeDirection(Direction d){
+		switch (d) {
+	        case Up: 
+	        	return Direction.Down;
+	        case Down:  
+	        	return Direction.Up;
+	        case Right:
+	        	return Direction.Left;
+	        case Left:
+	        	return Direction.Right;
+		}
 		
+		// Impossible to get here, but java forces me to write it
+		return defaultDirection;
 	}
 	
 	public Board.Creature getCreatureAt(Location l){
@@ -200,9 +219,7 @@ public class Game{
 			Board.Creature ghost = getGhostCreatureByNum(i + 1);
 			
 			int possibleWays = findNewPathForGhost( ghost ).capacity();
-			if ( possibleWays > 1  && getCreatureAt( getNextLocation(ghost, ghost.getDirection()) ) == Board.Creature.Wall ) {
-				ghost.setNextDirection( findNewPathForGhost( ghost ).get(possibleWays - 1) );
-			}
+			ghost.setNextDirection( findNewPathForGhost( ghost ).get( (int) (Math.random() * possibleWays - 1) ) );
 			
 			changeDirection( ghost.getNextDirection(), ghost );
 			moveGhost( ghost );
