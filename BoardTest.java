@@ -1,37 +1,45 @@
+package pacman;
+
 import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import pacman.Board;
+
 public class BoardTest {
 	
-	Board.Creature[][] board;
+	Board board;
 	
 	@Before
 	public void setup(){
-		board = new Board().get();
+		board = new Board();
 	}
 	
 	@Test
 	public void testDimensions_Equal(){
 		// arrange
+		Board b = new Board();
 		
 		// action
-		int dimensions = new Board().getDimensions();
+		int Xdim = b.getDimensions('X'), Ydim = b.getDimensions('Y');
 		
 		// assert
-		assertEquals(30, dimensions);
+		assertEquals(30, Xdim);
+		assertEquals(30, Ydim);
 	}
 	
 	@Test
 	public void testDimensions_Different(){
 		// arrange
+		Board b = new Board(new String[]{"---", "---"});
 		
 		// action
-		int dimensions = new Board(new String[]{"---", "---"}).getDimensions();
+		int Xdim = b.getDimensions('X'), Ydim = b.getDimensions('Y');
 		
 		// assert
-		assertEquals(23, dimensions);
+		assertEquals(02, Xdim);
+		assertEquals(03, Ydim);
 	}
 	
 	@Test
@@ -97,15 +105,16 @@ public class BoardTest {
 	
 	private int count(Board.Creature c){
 		int cNum = 0;
-		for (int i = 0; i < board.length; i++){
-			for (int j = 0; j < board[0].length; j++){
-				if (board[i][j] == c)
+		for (int i = 0; i < board.get().length; i++){
+			for (int j = 0; j < board.get()[0].length; j++){
+				if (board.get()[i][j] == c)
 					cNum ++;
 			}
 		}
 		return cNum;
 	}	
 	
+	@SuppressWarnings("deprecation")
 	@Test
 	public void setBoardWithSingleString(){
 		// arrange
@@ -113,12 +122,13 @@ public class BoardTest {
 				Board.Creature.Ghost1, Board.Creature.Point, Board.Creature.Null};
 		
 		// action
-		this.board = new Board(new String[]{"PWG-."}).get();
+		this.board = new Board(new String[]{"PWG-."});
 		
 		// assert
-		assertEquals(expected, this.board[0]);
+		assertEquals(expected, this.board.get()[0]);
 	}
 
+	@SuppressWarnings("deprecation")
 	@Test
 	public void setBoardWithArrayString(){
 		// arrange
@@ -129,10 +139,10 @@ public class BoardTest {
 		};
 		
 		// action
-		this.board = new Board(new String[] {"PW", "-G", "W."}).get();
+		this.board = new Board(new String[] {"PW", "-G", "W."});
 		
 		// assert
-		assertEquals(expected, this.board);
+		assertEquals(expected, this.board.get());
 	}
 	
 }

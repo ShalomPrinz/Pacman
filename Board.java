@@ -1,6 +1,8 @@
+package pacman;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Board {
@@ -33,7 +35,7 @@ public class Board {
 		
 	}
 
-	enum Creature implements Moveable{
+	public enum Creature implements Moveable{
 		Pacman,
 		Ghost1, Ghost2, Ghost3, Ghost4,
 		Point,
@@ -42,7 +44,7 @@ public class Board {
 
 		private Location location;
 		private Game.Direction direction;
-		private Game.Direction goHere = Game.defaultDirection;
+		private Game.Direction goHere;
 		
 		@Override
 		public Location getLocation() {
@@ -99,17 +101,18 @@ public class Board {
 	public void limitToSpecificCreatures(Creature[] CreaturesForThisBoard){
 		for (int i = 0; i < board.length; i++){
 			for (int j = 0; j < board[0].length; j++){
-				if (!isCreatureAllowed( get(new Location(i, j) ), CreaturesForThisBoard ))
+				if (! Arrays.stream( CreaturesForThisBoard ).anyMatch( get(new Location(i, j)) :: equals ) )
 					set( new Location(i, j), Creature.Null );
 			}
 		}
 	}
 	
-	public int getDimensions(){
-		if (board.length != board[0].length)
-			return Integer.parseInt( new String( board.length + "" + board[0].length ) );
+	public int getDimensions(char dim){
+		int beginIndex, endIndex;
+		beginIndex = (dim == 'X') ? 0 : 2;
+		endIndex = (dim == 'X') ? 2 : 4;
 		
-		return board.length;
+		return Integer.parseInt( new String( String.format( "%02d", board.length )  + String.format( "%02d", board[0].length ) ).substring(beginIndex, endIndex) );
 	}
 	
 	public int getGhostNum(){
@@ -163,16 +166,6 @@ public class Board {
 		}
 		
 		return this.board;
-	}
-
-	private boolean isCreatureAllowed(Board.Creature isAllowed, Board.Creature[] allowedArray){
-		
-		for (Board.Creature cre : allowedArray){
-			if (isAllowed == cre)
-				return true;
-		}
-		
-		return false;
 	}
 
 	private void initialize(Location l, Creature c){

@@ -1,6 +1,10 @@
+package pacman;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
+
+import pacman.Board;
+import pacman.Location;
 
 public class GameTest {
 
