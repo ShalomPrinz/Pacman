@@ -36,15 +36,20 @@ public class Board {
 	}
 
 	public enum Creature implements Moveable{
-		Pacman,
-		Ghost1, Ghost2, Ghost3, Ghost4,
-		Point,
-		Wall,
-		Null;
+		PACMAN,
+		GHOST_1, GHOST_2, GHOST_3, GHOST_4,
+		POINT,
+		WALL,
+		NULL;
 
+		private Location initialLocation;
 		private Location location;
 		private Game.Direction direction;
 		private Game.Direction goHere;
+		
+		public Location getInitialLocation() {
+			return this.initialLocation;
+		}
 		
 		@Override
 		public Location getLocation() {
@@ -89,20 +94,20 @@ public class Board {
 	public void set(Location l, Creature c){
 		board[l.getX()][l.getY()] = c;
 		
-		if (c == Creature.Wall || c == Creature.Null || c == Creature.Point)
+		if (c == Creature.WALL || c == Creature.NULL || c == Creature.POINT)
 			return;
 		
 		c.setLocation(l);
 		
 		if (c.getDirection() == null)
-			c.setDirection(Game.defaultDirection);
+			c.setDirection(Game.DEFAULT_DIRECTION);
 	}
 	
 	public void limitToSpecificCreatures(Creature[] CreaturesForThisBoard){
 		for (int i = 0; i < board.length; i++){
 			for (int j = 0; j < board[0].length; j++){
 				if (! Arrays.stream( CreaturesForThisBoard ).anyMatch( get(new Location(i, j)) :: equals ) )
-					set( new Location(i, j), Creature.Null );
+					set( new Location(i, j), Creature.NULL );
 			}
 		}
 	}
@@ -135,26 +140,26 @@ public class Board {
 	private Creature StringToCreature(String st){
 		switch(st){
 			case "P":
-				return Creature.Pacman;
+				return Creature.PACMAN;
 			case "W":
-				return Creature.Wall;
+				return Creature.WALL;
 			case "-":
-				return Creature.Point;
+				return Creature.POINT;
 			case "G":				
 				this.ghostsNumber++;
 				switch(this.ghostsNumber){
 					case 1:
-						return Creature.Ghost1;
+						return Creature.GHOST_1;
 					case 2:
-						return Creature.Ghost2;
+						return Creature.GHOST_2;
 					case 3:
-						return Creature.Ghost3;
+						return Creature.GHOST_3;
 					case 4:
-						return Creature.Ghost4;
+						return Creature.GHOST_4;
 				}
 				
 			default:
-				return Creature.Null;
+				return Creature.NULL;
 		}
 	}
 
@@ -171,6 +176,7 @@ public class Board {
 	private void initialize(Location l, Creature c){
 		c.setLocation(null);
 		c.setDirection(null);
+		c.initialLocation = l;
 		set( l, c );
 	}
 
