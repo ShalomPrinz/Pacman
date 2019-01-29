@@ -1,3 +1,4 @@
+package pacman;
 
 public interface Moveable {
 	
@@ -8,4 +9,13 @@ public interface Moveable {
 	Game.Direction getDirection();
 
 	void setDirection(Game.Direction direction);
+	
+	Game.Direction getNextDirection();
+	
+	void setNextDirection(Game.Direction nextDirection);
+	
+	Location getInitialLocation();
+	
+	void setInitialLocation(Location initialLocation);
+	
 }

@@ -1,22 +1,24 @@
+package pacman;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.util.Arrays;
 import java.util.Scanner;
+import java.util.Vector;
+
+import pacman.Creature.Type;
 
 public class Board {
 	
-	public Board(){
+	public Board() {
 		this(null);
 	}
 	
-	public Board(String[] rowsArray){
+	public Board(String[] rowsArray) {
 		this.ghostsNumber = 0;
+		this.movingCreatures = new Vector<>(0, 1);
 		
-		for (Creature c : Creature.values()){
-			c.setLocation(null);
-			c.setNextDirection(null);
-		}
-			
 		if (rowsArray == null){
 			this.board = new Creature[30][30];
 			
@@ -33,48 +35,13 @@ public class Board {
 		
 	}
 
-	enum Creature implements Moveable{
-		Pacman,
-		Ghost1, Ghost2, Ghost3, Ghost4,
-		Point,
-		Wall,
-		Null;
-
-		private Location location;
-		private Game.Direction direction;
-		private Game.Direction goHere = Game.defaultDirection;
-		
-		@Override
-		public Location getLocation() {
-			return this.location;
-		}
-
-		@Override
-		public void setLocation(Location location) {
-			this.location = location;
-		}
-
-		@Override
-		public Game.Direction getDirection() {
-			return this.direction;
-		}
-
-		@Override
-		public void setDirection(Game.Direction direction) {
-			this.direction = direction;
-		}
-
-		public Game.Direction getNextDirection() {
-			return goHere;
-		}
-
-		public void setNextDirection(Game.Direction goHere) {
-			this.goHere = goHere;
-		}
-	}
-	
+	private Vector< MovingCreature > movingCreatures;
 	private Creature[][] board;
 	private int ghostsNumber;
+	
+	public MovingCreature[] getMovingCreatures() {
+		return this.movingCreatures.toArray( new MovingCreature[ this.movingCreatures.size() ] );
+	}
 	
 	public Creature[][] get() {
 		return board.clone();
@@ -87,29 +54,32 @@ public class Board {
 	public void set(Location l, Creature c){
 		board[l.getX()][l.getY()] = c;
 		
-		if (c == Creature.Wall || c == Creature.Null || c == Creature.Point)
+		if ( isStaticCreature(c) )
 			return;
 		
-		c.setLocation(l);
+		MovingCreature Mc = (MovingCreature) c;
 		
-		if (c.getDirection() == null)
-			c.setDirection(Game.defaultDirection);
+		Mc.setLocation(l);
+		
+		if (Mc.getDirection() == null)
+			Mc.setDirection(Game.DEFAULT_DIRECTION);
 	}
 	
-	public void limitToSpecificCreatures(Creature[] CreaturesForThisBoard){
+	public void limitToSpecificCreatures(Type[] TypesForThisBoard){
 		for (int i = 0; i < board.length; i++){
 			for (int j = 0; j < board[0].length; j++){
-				if (!isCreatureAllowed( get(new Location(i, j) ), CreaturesForThisBoard ))
-					set( new Location(i, j), Creature.Null );
+				if (! Arrays.stream( TypesForThisBoard ).anyMatch( get( new Location(i, j) ).getType() :: equals ) )
+					set( new Location(i, j), new Null() );
 			}
 		}
 	}
 	
-	public int getDimensions(){
-		if (board.length != board[0].length)
-			return Integer.parseInt( new String( board.length + "" + board[0].length ) );
+	public int getDimensions(char dim){
+		int beginIndex, endIndex;
+		beginIndex = (dim == 'X') ? 0 : 2;
+		endIndex = (dim == 'X') ? 2 : 4;
 		
-		return board.length;
+		return Integer.parseInt( new String( String.format( "%02d", board.length )  + String.format( "%02d", board[0].length ) ).substring(beginIndex, endIndex) );
 	}
 	
 	public int getGhostNum(){
@@ -130,30 +100,21 @@ public class Board {
 	}
 	
 	private Creature StringToCreature(String st){
-		switch(st){
-			case "P":
-				return Creature.Pacman;
-			case "W":
-				return Creature.Wall;
-			case "-":
-				return Creature.Point;
-			case "G":				
-				this.ghostsNumber++;
-				switch(this.ghostsNumber){
-					case 1:
-						return Creature.Ghost1;
-					case 2:
-						return Creature.Ghost2;
-					case 3:
-						return Creature.Ghost3;
-					case 4:
-						return Creature.Ghost4;
-				}
 				
+		switch(st){
+			case "W":
+				return Wall.getInstance();
+			case "-":
+				return new Point();
+			case "P":
+				return new Pacman();
+			case "G":
+				return new Ghost();
 			default:
-				return Creature.Null;
+				return new Null();
 		}
-	}
+				
+	}	
 
 	private Creature[][] setBoardWithStringArray(String[] sts) {
 		
@@ -165,20 +126,16 @@ public class Board {
 		return this.board;
 	}
 
-	private boolean isCreatureAllowed(Board.Creature isAllowed, Board.Creature[] allowedArray){
-		
-		for (Board.Creature cre : allowedArray){
-			if (isAllowed == cre)
-				return true;
-		}
-		
-		return false;
-	}
-
 	private void initialize(Location l, Creature c){
-		c.setLocation(null);
-		c.setDirection(null);
+		if ( !isStaticCreature( c ) ) {
+			MovingCreature Mc = (MovingCreature) c;
+			Mc.setInitialLocation( l );
+			this.movingCreatures.add(Mc);
+		}
 		set( l, c );
 	}
 
+	private boolean isStaticCreature( Creature c ) {
+		return ( c.getType() == Type.WALL || c.getType() == Type.NULL || c.getType() == Type.POINT );
+	}
 }

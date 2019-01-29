@@ -1,37 +1,46 @@
+package pacman;
+
 import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import pacman.Board;
+import pacman.Creature.Type;
+
 public class BoardTest {
 	
-	Board.Creature[][] board;
+	Board board;
 	
 	@Before
 	public void setup(){
-		board = new Board().get();
+		board = new Board();
 	}
 	
 	@Test
 	public void testDimensions_Equal(){
 		// arrange
+		Board b = new Board();
 		
 		// action
-		int dimensions = new Board().getDimensions();
+		int Xdim = b.getDimensions('X'), Ydim = b.getDimensions('Y');
 		
 		// assert
-		assertEquals(30, dimensions);
+		assertEquals(30, Xdim);
+		assertEquals(30, Ydim);
 	}
 	
 	@Test
 	public void testDimensions_Different(){
 		// arrange
+		Board b = new Board(new String[]{"---", "---"});
 		
 		// action
-		int dimensions = new Board(new String[]{"---", "---"}).getDimensions();
+		int Xdim = b.getDimensions('X'), Ydim = b.getDimensions('Y');
 		
 		// assert
-		assertEquals(23, dimensions);
+		assertEquals(02, Xdim);
+		assertEquals(03, Ydim);
 	}
 	
 	@Test
@@ -39,7 +48,7 @@ public class BoardTest {
 		// arrange
 		
 		// action
-		int pacmans = count(Board.Creature.Pacman);
+		int pacmans = count( Type.PACMAN );
 		
 		// assert
 		assertEquals(1, pacmans);
@@ -50,16 +59,10 @@ public class BoardTest {
 		// arrange
 		
 		// action
-		int Ghost1 = count(Board.Creature.Ghost1);
-		int Ghost2 = count(Board.Creature.Ghost2);
-		int Ghost3 = count(Board.Creature.Ghost3);
-		int Ghost4 = count(Board.Creature.Ghost4);
+		int ghosts = count( Type.GHOST );
 		
 		// assert
-		assertEquals(1, Ghost1);
-		assertEquals(1, Ghost2);
-		assertEquals(1, Ghost3);
-		assertEquals(1, Ghost4);
+		assertEquals(4, ghosts);
 	}
 	
 	@Test
@@ -67,7 +70,7 @@ public class BoardTest {
 		// arrange
 		
 		// action
-		int points = count(Board.Creature.Point);
+		int points = count( Type.POINT);
 		
 		// assert
 		assertEquals(330, points);
@@ -78,7 +81,7 @@ public class BoardTest {
 		// arrange
 		
 		// action
-		int nulls = count(Board.Creature.Null);
+		int nulls = count( Type.NULL );
 		
 		// assert
 		assertEquals(148, nulls);
@@ -89,17 +92,17 @@ public class BoardTest {
 		// arrange
 		
 		// action
-		int walls = count(Board.Creature.Wall);
+		int walls = count( Type.WALL );
 		
 		// assert
 		assertEquals(417, walls);
 	}
 	
-	private int count(Board.Creature c){
+	private int count(Type t){
 		int cNum = 0;
-		for (int i = 0; i < board.length; i++){
-			for (int j = 0; j < board[0].length; j++){
-				if (board[i][j] == c)
+		for (int i = 0; i < board.get().length; i++){
+			for (int j = 0; j < board.get()[i].length; j++){
+				if (board.get()[i][j].getType() == t)
 					cNum ++;
 			}
 		}
@@ -109,30 +112,34 @@ public class BoardTest {
 	@Test
 	public void setBoardWithSingleString(){
 		// arrange
-		Board.Creature[] expected = {Board.Creature.Pacman, Board.Creature.Wall,
-				Board.Creature.Ghost1, Board.Creature.Point, Board.Creature.Null};
+		Type[] expected = {Type.PACMAN, Type.WALL,
+				Type.GHOST, Type.POINT, Type.NULL};
 		
 		// action
-		this.board = new Board(new String[]{"PWG-."}).get();
+		this.board = new Board(new String[]{"PWG-."});
 		
 		// assert
-		assertEquals(expected, this.board[0]);
+		for (int i = 0; i < this.board.get()[0].length; i++)
+			assertEquals( expected[i], this.board.get( new Location(0, i) ).getType() );
 	}
 
 	@Test
 	public void setBoardWithArrayString(){
 		// arrange
-		Board.Creature[][] expected = {
-			{Board.Creature.Pacman, Board.Creature.Wall},
-			{Board.Creature.Point, Board.Creature.Ghost1},
-			{Board.Creature.Wall, Board.Creature.Null} 
+		Type[][] expected = {
+			{Type.PACMAN, Type.WALL},
+			{Type.POINT, Type.GHOST},
+			{Type.WALL, Type.NULL} 
 		};
 		
 		// action
-		this.board = new Board(new String[] {"PW", "-G", "W."}).get();
+		this.board = new Board(new String[] {"PW", "-G", "W."});
 		
 		// assert
-		assertEquals(expected, this.board);
+		for (int i = 0; i < this.board.get().length; i++) {
+			for (int j = 0; j < this.board.get()[i].length; j++) 
+				assertEquals( expected[i][j], this.board.get( new Location(i, j) ).getType() );
+		}
 	}
 	
 }
