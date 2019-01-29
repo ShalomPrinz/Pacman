@@ -1,7 +1,7 @@
 package pacman;
 
 public class Pacman extends MovingCreature{
-
+	
 	@Override
 	Type getType() {
 		return Type.PACMAN;
@@ -15,13 +15,26 @@ public class Pacman extends MovingCreature{
 		Location nextLocation = game.getNextLocation(this, this.getDirection());
 		
 		switch ( game.getCreatureAt(nextLocation).getType() ){
+			case BIG_POINT:
+				game.activateGhostEating();
 			case POINT:
-				game.setScore( game.getScore() + Game.POINT_SCORE );
+				game.setScore( game.getScore() + ( (ScoreIncrement) game.getCreatureAt(nextLocation) ).getValue()  );
 			case NULL:
 				game.set( currentLocation, nextLocation, this );
 				break;
 			case GHOST:
-				game.pacmanDead();
+				Ghost g = (Ghost) game.getCreatureAt(nextLocation);
+				switch ( g.currentMode ) {
+					case EATABLE:
+						game.set( currentLocation, nextLocation, this );
+						break;
+					case ALIVE:
+						game.pacmanDead();
+						break;
+					default:
+						break;
+				}
+				break;
 			default:
 				break;
 		}

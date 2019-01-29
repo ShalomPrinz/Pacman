@@ -18,6 +18,7 @@ public class Program extends JFrame{
 	 */
 	Game game;
 	Pacman pacman;
+	Ghost someGhost;
 	static final int Xdim = 30, Ydim = 30;
 	Timer show;
 	
@@ -31,6 +32,7 @@ public class Program extends JFrame{
 		
 		this.game = new Game();
 		this.pacman = findPacman();
+		this.someGhost = findGhost();
 		
 		for (Game.Direction d : Game.Direction.values()){
 			DirectionChanger change = new DirectionChanger(d.name(), game, pacman);
@@ -43,24 +45,33 @@ public class Program extends JFrame{
 	private String CreatureToString(Creature c){
 		switch( c.getType() ){
 			case GHOST:
-				return "G";
+				Ghost g = (Ghost) c;
+				if (g.currentMode == Ghost.Mode.ALIVE)
+					return "G";
+				if (g.currentMode == Ghost.Mode.EATABLE)
+					return "g";
+				return "D";
 			case NULL:
 				return "-";
 			case PACMAN:
 				return "P";
 			case POINT:
 				return ".";
+			case BIG_POINT:
+				return "o";
 			case WALL:
 				return "W";
+			case REVIVOR:
+				return "R";
 		}
 		
-		return ".";
+		return "-";
 	}
 	
 	private void showBoard() {
 		for (int i = 0; i < Xdim; i++){
 			for (int j = 0; j < Ydim; j++)
-				System.out.print( this.CreatureToString( this.game.getCreatureAt(new Location(i, j)) ) );
+				System.out.print( this.CreatureToString( this.game.getCreatureAt( new Location(i, j) ) ) );
 			
 			System.out.println();
 		}
@@ -116,7 +127,7 @@ public class Program extends JFrame{
 			@Override
 			public void run() {
 								
-				System.out.println( "\nRound: " + round + ", Score: " + game.getScore() );
+				System.out.println( "\nRound: " + round + ", Score: " + game.getScore() + ", Pacman " + ( someGhost.currentMode == Ghost.Mode.EATABLE ? "Can" : "Can't" ) + " Eat a Ghost" );
 				round ++;
 				game.move( null );
 				showBoard();
@@ -128,17 +139,29 @@ public class Program extends JFrame{
 					
 			}
 
-		}, 0, 400);
+		}, 0, 300);
 	}
 
-	private Pacman findPacman() {
+	public Pacman findPacman() {
 		for (int i = 0; i < Xdim; i++) {
 			for (int j = 0; j < Ydim; j++) {
-				if (this.game.getCreatureAt( new Location(i, j) ).getType() == Creature.Type.PACMAN)
-					return (Pacman) this.game.getCreatureAt( new Location(i, j));
+				if (game.getCreatureAt( new Location(i, j) ).getType() == Creature.Type.PACMAN)
+					return (Pacman) game.getCreatureAt( new Location(i, j));
 			}
 		}
 		
 		return null;
 	}
+	
+	public Ghost findGhost() {
+		for (int i = 0; i < Xdim; i++) {
+			for (int j = 0; j < Ydim; j++) {
+				if (game.getCreatureAt( new Location(i, j) ).getType() == Creature.Type.GHOST)
+					return (Ghost) game.getCreatureAt( new Location(i, j));
+			}
+		}
+		
+		return null;
+	}
+	
 }

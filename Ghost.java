@@ -5,8 +5,18 @@ import java.util.Vector;
 
 import pacman.Game.Direction;
 
-public class Ghost extends MovingCreature{
+public class Ghost extends MovingCreature implements ScoreIncrement{
 
+	private final static int VALUE = 200;
+	
+	public Mode currentMode = Mode.ALIVE;
+	
+	public enum Mode{
+		ALIVE,
+		EATABLE,
+		DEAD
+	}
+	
 	@Override
 	Type getType() {
 		return Type.GHOST;
@@ -23,17 +33,39 @@ public class Ghost extends MovingCreature{
 		Location nextLocation = game.getNextLocation(this, this.getDirection());
 		
 		switch ( game.getCreatureAt(nextLocation).getType() ){
+			case BIG_POINT:
 			case POINT:
 			case NULL:
 				game.set( currentLocation, nextLocation, this );
 				break;
 			case PACMAN:
-				game.pacmanDead();
+				switch (this.currentMode) {
+					case EATABLE:
+						game.setScore( game.getScore() + this.getValue() );
+						this.currentMode = Mode.DEAD;
+						break;
+					case ALIVE:
+						game.pacmanDead();
+						break;
+					default:
+						break;
+				}
+				break;
+			case REVIVOR:
+				if (this.currentMode == Mode.DEAD)
+					this.currentMode = Mode.ALIVE;
+				game.set( currentLocation, nextLocation, this );
+				break;
 			default:
 				break;					
 		}
 	}
 	
+	@Override
+	public int getValue() {
+		return VALUE;
+	}
+		
 	private Vector<Direction> findNewPath(Game game){
 		
 		Vector<Direction> possibleDirections = new Vector<>(0, 1);
@@ -71,5 +103,11 @@ public class Ghost extends MovingCreature{
 		// Impossible to get here, but java forces me to write it
 		return Game.DEFAULT_DIRECTION;
 	}
-	
+		
+//	@Override
+//	public picture getPicture() {
+//		switch ( this.currentMode ) {
+//			choose picture by mode
+//		}	
+//	}
 }

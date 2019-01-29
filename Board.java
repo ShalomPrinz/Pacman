@@ -35,7 +35,7 @@ public class Board {
 		
 	}
 
-	private Vector< MovingCreature > movingCreatures;
+	private Vector < MovingCreature > movingCreatures;
 	private Creature[][] board;
 	private int ghostsNumber;
 	
@@ -47,11 +47,11 @@ public class Board {
 		return board.clone();
 	}
 
-	public Creature get(Location l){
+	public Creature get(Location l) {
 		return board[l.getX()][l.getY()];
 	}
 	
-	public void set(Location l, Creature c){
+	public void set(Location l, Creature c) {
 		board[l.getX()][l.getY()] = c;
 		
 		if ( isStaticCreature(c) )
@@ -65,7 +65,7 @@ public class Board {
 			Mc.setDirection(Game.DEFAULT_DIRECTION);
 	}
 	
-	public void limitToSpecificCreatures(Type[] TypesForThisBoard){
+	public void limitToSpecificCreatures( Type[] TypesForThisBoard ) {
 		for (int i = 0; i < board.length; i++){
 			for (int j = 0; j < board[0].length; j++){
 				if (! Arrays.stream( TypesForThisBoard ).anyMatch( get( new Location(i, j) ).getType() :: equals ) )
@@ -74,7 +74,7 @@ public class Board {
 		}
 	}
 	
-	public int getDimensions(char dim){
+	public int getDimensions(char dim) {
 		int beginIndex, endIndex;
 		beginIndex = (dim == 'X') ? 0 : 2;
 		endIndex = (dim == 'X') ? 2 : 4;
@@ -82,11 +82,11 @@ public class Board {
 		return Integer.parseInt( new String( String.format( "%02d", board.length )  + String.format( "%02d", board[0].length ) ).substring(beginIndex, endIndex) );
 	}
 	
-	public int getGhostNum(){
+	public int getGhostNum() {
 		return this.ghostsNumber;
 	}
 	
-	private Creature[][] setBoard() throws FileNotFoundException{
+	private Creature[][] setBoard() throws FileNotFoundException {
 		Scanner sc = new Scanner(new BufferedReader(new FileReader("./Board.txt")));
 	    while(sc.hasNextLine()) {
 	    	for (int i = 0; i < board.length && sc.hasNextLine(); i++) {
@@ -99,17 +99,21 @@ public class Board {
 	    return board;
 	}
 	
-	private Creature StringToCreature(String st){
+	private Creature StringToCreature(String st) {
 				
 		switch(st){
 			case "W":
 				return Wall.getInstance();
 			case "-":
 				return new Point();
+			case "B":
+				return new BigPoint();
 			case "P":
 				return new Pacman();
 			case "G":
 				return new Ghost();
+			case "R":
+				return new Revivor();
 			default:
 				return new Null();
 		}
@@ -126,7 +130,7 @@ public class Board {
 		return this.board;
 	}
 
-	private void initialize(Location l, Creature c){
+	private void initialize(Location l, Creature c) {
 		if ( !isStaticCreature( c ) ) {
 			MovingCreature Mc = (MovingCreature) c;
 			Mc.setInitialLocation( l );
@@ -136,6 +140,8 @@ public class Board {
 	}
 
 	private boolean isStaticCreature( Creature c ) {
-		return ( c.getType() == Type.WALL || c.getType() == Type.NULL || c.getType() == Type.POINT );
+		Type[] staticCreatures = { Type.BIG_POINT, Type.NULL, Type.POINT, Type.REVIVOR, Type.WALL};
+		return Arrays.stream( staticCreatures ).anyMatch( c.getType() :: equals );
 	}
+
 }

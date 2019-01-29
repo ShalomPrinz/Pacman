@@ -11,7 +11,7 @@ public class Game{
 	boolean gameOn;
 	
 	public static final Direction DEFAULT_DIRECTION = Direction.LEFT;
-	public static final int POINT_SCORE = 10;
+	public static final long GHOST_EATING_PERIOD = 10000; // 10 seconds
 		
 	public Game(){
 		this(null); // prevents duplicate constructors and mistakes
@@ -26,7 +26,7 @@ public class Game{
 		this.topBoard.limitToSpecificCreatures(new Type[]{Type.GHOST, Type.PACMAN});
 		
 		this.botBoard = new Board(b);
-		this.botBoard.limitToSpecificCreatures(new Type[]{Type.WALL, Type.POINT, Type.NULL} );
+		this.botBoard.limitToSpecificCreatures(new Type[]{Type.WALL, Type.POINT, Type.BIG_POINT, Type.NULL, Type.REVIVOR} );
 	
 	}	
 	
@@ -77,7 +77,7 @@ public class Game{
 
 	public void set(Location current, Location next, MovingCreature creature) {
 		topBoard.set( current, new Null() );
-		topBoard.set( next, creature);
+		topBoard.set( next, creature );
 		if (creature.getType() == Type.PACMAN)
 			botBoard.set( next, new Null() );
 	}
@@ -90,6 +90,28 @@ public class Game{
 		
 		for (MovingCreature c : creatures)
 			c.move(this);		
+	}
+	
+	public void activateGhostEating() {
+		setModeForAllGhosts( Ghost.Mode.EATABLE );
+		
+		new Thread( () ->  {
+			
+			long end = System.currentTimeMillis() + Game.GHOST_EATING_PERIOD; 
+			while (System.currentTimeMillis() < end);
+			setModeForAllGhosts( Ghost.Mode.ALIVE ); // unless dead (inside method)	
+			
+		}).start();
+	}
+
+	private void setModeForAllGhosts( Ghost.Mode m ) {
+		for ( MovingCreature Mc : topBoard.getMovingCreatures() ) {
+			if (Mc.getType() == Type.GHOST) {
+				Ghost g = (Ghost) Mc;
+				if (g.currentMode != Ghost.Mode.DEAD)
+					g.currentMode = m;
+			}	
+		}
 	}
 	
 	public Location getNextLocation(MovingCreature Mc, Direction d) {
