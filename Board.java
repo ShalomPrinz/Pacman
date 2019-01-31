@@ -66,10 +66,12 @@ public class Board {
 			this.direction = direction;
 		}
 
+		@Override
 		public Game.Direction getNextDirection() {
 			return goHere;
 		}
 
+		@Override
 		public void setNextDirection(Game.Direction goHere) {
 			this.goHere = goHere;
 		}

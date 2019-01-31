@@ -9,4 +9,8 @@ public interface Moveable {
 	Game.Direction getDirection();
 
 	void setDirection(Game.Direction direction);
+
+	Game.Direction getNextDirection();
+
+	void setNextDirection(Game.Direction nextDirection);
 }
