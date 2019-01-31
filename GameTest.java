@@ -22,7 +22,7 @@ public class GameTest {
 		// arrange
 		setGameBoardByStringArray(new String[]{"PW"});
 		Location l1 = new Location(0, 0), l2 = new Location(0, 1);
-		Board.Creature.PACMAN.setDirection(Game.Direction.Right);
+		Board.Creature.PACMAN.setDirection(Game.Direction.RIGHT);
 		
 		// action
 		game.move();
@@ -37,7 +37,7 @@ public class GameTest {
 		// arrange
 		setGameBoardByStringArray(new String[]{"P-"});
 		Location l1 = new Location(0, 0), l2 = new Location(0, 1);
-		Board.Creature.PACMAN.setDirection(Game.Direction.Right);
+		Board.Creature.PACMAN.setDirection(Game.Direction.RIGHT);
 		
 		// action
 		game.move();
@@ -51,7 +51,7 @@ public class GameTest {
 	public void PacmanRightGhost(){
 		// arrange
 		setGameBoardByStringArray(new String[]{"PG"});
-		Board.Creature.PACMAN.setDirection(Game.Direction.Right);
+		Board.Creature.PACMAN.setDirection(Game.Direction.RIGHT);
 		
 		// action
 		game.move();
@@ -65,7 +65,7 @@ public class GameTest {
 		// arrange
 		setGameBoardByStringArray(new String[]{"P."});
 		Location l1 = new Location(0, 0), l2 = new Location(0, 1);
-		Board.Creature.PACMAN.setDirection(Game.Direction.Right);
+		Board.Creature.PACMAN.setDirection(Game.Direction.RIGHT);
 		
 		// action
 		game.move();
@@ -80,7 +80,7 @@ public class GameTest {
 		// arrange
 		setGameBoardByStringArray(new String[]{"--P", "...", "..."});
 		Location l1 = new Location(0, 0), l2 = new Location(0, 2);
-		Board.Creature.PACMAN.setDirection(Game.Direction.Right);
+		Board.Creature.PACMAN.setDirection(Game.Direction.RIGHT);
 		
 		// action
 		game.move();
@@ -126,7 +126,7 @@ public class GameTest {
 	public void PacmanUpGhost(){
 		// arrange
 		setGameBoardByStringArray(new String[]{"G-", "PW"});
-		Board.Creature.PACMAN.setDirection(Game.Direction.Up);
+		Board.Creature.PACMAN.setDirection(Game.Direction.UP);
 		
 		// action
 		game.move();
@@ -142,7 +142,7 @@ public class GameTest {
 		// arrange
 		setGameBoardByStringArray(new String[]{"PW", "WG"});
 		Location l1 = new Location(0, 0), l2 = new Location(1, 0);
-		Board.Creature.PACMAN.setDirection(Game.Direction.Down);
+		Board.Creature.PACMAN.setDirection(Game.Direction.DOWN);
 		
 		// action
 		game.move();
@@ -160,7 +160,7 @@ public class GameTest {
 		// arrange
 		setGameBoardByStringArray(new String[]{"GW"});
 		Location l1 = new Location(0, 0), l2 = new Location(0, 1);
-		Board.Creature.GHOST_1.setDirection(Game.Direction.Right);
+		Board.Creature.GHOST_1.setDirection(Game.Direction.RIGHT);
 		
 		// action
 		game.move();
@@ -175,7 +175,7 @@ public class GameTest {
 		// arrange
 		setGameBoardByStringArray(new String[]{"G-"});
 		Location l1 = new Location(0, 0), l2 = new Location(0, 1);
-		Board.Creature.GHOST_1.setDirection(Game.Direction.Right);
+		Board.Creature.GHOST_1.setDirection(Game.Direction.RIGHT);
 		
 		// action
 		game.move();
@@ -190,7 +190,7 @@ public class GameTest {
 		// arrange
 		setGameBoardByStringArray(new String[]{"G-."});
 		Location l1 = new Location(0, 0), l2 = new Location(0, 1), l3 = new Location(0, 2);
-		Board.Creature.GHOST_1.setDirection(Game.Direction.Right);
+		Board.Creature.GHOST_1.setDirection(Game.Direction.RIGHT);
 		
 		// action
 		game.move();
@@ -206,7 +206,7 @@ public class GameTest {
 	public void GhostRightPacman(){
 		// arrange
 		setGameBoardByStringArray(new String[]{"GP"});
-		Board.Creature.GHOST_1.setDirection(Game.Direction.Right);
+		Board.Creature.GHOST_1.setDirection(Game.Direction.RIGHT);
 		
 		// action
 		game.move();
@@ -220,7 +220,7 @@ public class GameTest {
 		// arrange
 		setGameBoardByStringArray(new String[]{"GG"});
 		Location l1 = new Location(0, 0), l2 = new Location(0, 1);
-		Board.Creature.GHOST_1.setDirection(Game.Direction.Right);
+		Board.Creature.GHOST_1.setDirection(Game.Direction.RIGHT);
 		
 		// action
 		game.move();
@@ -237,7 +237,7 @@ public class GameTest {
 		// arrange
 		setGameBoardByStringArray(new String[]{"GG"});
 		Location l1 = new Location(0, 0), l2 = new Location(0, 1);
-		Board.Creature.GHOST_1.setDirection(Game.Direction.Right);
+		Board.Creature.GHOST_1.setDirection(Game.Direction.RIGHT);
 		
 		// action
 		game.move();
@@ -254,7 +254,7 @@ public class GameTest {
 		// arrange
 		setGameBoardByStringArray(new String[]{".", "G"});
 		Location l1 = new Location(0, 0), l2 = new Location(1, 0);
-		Board.Creature.GHOST_1.setDirection(Game.Direction.Up);
+		Board.Creature.GHOST_1.setDirection(Game.Direction.UP);
 		
 		// action
 		game.move();
@@ -269,7 +269,7 @@ public class GameTest {
 		// arrange
 		setGameBoardByStringArray(new String[]{"WGW", "...", "..."});
 		Location l1 = new Location(2, 1), l2 = new Location(0, 1);
-		Board.Creature.GHOST_1.setDirection(Game.Direction.Up);
+		Board.Creature.GHOST_1.setDirection(Game.Direction.UP);
 		
 		// action
 		game.move();
@@ -286,7 +286,7 @@ public class GameTest {
 		// arrange
 		setGameBoardByStringArray(new String[]{"G", "-"});
 		Location l1 = new Location(0, 0), l2 = new Location(1, 0);
-		Board.Creature.GHOST_1.setDirection(Game.Direction.Down);
+		Board.Creature.GHOST_1.setDirection(Game.Direction.DOWN);
 		
 		// action
 		game.move();
@@ -301,7 +301,7 @@ public class GameTest {
 		// arrange
 		setGameBoardByStringArray(new String[]{"---", "-.-", ".G."});
 		Location l1 = new Location(2, 1), l2 = new Location(0, 1);
-		Board.Creature.GHOST_1.setDirection(Game.Direction.Down);
+		Board.Creature.GHOST_1.setDirection(Game.Direction.DOWN);
 		
 		// action
 		game.move();
@@ -321,7 +321,7 @@ public class GameTest {
 		Location l1 = new Location(0, 0), l2 = new Location(0, 1);
 		
 		// action
-		game.changeDirection(Game.Direction.Down, Board.Creature.PACMAN);
+		game.changeDirection(Game.Direction.DOWN, Board.Creature.PACMAN);
 		game.move();
 		
 		// assert
@@ -336,7 +336,7 @@ public class GameTest {
 		Location l1 = new Location(0, 0), l2 = new Location(1, 0);
 		
 		// action
-		game.changeDirection(Game.Direction.Down, Board.Creature.PACMAN);
+		game.changeDirection(Game.Direction.DOWN, Board.Creature.PACMAN);
 		game.move();
 		
 		// assert
@@ -351,7 +351,7 @@ public class GameTest {
 		Location l1 = new Location(0, 0), l2 = new Location(1, 0);
 		
 		// action
-		game.changeDirection(Game.Direction.Down, Board.Creature.PACMAN);
+		game.changeDirection(Game.Direction.DOWN, Board.Creature.PACMAN);
 		game.move();
 		game.move();
 		
@@ -369,7 +369,7 @@ public class GameTest {
 		Location l1 = new Location(0, 0), l2 = new Location(0, 1);
 		
 		// action
-		game.changeDirection(Game.Direction.Down, Board.Creature.GHOST_1);
+		game.changeDirection(Game.Direction.DOWN, Board.Creature.GHOST_1);
 		game.move();
 		
 		// assert
@@ -384,7 +384,7 @@ public class GameTest {
 		Location l1 = new Location(0, 0), l2 = new Location(1, 0);
 		
 		// action
-		game.changeDirection(Game.Direction.Down, Board.Creature.GHOST_1);
+		game.changeDirection(Game.Direction.DOWN, Board.Creature.GHOST_1);
 		game.move();
 		
 		// assert
@@ -399,7 +399,7 @@ public class GameTest {
 		Location l1 = new Location(0, 0), l2 = new Location(1, 0);
 		
 		// action
-		game.changeDirection(Game.Direction.Down, Board.Creature.GHOST_1);
+		game.changeDirection(Game.Direction.DOWN, Board.Creature.GHOST_1);
 		game.move();
 		game.move();
 		

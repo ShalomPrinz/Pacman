@@ -44,7 +44,7 @@ public class Board {
 
 		private Location location;
 		private Game.Direction direction;
-		private Game.Direction goHere = Game.Direction.Left;
+		private Game.Direction goHere = Game.Direction.LEFT;
 		
 		@Override
 		public Location getLocation() {

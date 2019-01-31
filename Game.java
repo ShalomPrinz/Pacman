@@ -10,7 +10,7 @@ public class Game{
 	
 	boolean gameOn;
 	
-	public static final Direction defaultDirection = Direction.Left;
+	public static final Direction defaultDirection = Direction.LEFT;
 	
 	Timer moveTimer;
 	
@@ -33,11 +33,11 @@ public class Game{
 	
 	}	
 	
-	public enum Direction{
-		Right,
-		Left,
-		Up,
-		Down
+	public enum Direction {
+		RIGHT,
+		LEFT,
+		UP,
+		DOWN
 	}
 	
 	private void movePacman(){	
@@ -133,16 +133,16 @@ public class Game{
 	
 	private Location changeLocationByDirection(int x, int y, Direction d){
 		switch (d){
-		case Right:
+		case RIGHT:
 			y ++;
 			break;
-		case Left:
+		case LEFT:
 			y --;
 			break;
-		case Down:
+		case DOWN:
 			x ++;
 			break;
-		case Up:
+		case UP:
 			x --;
 			break;
 		}
@@ -183,14 +183,14 @@ public class Game{
 	
 	private Direction getOppositeDirection( Direction d ){
 		switch(d) {
-			case Down:
-				return Direction.Up;
-			case Left:
-				return Direction.Right;
-			case Right:
-				return Direction.Left;
-			case Up:
-				return Direction.Down;
+			case DOWN:
+				return Direction.UP;
+			case LEFT:
+				return Direction.RIGHT;
+			case RIGHT:
+				return Direction.LEFT;
+			case UP:
+				return Direction.DOWN;
 			default:
 				return defaultDirection;
 		}
