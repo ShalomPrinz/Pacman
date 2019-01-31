@@ -1,3 +1,5 @@
+package pacman;
+
 import static org.junit.Assert.*;
 
 import org.junit.Before;
@@ -39,7 +41,7 @@ public class BoardTest {
 		// arrange
 		
 		// action
-		int pacmans = count(Board.Creature.Pacman);
+		int pacmans = count(Board.Creature.PACMAN);
 		
 		// assert
 		assertEquals(1, pacmans);
@@ -50,10 +52,10 @@ public class BoardTest {
 		// arrange
 		
 		// action
-		int Ghost1 = count(Board.Creature.Ghost1);
-		int Ghost2 = count(Board.Creature.Ghost2);
-		int Ghost3 = count(Board.Creature.Ghost3);
-		int Ghost4 = count(Board.Creature.Ghost4);
+		int Ghost1 = count(Board.Creature.GHOST_1);
+		int Ghost2 = count(Board.Creature.GHOST_2);
+		int Ghost3 = count(Board.Creature.GHOST_3);
+		int Ghost4 = count(Board.Creature.GHOST_4);
 		
 		// assert
 		assertEquals(1, Ghost1);
@@ -67,7 +69,7 @@ public class BoardTest {
 		// arrange
 		
 		// action
-		int points = count(Board.Creature.Point);
+		int points = count(Board.Creature.POINT);
 		
 		// assert
 		assertEquals(330, points);
@@ -78,7 +80,7 @@ public class BoardTest {
 		// arrange
 		
 		// action
-		int nulls = count(Board.Creature.Null);
+		int nulls = count(Board.Creature.NULL);
 		
 		// assert
 		assertEquals(148, nulls);
@@ -89,7 +91,7 @@ public class BoardTest {
 		// arrange
 		
 		// action
-		int walls = count(Board.Creature.Wall);
+		int walls = count(Board.Creature.WALL);
 		
 		// assert
 		assertEquals(417, walls);
@@ -106,11 +108,12 @@ public class BoardTest {
 		return cNum;
 	}	
 	
+	@SuppressWarnings("deprecation")
 	@Test
 	public void setBoardWithSingleString(){
 		// arrange
-		Board.Creature[] expected = {Board.Creature.Pacman, Board.Creature.Wall,
-				Board.Creature.Ghost1, Board.Creature.Point, Board.Creature.Null};
+		Board.Creature[] expected = {Board.Creature.PACMAN, Board.Creature.WALL,
+				Board.Creature.GHOST_1, Board.Creature.POINT, Board.Creature.NULL};
 		
 		// action
 		this.board = new Board(new String[]{"PWG-."}).get();
@@ -119,13 +122,14 @@ public class BoardTest {
 		assertEquals(expected, this.board[0]);
 	}
 
+	@SuppressWarnings("deprecation")
 	@Test
 	public void setBoardWithArrayString(){
 		// arrange
 		Board.Creature[][] expected = {
-			{Board.Creature.Pacman, Board.Creature.Wall},
-			{Board.Creature.Point, Board.Creature.Ghost1},
-			{Board.Creature.Wall, Board.Creature.Null} 
+			{Board.Creature.PACMAN, Board.Creature.WALL},
+			{Board.Creature.POINT, Board.Creature.GHOST_1},
+			{Board.Creature.WALL, Board.Creature.NULL} 
 		};
 		
 		// action
