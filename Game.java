@@ -165,20 +165,35 @@ public class Game{
 	private Vector<Direction> findNewPathForGhost(Board.Creature ghost){
 		Vector<Direction> possibleDirections = new Vector<>(0, 1);
 		
-		Direction previousDirection = ghost.getDirection();
+		Direction oppositeDirection = getOppositeDirection( ghost.getDirection() );
 		
 		for (Direction d : Direction.values()){
 			if ( getCreatureAt( getNextLocation(ghost, d) ) != Board.Creature.WALL &&
-					d != previousDirection)
+					d != oppositeDirection)
 				possibleDirections.add(d);
 		}
 		
 		if (possibleDirections.capacity() == 0)
-			possibleDirections.add( getCreatureAt( getNextLocation( ghost, previousDirection ) )
-					!= Board.Creature.WALL ? previousDirection : defaultDirection);
+			possibleDirections.add( getCreatureAt( getNextLocation( ghost, oppositeDirection ) )
+					!= Board.Creature.WALL ? oppositeDirection : defaultDirection);
 		
 		return possibleDirections;
 		
+	}
+	
+	private Direction getOppositeDirection( Direction d ){
+		switch(d) {
+			case Down:
+				return Direction.Up;
+			case Left:
+				return Direction.Right;
+			case Right:
+				return Direction.Left;
+			case Up:
+				return Direction.Down;
+			default:
+				return defaultDirection;
+		}
 	}
 	
 	public Board.Creature getCreatureAt(Location l){
@@ -205,8 +220,9 @@ public class Game{
 			Board.Creature ghost = getGhostCreatureByNum(i + 1);
 			
 			int possibleWays = findNewPathForGhost( ghost ).capacity();
-			if ( possibleWays > 1  && getCreatureAt( getNextLocation(ghost, ghost.getDirection()) ) == Board.Creature.WALL ) {
-				ghost.setNextDirection( findNewPathForGhost( ghost ).get(possibleWays - 1) );
+			if ( getCreatureAt( getNextLocation(ghost, ghost.getDirection()) ) == Board.Creature.WALL ) {
+				int randomWay = (int) (Math.random() * possibleWays);
+				ghost.setNextDirection( findNewPathForGhost( ghost ).get( randomWay ) );
 			}
 			
 			changeDirection( ghost.getNextDirection(), ghost );

@@ -423,4 +423,20 @@ public class GameTest {
 		assertEquals(Board.Creature.GHOST_1 , this.game.getCreatureAt(l2));
 	}
 
+	@Test
+	public void findNewPathForGhost_method() {
+		// arrange
+		setGameBoardByStringArray(new String[]{"W-G", "W-W", "WWW"});
+		Game.Direction original  = Board.Creature.GHOST_1.getDirection();
+		Game.Direction designed;
+		
+		// action
+		game.move();
+		game.move();
+		designed = Board.Creature.GHOST_1.getDirection();
+		
+		// assert
+		assertTrue(original != designed);
+	}
+
 }
