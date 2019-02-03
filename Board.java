@@ -35,16 +35,49 @@ public class Board {
 		
 	}
 
-	public enum Creature implements Moveable {
-		PACMAN,
-		GHOST_1, GHOST_2, GHOST_3, GHOST_4,
-		POINT,
-		WALL,
-		NULL;
-
+	public static class Creature implements Moveable {
+		public static Creature PACMAN = new Creature();
+		public static Creature GHOST_1 = new Creature();
+		public static Creature GHOST_2 = new Creature();
+		public static Creature GHOST_3 = new Creature();
+		public static Creature GHOST_4 = new Creature();
+		public static Creature POINT = new Creature();
+		public static Creature WALL = new Creature();
+		public static Creature NULL = new Creature();
+		
 		private Location location;
 		private Game.Direction direction;
 		private Game.Direction goHere = Game.Direction.LEFT;
+		private Type type;
+		
+		public enum Type {
+			PACMAN,
+			GHOST,
+			POINT,
+			WALL,
+			NULL
+		}
+		
+		public static void init() {
+			PACMAN.type = Type.PACMAN;
+			GHOST_1.type = Type.GHOST;
+			GHOST_2.type = Type.GHOST;
+			GHOST_3.type = Type.GHOST;
+			GHOST_4.type = Type.GHOST;
+			POINT.type = Type.POINT;
+			WALL.type = Type.WALL;
+			NULL.type = Type.NULL;
+		}
+		
+		public Type getType() {
+			return this.type;
+		}
+		
+		public static Creature[] values(){
+			return new Creature[] {
+				PACMAN, GHOST_1, GHOST_2, GHOST_3, GHOST_4, POINT, WALL, NULL
+			};
+		}
 		
 		@Override
 		public Location getLocation() {

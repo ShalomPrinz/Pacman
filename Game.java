@@ -21,6 +21,7 @@ public class Game{
 	public Game(final String[] b){
 		this.gameOn = false;
 		this.moveTimer = new Timer();
+		Board.Creature.init();
 				
 		this.topBoard = new Board(b);
 		this.topBoard.limitToSpecificCreatures(new Board.Creature[]{
@@ -45,7 +46,7 @@ public class Game{
 		Location currentLocation = p.getLocation();
 		Location nextLocation = getNextLocation(p, p.getDirection());
 		
-		switch ( getCreatureAt(nextLocation) ){
+		switch ( getCreatureAt(nextLocation).getType() ){
 		case POINT:
 			// score ++
 		case NULL:
@@ -54,10 +55,7 @@ public class Game{
 			botBoard.set(nextLocation, Board.Creature.NULL);
 			break;
 			
-		case GHOST_1:
-		case GHOST_2:
-		case GHOST_3:
-		case GHOST_4:
+		case GHOST:
 			stopGame( p );
 			break;
 			
@@ -98,7 +96,7 @@ public class Game{
 		Location currentLocation = c.getLocation();
 		Location nextLocation = getNextLocation(c, c.getDirection());
 		
-		switch ( getCreatureAt(nextLocation)){
+		switch ( getCreatureAt(nextLocation).getType()){
 			case POINT:
 			case NULL:
 				topBoard.set( currentLocation, Board.Creature.NULL );
