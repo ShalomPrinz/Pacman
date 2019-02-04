@@ -3,6 +3,7 @@ package pacman;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Board {
@@ -146,9 +147,9 @@ public class Board {
 	}
 	
 	public void limitToSpecificCreatures( Creature[] CreaturesForThisBoard ) {
-		for (int i = 0; i < board.length; i++){
-			for (int j = 0; j < board[0].length; j++){
-				if (!isCreatureAllowed( get(new Location(i, j) ), CreaturesForThisBoard ))
+		for ( int i = 0; i < board.length; i++ ) {
+			for ( int j = 0; j < board[0].length; j++ ) {
+				if ( !Arrays.stream( CreaturesForThisBoard ).anyMatch( get( new Location(i, j) ) :: equals ) ) 
 					set( new Location(i, j), Creature.NULL );
 			}
 		}
@@ -214,17 +215,7 @@ public class Board {
 		
 		return this.board;
 	}
-
-	private boolean isCreatureAllowed( Board.Creature isAllowed, Board.Creature[] allowedArray ){
-		
-		for (Board.Creature cre : allowedArray){
-			if (isAllowed == cre)
-				return true;
-		}
-		
-		return false;
-	}
-
+	
 	private void initialize( Location l, Creature c ) {
 		
 		if (! (c == Creature.WALL || c == Creature.NULL || c == Creature.POINT) ) {
