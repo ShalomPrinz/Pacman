@@ -155,11 +155,8 @@ public class Board {
 		}
 	}
 	
-	public int getDimensions() {
-		if (board.length != board[0].length)
-			return Integer.parseInt( new String( board.length + "" + board[0].length ) );
-		
-		return board.length;
+	public int getDimensions( char dim ) {
+		return (dim == 'X') ? board.length : board[0].length;
 	}
 	
 	public int getGhostNum() {

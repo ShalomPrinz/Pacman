@@ -67,12 +67,7 @@ public class Game{
 	private Location getNextLocation( Board.MovingCreature Mc, Direction d ) {
 		Location nextLocation = changeLocationByDirection(Mc.getLocation().getX(), Mc.getLocation().getY(), d);
 		
-		int Xdim = topBoard.getDimensions(), Ydim = Xdim;
-		
-		if (topBoard.get().length != topBoard.get()[0].length){
-			Xdim = topBoard.get().length;
-			Ydim = topBoard.get()[0].length;
-		}
+		int Xdim = topBoard.getDimensions('X'), Ydim = topBoard.getDimensions('Y');
 		
 		nextLocation.setX( setDimensionOutOfBoard( nextLocation.getX(), Xdim ) );
 		nextLocation.setY( setDimensionOutOfBoard( nextLocation.getY(), Ydim ) );

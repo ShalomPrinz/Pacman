@@ -19,10 +19,12 @@ public class BoardTest {
 		// arrange
 		
 		// action
-		int dimensions = new Board().getDimensions();
-		
+		int Xdim = new Board().getDimensions('X');
+		int Ydim = new Board().getDimensions('Y');
+
 		// assert
-		assertEquals(30, dimensions);
+		assertEquals(30, Xdim);
+		assertEquals(30, Ydim);
 	}
 	
 	@Test
@@ -30,10 +32,12 @@ public class BoardTest {
 		// arrange
 		
 		// action
-		int dimensions = new Board(new String[]{"---", "---"}).getDimensions();
+		int Xdim = new Board( new String[] {"---", "---"} ).getDimensions('X');
+		int Ydim = new Board( new String[] {"---", "---"} ).getDimensions('Y');
 		
 		// assert
-		assertEquals(23, dimensions);
+		assertEquals(2, Xdim);
+		assertEquals(3, Ydim);
 	}
 	
 	@Test
