@@ -135,7 +135,7 @@ public class Board {
 	public void set( Location l, Creature c ) {
 		board[l.getX()][l.getY()] = c;
 		
-		if (c == Creature.WALL || c == Creature.NULL || c == Creature.POINT)
+		if ( isStaticCreature(c) )
 			return;
 		
 		MovingCreature Mc = (MovingCreature) c;
@@ -164,6 +164,10 @@ public class Board {
 	
 	public int getGhostNum() {
 		return this.ghostsNumber;
+	}
+	
+	public boolean isStaticCreature( Creature c ) {
+		return ( c == Creature.WALL || c == Creature.NULL || c == Creature.POINT ) ? true : false;
 	}
 	
 	private Creature[][] setBoard() throws FileNotFoundException {
@@ -218,7 +222,7 @@ public class Board {
 	
 	private void initialize( Location l, Creature c ) {
 		
-		if (! (c == Creature.WALL || c == Creature.NULL || c == Creature.POINT) ) {
+		if ( !isStaticCreature(c) ) {
 			MovingCreature Mc = (MovingCreature) c;
 			Mc.setLocation(null);
 			Mc.setDirection(null);
