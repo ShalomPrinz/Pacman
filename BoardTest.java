@@ -41,7 +41,7 @@ public class BoardTest {
 		// arrange
 		
 		// action
-		int pacmans = count(Board.Creature.PACMAN);
+		int pacmans = count(Board.MovingCreature.PACMAN);
 		
 		// assert
 		assertEquals(1, pacmans);
@@ -52,10 +52,10 @@ public class BoardTest {
 		// arrange
 		
 		// action
-		int Ghost1 = count(Board.Creature.GHOST_1);
-		int Ghost2 = count(Board.Creature.GHOST_2);
-		int Ghost3 = count(Board.Creature.GHOST_3);
-		int Ghost4 = count(Board.Creature.GHOST_4);
+		int Ghost1 = count(Board.MovingCreature.GHOST_1);
+		int Ghost2 = count(Board.MovingCreature.GHOST_2);
+		int Ghost3 = count(Board.MovingCreature.GHOST_3);
+		int Ghost4 = count(Board.MovingCreature.GHOST_4);
 		
 		// assert
 		assertEquals(1, Ghost1);
@@ -112,8 +112,8 @@ public class BoardTest {
 	@Test
 	public void setBoardWithSingleString(){
 		// arrange
-		Board.Creature[] expected = {Board.Creature.PACMAN, Board.Creature.WALL,
-				Board.Creature.GHOST_1, Board.Creature.POINT, Board.Creature.NULL};
+		Board.Creature[] expected = {Board.MovingCreature.PACMAN, Board.Creature.WALL,
+				Board.MovingCreature.GHOST_1, Board.Creature.POINT, Board.Creature.NULL};
 		
 		// action
 		this.board = new Board(new String[]{"PWG-."}).get();
@@ -127,8 +127,8 @@ public class BoardTest {
 	public void setBoardWithArrayString(){
 		// arrange
 		Board.Creature[][] expected = {
-			{Board.Creature.PACMAN, Board.Creature.WALL},
-			{Board.Creature.POINT, Board.Creature.GHOST_1},
+			{Board.MovingCreature.PACMAN, Board.Creature.WALL},
+			{Board.Creature.POINT, Board.MovingCreature.GHOST_1},
 			{Board.Creature.WALL, Board.Creature.NULL} 
 		};
 		
