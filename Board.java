@@ -5,6 +5,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Arrays;
 import java.util.Scanner;
+import java.util.Vector;
+
+import pacman.Creature.Type;
 
 public class Board {
 	
@@ -14,12 +17,7 @@ public class Board {
 	
 	public Board( String[] rowsArray ) {
 		this.ghostsNumber = 0;
-		
-		for (Creature c : MovingCreature.values()){
-			MovingCreature Mc = (MovingCreature) c;
-			Mc.setLocation(null);
-			Mc.setNextDirection(null);
-		}
+		this.ghosts = new Vector< Ghost >(0, 1);
 			
 		if (rowsArray == null){
 			this.board = new Creature[30][30];
@@ -36,91 +34,9 @@ public class Board {
 		}
 		
 	}
-
-	public static class MovingCreature extends Creature implements Moveable {
-		public static MovingCreature PACMAN = new MovingCreature();
-		public static MovingCreature GHOST_1 = new MovingCreature();
-		public static MovingCreature GHOST_2 = new MovingCreature();
-		public static MovingCreature GHOST_3 = new MovingCreature();
-		public static MovingCreature GHOST_4 = new MovingCreature();
-		
-		private Location location;
-		private Game.Direction direction;
-		private Game.Direction nextDirection = Game.Direction.LEFT;
-		
-		public static void init() {
-			PACMAN.type = Type.PACMAN;
-			GHOST_1.type = Type.GHOST;
-			GHOST_2.type = Type.GHOST;
-			GHOST_3.type = Type.GHOST;
-			GHOST_4.type = Type.GHOST;
-		}
-		
-		public static Creature[] values() {
-			return new Creature[] {
-				PACMAN, GHOST_1, GHOST_2, GHOST_3, GHOST_4
-			};
-		}
-		
-		@Override
-		public Location getLocation() {
-			return this.location;
-		}
-
-		@Override
-		public void setLocation(Location location) {
-			this.location = location;
-		}
-
-		@Override
-		public Game.Direction getDirection() {
-			return this.direction;
-		}
-
-		@Override
-		public void setDirection(Game.Direction direction) {
-			this.direction = direction;
-		}
-
-		@Override
-		public Game.Direction getNextDirection() {
-			return nextDirection;
-		}
-
-		@Override
-		public void setNextDirection(Game.Direction goHere) {
-			this.nextDirection = goHere;
-		}
-	}
 	
-	public static class Creature {
-		public static Creature POINT = new Creature();
-		public static Creature WALL = new Creature();
-		public static Creature NULL = new Creature();
-		
-		protected Type type;
-
-		public enum Type {
-			PACMAN,
-			GHOST,
-			POINT,
-			WALL,
-			NULL
-		}
-		
-		public Type getType() {
-			return this.type;
-		}
-		
-		public static void init() {
-			POINT.type = Type.POINT;
-			WALL.type = Type.WALL;
-			NULL.type = Type.NULL;
-			MovingCreature.init();
-		}
-		
-	}
-	
+	private Pacman pacman;
+	private Vector< Ghost > ghosts;
 	private Creature[][] board;
 	private int ghostsNumber;
 	
@@ -146,11 +62,11 @@ public class Board {
 			Mc.setDirection(Game.defaultDirection);
 	}
 	
-	public void limitToSpecificCreatures( Creature[] CreaturesForThisBoard ) {
+	public void limitToSpecificCreatures( Type[] typesAllowed ) {
 		for ( int i = 0; i < board.length; i++ ) {
 			for ( int j = 0; j < board[0].length; j++ ) {
-				if ( !Arrays.stream( CreaturesForThisBoard ).anyMatch( get( new Location(i, j) ) :: equals ) ) 
-					set( new Location(i, j), Creature.NULL );
+				if ( !Arrays.stream( typesAllowed ).anyMatch( get( new Location(i, j) ).getType() :: equals ) ) 
+					set( new Location(i, j), new Null() );
 			}
 		}
 	}
@@ -164,12 +80,21 @@ public class Board {
 	}
 	
 	public boolean isStaticCreature( Creature c ) {
-		return ( c == Creature.WALL || c == Creature.NULL || c == Creature.POINT ) ? true : false;
+		Type[] staticCreatures = { Type.NULL, Type.POINT, Type.WALL};
+		return Arrays.stream( staticCreatures ).anyMatch( c.getType() :: equals );
+	}
+	
+	public Ghost[] getGhosts() {
+		return this.ghosts.toArray( new Ghost[ this.ghosts.size() ] );
+	}
+	
+	public Pacman getPacman() {
+		return this.pacman;
 	}
 	
 	private Creature[][] setBoard() throws FileNotFoundException {
 		// I didn't find the relative path for the file Board.txt so i used this
-		Scanner sc = new Scanner(new BufferedReader(new FileReader("E:\\Docs\\ωμεν\\A android project\\Pacman\\Board.txt")));
+		Scanner sc = new Scanner(new BufferedReader(new FileReader("D:/Users/student/workspace/project/Pacman/Board.txt")));
 	    while(sc.hasNextLine()) {
 	    	for (int i = 0; i < board.length && sc.hasNextLine(); i++) {
     			String[] line = sc.nextLine().trim().split("	");
@@ -183,27 +108,16 @@ public class Board {
 	
 	private Creature StringToCreature( String st ) {
 		switch(st){
-			case "P":
-				return MovingCreature.PACMAN;
 			case "W":
-				return Creature.WALL;
+				return new Wall();
 			case "-":
-				return Creature.POINT;
-			case "G":				
-				this.ghostsNumber++;
-				switch(this.ghostsNumber){
-					case 1:
-						return MovingCreature.GHOST_1;
-					case 2:
-						return MovingCreature.GHOST_2;
-					case 3:
-						return MovingCreature.GHOST_3;
-					case 4:
-						return MovingCreature.GHOST_4;
-				}
-				
+				return new Point();
+			case "P":
+				return new Pacman();
+			case "G":
+				return new Ghost();
 			default:
-				return Creature.NULL;
+				return new Null();
 		}
 	}
 
@@ -223,6 +137,16 @@ public class Board {
 			MovingCreature Mc = (MovingCreature) c;
 			Mc.setLocation(null);
 			Mc.setDirection(null);
+			
+			if ( c.getType() == Type.GHOST ){
+				Ghost g = (Ghost) Mc;
+				ghosts.add(g);
+			}
+			
+			if ( c.getType() == Type.PACMAN){
+				Pacman p = (Pacman) Mc;
+				this.pacman = p;
+			}
 		}
 		set( l, c );
 	}

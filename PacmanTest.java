@@ -1,9 +1,13 @@
 package pacman;
 
 import static org.junit.Assert.*;
-import org.junit.jupiter.api.Test;
+//import org.junit.jupiter.api.Test;
 
-class PacmanTest {
+import org.junit.Test;
+
+import pacman.Creature.Type;
+
+public class PacmanTest {
 
 	Game game;
 	Pacman pacman;
@@ -16,19 +20,20 @@ class PacmanTest {
 	
 	// Right
 	
-		@Test
+	@Test
 	public void PacmanRightWall(){
 		// arrange
 		Location l1 = new Location(0, 0), l2 = new Location(0, 1);
 		setGameBoardByStringArray( new String[]{"PW"} );
-		Board.MovingCreature.PACMAN.setDirection(Game.Direction.RIGHT);
+		Pacman p = (Pacman) this.game.getCreatureAt(l1);
+		p.setDirection(Game.Direction.RIGHT);
 		
 		// action
 		game.move();
 		
 		// assert
-		assertEquals(Board.MovingCreature.PACMAN, this.game.getCreatureAt(l1));
-		assertEquals(Board.Creature.WALL, this.game.getCreatureAt(l2));
+		assertEquals( Type.PACMAN, this.game.getCreatureAt(l1).getType() );
+		assertEquals( Type.WALL, this.game.getCreatureAt(l2).getType() );
 	}
 
 //	@Test
