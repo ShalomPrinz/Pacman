@@ -93,8 +93,7 @@ public class Board {
 	}
 	
 	private Creature[][] setBoard() throws FileNotFoundException {
-		// I didn't find the relative path for the file Board.txt so i used this
-		Scanner sc = new Scanner(new BufferedReader(new FileReader("D:/Users/student/workspace/project/Pacman/Board.txt")));
+		Scanner sc = new Scanner(new BufferedReader(new FileReader("./Board.txt")));
 	    while(sc.hasNextLine()) {
 	    	for (int i = 0; i < board.length && sc.hasNextLine(); i++) {
     			String[] line = sc.nextLine().trim().split("	");
