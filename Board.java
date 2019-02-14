@@ -119,12 +119,6 @@ public class Board {
 	}
 	
 	private void initialize( Location l, Creature c ) {
-		
-		if ( !isStaticCreature(c) ) {
-			MovingCreature Mc = (MovingCreature) c;
-			Mc.setLocation(null);
-			Mc.setDirection(null);
-		}
 		set( l, c );
 	}
 	

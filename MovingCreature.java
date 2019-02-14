@@ -7,7 +7,13 @@ public abstract class MovingCreature extends Creature implements Moveable{
 	private Location location;
 	private Game.Direction direction;
 	private Game.Direction nextDirection;
-		
+	
+	public MovingCreature() {
+		this.location = null;
+		this.direction = null;
+		this.nextDirection = null;
+	}
+	
 	@Override
 	public Location getLocation() {
 		return location;
