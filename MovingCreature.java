@@ -38,6 +38,6 @@ public abstract class MovingCreature extends Creature implements Moveable{
 		this.nextDirection = nextDirection;
 	}
 
-	abstract void move();
+	abstract void move(Game game);
 	
 }

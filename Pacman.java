@@ -8,8 +8,29 @@ public class Pacman extends MovingCreature {
 	}
 
 	@Override
-	void move() {
-		// TODO Auto-generated method stub
+	void move(Game game) {
+		
+		game.changeDirection(this.getNextDirection(), this);
+		
+		Location currentLocation = this.getLocation();
+		Location nextLocation = game.getNextLocation(this, this.getDirection());
+		
+		switch ( game.getCreatureAt(nextLocation).getType() ){
+			case POINT:
+				// score ++
+			case NULL:
+				game.setByPacman( currentLocation, nextLocation );//new Null() );
+//				topBoard.set( nextLocation, p );
+//				botBoard.set( nextLocation, new Null() );
+				break;
+				
+			case GHOST:
+				game.stopGame();
+				break;
+				
+			default:
+				break;
+		}
 	}
 
 }

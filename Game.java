@@ -36,39 +36,6 @@ public class Game{
 		DOWN
 	}
 	
-	private void movePacman( Pacman p ) {	
-		Location currentLocation = p.getLocation();
-		Location nextLocation = getNextLocation(p, p.getDirection());
-		
-		switch ( getCreatureAt(nextLocation).getType() ){
-			case POINT:
-				// score ++
-			case NULL:
-				topBoard.set( currentLocation, new Null() );
-				topBoard.set( nextLocation, p );
-				botBoard.set( nextLocation, new Null() );
-				break;
-				
-			case GHOST:
-				stopGame();
-				break;
-				
-			default:
-				break;
-		}
-	}
-
-	private Location getNextLocation( MovingCreature Mc, Direction d ) {
-		Location nextLocation = changeLocationByDirection(Mc.getLocation().getX(), Mc.getLocation().getY(), d);
-		
-		int Xdim = topBoard.getDimensions('X'), Ydim = topBoard.getDimensions('Y');
-		
-		nextLocation.setX( setDimensionOutOfBoard( nextLocation.getX(), Xdim ) );
-		nextLocation.setY( setDimensionOutOfBoard( nextLocation.getY(), Ydim ) );
-		
-		return nextLocation;
-	}
-
 	private int setDimensionOutOfBoard( int location, int dimension ) {
 		if (location >= dimension)
 			return 0;
@@ -118,11 +85,7 @@ public class Game{
 		}
 		return new Location(x, y);
 	}
-	
-	private void stopGame() {
-		this.gameOn = false;
-	}
-	
+		
 	private Vector<Direction> findNewPathForGhost( Ghost ghost ) {
 		Vector<Direction> possibleDirections = new Vector<>(0, 1);
 		
@@ -157,6 +120,21 @@ public class Game{
 		}
 	}
 	
+	public void stopGame() {
+		this.gameOn = false;
+	}
+	
+	public Location getNextLocation( MovingCreature Mc, Direction d ) {
+		Location nextLocation = changeLocationByDirection(Mc.getLocation().getX(), Mc.getLocation().getY(), d);
+		
+		int Xdim = topBoard.getDimensions('X'), Ydim = topBoard.getDimensions('Y');
+		
+		nextLocation.setX( setDimensionOutOfBoard( nextLocation.getX(), Xdim ) );
+		nextLocation.setY( setDimensionOutOfBoard( nextLocation.getY(), Ydim ) );
+		
+		return nextLocation;
+	}
+	
 	public Creature getCreatureAt( Location l ) {
 		
 		// If the creature is null on the top, it will return the creature on the bottom board
@@ -175,10 +153,8 @@ public class Game{
 		Ghost[] ghosts = topBoard.getGhosts();
 		Pacman pacman = topBoard.getPacman();
 		
-		if ( pacman != null ) {
-			changeDirection(pacman.getNextDirection(), pacman);
-			movePacman(pacman);
-		}
+		if ( pacman != null ) 
+			pacman.move(this);
 		
 		for ( int i = 0; i < ghosts.length; i++ ) {		
 			
@@ -212,4 +188,9 @@ public class Game{
 		
 	}
 	
+	public void setByPacman( Location current, Location next ) {
+		botBoard.set(next, new Null());
+		topBoard.set(current, new Null());
+		topBoard.set(next, topBoard.getPacman());
+	}
 }
