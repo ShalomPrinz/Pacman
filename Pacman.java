@@ -10,7 +10,7 @@ public class Pacman extends MovingCreature {
 	@Override
 	void move(Game game) {
 		
-		game.changeDirection(this.getNextDirection(), this);
+		changeDirection(game, this.getNextDirection(), this);
 		
 		Location currentLocation = this.getLocation();
 		Location nextLocation = game.getNextLocation(this, this.getDirection());

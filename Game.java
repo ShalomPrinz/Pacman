@@ -103,23 +103,6 @@ public class Game{
 		
 	}
 	
-	public void changeDirection( Direction goThisDirection, MovingCreature wantsAnotherDirection ) {
-		
-		if (goThisDirection == null || wantsAnotherDirection.getLocation() == null)
-			return;
-		
-		Location nextLocation = getNextLocation(wantsAnotherDirection, goThisDirection);
-		
-		if ( getCreatureAt( nextLocation ).getType() != Type.WALL ){
-			wantsAnotherDirection.setDirection(goThisDirection);
-			wantsAnotherDirection.setNextDirection(null);
-		}
-		else {
-			wantsAnotherDirection.setNextDirection(goThisDirection);
-		}
-		
-	}
-	
 	public void set( Location current, Location next, MovingCreature Mc ) {
 		topBoard.set(current, new Null());
 		topBoard.set(next, Mc);

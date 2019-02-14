@@ -21,7 +21,7 @@ public class Ghost extends MovingCreature {
 			this.setNextDirection( findNewPath( game ).get( randomWay ) );
 		}
 		
-		game.changeDirection( this.getNextDirection(), this );
+		changeDirection( game, this.getNextDirection(), this );
 		
 		Location currentLocation = this.getLocation();
 		Location nextLocation = game.getNextLocation(this, this.getDirection());

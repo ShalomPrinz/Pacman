@@ -341,7 +341,7 @@ public class GameTest {
 		Pacman p = (Pacman) this.game.getCreatureAt(l2);
 		
 		// action
-		game.changeDirection(Game.Direction.DOWN, p);
+		p.changeDirection(game, Game.Direction.DOWN, p);
 		game.move();
 		
 		// assert
@@ -358,7 +358,7 @@ public class GameTest {
 		p.setDirection(Game.Direction.DOWN);
 		
 		// action
-		game.changeDirection(Game.Direction.DOWN, p);
+		p.changeDirection(game, Game.Direction.DOWN, p);
 		game.move();
 		
 		// assert
@@ -374,7 +374,7 @@ public class GameTest {
 		Pacman p = (Pacman) this.game.getCreatureAt(l3);
 		
 		// action
-		game.changeDirection(Game.Direction.DOWN, p);
+		p.changeDirection(game, Game.Direction.DOWN, p);
 		game.move();
 		game.move();
 		
@@ -394,7 +394,7 @@ public class GameTest {
 		g.setDirection(Game.Direction.DOWN);
 		
 		// action
-		game.changeDirection(Game.Direction.DOWN, g);
+		g.changeDirection(game, Game.Direction.DOWN, g);
 		game.move();
 		
 		// assert
@@ -411,7 +411,7 @@ public class GameTest {
 		g.setDirection(Game.Direction.DOWN);
 		
 		// action
-		game.changeDirection(Game.Direction.DOWN, g);
+		g.changeDirection(game, Game.Direction.DOWN, g);
 		game.move();
 		
 		// assert
@@ -427,7 +427,7 @@ public class GameTest {
 		Ghost g = (Ghost) this.game.getCreatureAt(l3);
 		
 		// action
-		game.changeDirection(Game.Direction.DOWN, g);
+		g.changeDirection(game, Game.Direction.DOWN, g);
 		game.move();
 		game.move();
 		

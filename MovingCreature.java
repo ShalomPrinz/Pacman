@@ -40,4 +40,20 @@ public abstract class MovingCreature extends Creature implements Moveable{
 
 	abstract void move(Game game);
 	
+	public void changeDirection( Game game, Direction newDirection, MovingCreature Mc ) {
+		
+		if (newDirection == null || Mc.getLocation() == null)
+			return;
+		
+		Location nextLocation = game.getNextLocation(Mc, newDirection);
+		
+		if ( game.getCreatureAt( nextLocation ).getType() != Type.WALL ){
+			Mc.setDirection(newDirection);
+			Mc.setNextDirection(null);
+		}
+		else {
+			Mc.setNextDirection(newDirection);
+		}
+		
+	}
 }
