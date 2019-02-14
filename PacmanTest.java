@@ -25,11 +25,11 @@ public class PacmanTest {
 		// arrange
 		Location l1 = new Location(0, 0), l2 = new Location(0, 1);
 		setGameBoardByStringArray( new String[]{"PW"} );
-		Pacman p = (Pacman) this.game.getCreatureAt(l1);
-		p.setDirection(Game.Direction.RIGHT);
+		pacman = (Pacman) this.game.getCreatureAt(l1);
+		pacman.setDirection(Game.Direction.RIGHT);
 		
 		// action
-		game.move();
+		game.move( new MovingCreature[]{pacman} );
 		
 		// assert
 		assertEquals( Type.PACMAN, this.game.getCreatureAt(l1).getType() );

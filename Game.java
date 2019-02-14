@@ -90,17 +90,10 @@ public class Game{
 			return topBoardCreature;
 	}
 	
-	public void move() {
+	public void move( MovingCreature[] moveUs ) {
 			
-		Ghost[] ghosts = topBoard.getGhosts();
-		Pacman pacman = topBoard.getPacman();
-		
-		if ( pacman != null ) 
-			pacman.move(this);
-		
-		for ( Ghost g : ghosts )		
-			g.move(this);
-		
+		for (MovingCreature Mc : moveUs)
+			Mc.move(this);		
 	}
 	
 	public void set( Location current, Location next, MovingCreature Mc ) {

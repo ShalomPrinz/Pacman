@@ -28,7 +28,7 @@ public class GameTest {
 		p.setDirection(Game.Direction.RIGHT);
 		
 		// action
-		game.move();
+		game.move( new MovingCreature[]{p} );
 		
 		// assert
 		assertEquals( Type.PACMAN, this.game.getCreatureAt(l1).getType() );
@@ -44,7 +44,7 @@ public class GameTest {
 		p.setDirection(Game.Direction.RIGHT);
 		
 		// action
-		game.move();
+		game.move( new MovingCreature[]{p} );
 		
 		// assert
 		assertEquals( Type.NULL , this.game.getCreatureAt(l1).getType() );
@@ -59,7 +59,7 @@ public class GameTest {
 		p.setDirection(Game.Direction.RIGHT);
 		
 		// action
-		game.move();
+		game.move( new MovingCreature[]{p} );
 		
 		// assert
 		assertFalse(this.game.gameOn);
@@ -74,7 +74,7 @@ public class GameTest {
 		p.setDirection(Game.Direction.RIGHT);
 		
 		// action
-		game.move();
+		game.move( new MovingCreature[]{p} );
 		
 		// assert
 		assertEquals( Type.NULL, this.game.getCreatureAt(l1).getType() );
@@ -90,7 +90,7 @@ public class GameTest {
 		p.setDirection(Game.Direction.RIGHT);
 		
 		// action
-		game.move();
+		game.move( new MovingCreature[]{p} );
 		
 		// assert
 		assertEquals( Type.PACMAN , this.game.getCreatureAt(l1).getType() );
@@ -104,9 +104,10 @@ public class GameTest {
 		// arrange
 		setGameBoardByStringArray(new String[]{"-P"});
 		Location l1 = new Location(0, 0), l2 = new Location(0, 1);
+		Pacman p = (Pacman) this.game.getCreatureAt(l2);
 		
 		// action
-		game.move();
+		game.move( new MovingCreature[]{p} );
 				
 		// assert
 		assertEquals( Type.PACMAN, this.game.getCreatureAt(l1).getType() );
@@ -118,9 +119,10 @@ public class GameTest {
 		// arrange
 		setGameBoardByStringArray(new String[]{"P--", "...", "..."});
 		Location l1 = new Location(0, 0), l2 = new Location(0, 2);
+		Pacman p = (Pacman) this.game.getCreatureAt(l1);
 		
 		// action
-		game.move();
+		game.move( new MovingCreature[]{p} );
 		
 		// assert
 		assertEquals( Type.NULL , this.game.getCreatureAt(l1).getType() );
@@ -137,7 +139,7 @@ public class GameTest {
 		p.setDirection(Game.Direction.UP);
 		
 		// action
-		game.move();
+		game.move( new MovingCreature[]{p} );
 				
 		// assert
 		assertFalse(this.game.gameOn);
@@ -154,7 +156,7 @@ public class GameTest {
 		p.setDirection(Game.Direction.DOWN);	
 		
 		// action
-		game.move();
+		game.move( new MovingCreature[]{p} );
 				
 		// assert
 		assertEquals( Type.PACMAN , this.game.getCreatureAt(l1).getType() );
@@ -173,7 +175,7 @@ public class GameTest {
 		g.setDirection(Game.Direction.RIGHT);	
 		
 		// action
-		game.move();
+		game.move( new MovingCreature[]{g} );
 				
 		// assert
 		assertEquals( Type.GHOST, this.game.getCreatureAt(l1).getType() );
@@ -189,7 +191,7 @@ public class GameTest {
 		g.setDirection(Game.Direction.RIGHT);	
 		
 		// action
-		game.move();
+		game.move( new MovingCreature[]{g} );
 				
 		// assert
 		assertEquals( Type.NULL, this.game.getCreatureAt(l1).getType() );
@@ -205,8 +207,8 @@ public class GameTest {
 		g.setDirection(Game.Direction.RIGHT);
 		
 		// action
-		game.move();
-		game.move();
+		game.move( new MovingCreature[]{g} );
+		game.move( new MovingCreature[]{g} );
 		
 		// assert
 		assertEquals( Type.NULL, this.game.getCreatureAt(l1).getType() );
@@ -222,7 +224,7 @@ public class GameTest {
 		g.setDirection(Game.Direction.RIGHT);
 		
 		// action
-		game.move();
+		game.move( new MovingCreature[]{g} );
 				
 		// assert
 		assertFalse(this.game.gameOn);
@@ -237,7 +239,7 @@ public class GameTest {
 		g.setDirection(Game.Direction.RIGHT);
 		
 		// action
-		game.move();
+		game.move( new MovingCreature[]{g} );
 				
 		// assert
 		assertEquals( Type.GHOST, this.game.getCreatureAt(l1).getType() );
@@ -255,7 +257,7 @@ public class GameTest {
 		g.setDirection(Game.Direction.LEFT);
 		
 		// action
-		game.move();
+		game.move( new MovingCreature[]{g} );
 				
 		// assert
 		assertEquals( Type.GHOST, this.game.getCreatureAt(l1).getType() );
@@ -273,7 +275,7 @@ public class GameTest {
 		g.setDirection(Game.Direction.UP);
 		
 		// action
-		game.move();
+		game.move( new MovingCreature[]{g} );
 				
 		// assert
 		assertEquals( Type.GHOST, this.game.getCreatureAt(l1).getType() );
@@ -289,7 +291,7 @@ public class GameTest {
 		g.setDirection(Game.Direction.UP);
 		
 		// action
-		game.move();
+		game.move( new MovingCreature[]{g} );
 		
 		// assert
 		assertEquals( Type.GHOST , this.game.getCreatureAt(l1).getType() );
@@ -307,7 +309,7 @@ public class GameTest {
 		g.setDirection(Game.Direction.DOWN);
 		
 		// action
-		game.move();
+		game.move( new MovingCreature[]{g} );
 				
 		// assert
 		assertEquals( Type.NULL, this.game.getCreatureAt(l1).getType() );
@@ -323,7 +325,7 @@ public class GameTest {
 		g.setDirection(Game.Direction.DOWN);
 		
 		// action
-		game.move();
+		game.move( new MovingCreature[]{g} );
 		
 		// assert
 		assertEquals( Type.NULL , this.game.getCreatureAt(l1).getType() );
@@ -342,7 +344,7 @@ public class GameTest {
 		
 		// action
 		p.changeDirection(game, Game.Direction.DOWN, p);
-		game.move();
+		game.move( new MovingCreature[]{p} );
 		
 		// assert
 		assertEquals( Type.NULL , this.game.getCreatureAt(l2).getType() );
@@ -359,7 +361,7 @@ public class GameTest {
 		
 		// action
 		p.changeDirection(game, Game.Direction.DOWN, p);
-		game.move();
+		game.move( new MovingCreature[]{p} );
 		
 		// assert
 		assertEquals( Type.NULL , this.game.getCreatureAt(l1).getType() );
@@ -375,8 +377,8 @@ public class GameTest {
 		
 		// action
 		p.changeDirection(game, Game.Direction.DOWN, p);
-		game.move();
-		game.move();
+		game.move( new MovingCreature[]{p} );
+		game.move( new MovingCreature[]{p} );
 		
 		// assert
 		assertEquals( Type.NULL , this.game.getCreatureAt(l1).getType() );
@@ -395,7 +397,7 @@ public class GameTest {
 		
 		// action
 		g.changeDirection(game, Game.Direction.DOWN, g);
-		game.move();
+		game.move( new MovingCreature[]{g} );
 		
 		// assert
 		assertEquals( Type.NULL , this.game.getCreatureAt(l2).getType() );
@@ -412,7 +414,7 @@ public class GameTest {
 		
 		// action
 		g.changeDirection(game, Game.Direction.DOWN, g);
-		game.move();
+		game.move( new MovingCreature[]{g} );
 		
 		// assert
 		assertEquals( Type.NULL , this.game.getCreatureAt(l1).getType() );
@@ -428,8 +430,8 @@ public class GameTest {
 		
 		// action
 		g.changeDirection(game, Game.Direction.DOWN, g);
-		game.move();
-		game.move();
+		game.move( new MovingCreature[]{g} );
+		game.move( new MovingCreature[]{g} );
 		
 		// assert
 		assertEquals( Type.POINT , this.game.getCreatureAt(l1).getType() );
@@ -440,11 +442,12 @@ public class GameTest {
 	public void GhostLeftWall_SmartChange(){
 		// arrange
 		setGameBoardByStringArray(new String[]{"W-G", "W-W", "WWW"});
-		Location l1 = new Location(0, 1), l2 = new Location(1, 1);
+		Location l1 = new Location(0, 1), l2 = new Location(1, 1), l3 = new Location(0, 2);
+		Ghost g = (Ghost) this.game.getCreatureAt(l3);
 		
 		// action
-		game.move();
-		game.move();
+		game.move( new MovingCreature[]{g} );
+		game.move( new MovingCreature[]{g} );
 		
 		// assert
 		assertEquals( Type.POINT , this.game.getCreatureAt(l1).getType() );
@@ -460,8 +463,8 @@ public class GameTest {
 		Game.Direction designed;
 		
 		// action
-		game.move();
-		game.move();
+		game.move( new MovingCreature[]{g} );
+		game.move( new MovingCreature[]{g} );
 		designed = g.getDirection();
 		
 		// assert
