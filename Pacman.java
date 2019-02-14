@@ -19,9 +19,7 @@ public class Pacman extends MovingCreature {
 			case POINT:
 				// score ++
 			case NULL:
-				game.setByPacman( currentLocation, nextLocation );//new Null() );
-//				topBoard.set( nextLocation, p );
-//				botBoard.set( nextLocation, new Null() );
+				game.setByPacman( currentLocation, nextLocation );
 				break;
 				
 			case GHOST:

@@ -45,29 +45,7 @@ public class Game{
 		
 		return location;
 	}
-	
-	private void moveGhost( Ghost g ){
 		
-		Location currentLocation = g.getLocation();
-		Location nextLocation = getNextLocation(g, g.getDirection());
-		
-		switch ( getCreatureAt(nextLocation).getType()){
-			case POINT:
-			case NULL:
-				topBoard.set( currentLocation, new Null() );
-				topBoard.set( nextLocation, g );
-				break;
-			case PACMAN:
-				stopGame();
-				break;
-
-			default:
-				break;					
-		}
-		
-		
-	}
-	
 	private Location changeLocationByDirection(int x, int y, Direction d){
 		switch (d){
 		case RIGHT:
@@ -86,40 +64,6 @@ public class Game{
 		return new Location(x, y);
 	}
 		
-	private Vector<Direction> findNewPathForGhost( Ghost ghost ) {
-		Vector<Direction> possibleDirections = new Vector<>(0, 1);
-		
-		Direction oppositeDirection = getOppositeDirection( ghost.getDirection() );
-		
-		for (Direction d : Direction.values()){
-			if ( getCreatureAt( getNextLocation(ghost, d) ).getType() != Type.WALL &&
-					d != oppositeDirection)
-				possibleDirections.add(d);
-		}
-		
-		if (possibleDirections.capacity() == 0)
-			possibleDirections.add( getCreatureAt( getNextLocation( ghost, oppositeDirection ) ).getType()
-					!= Type.WALL ? oppositeDirection : defaultDirection);
-		
-		return possibleDirections;
-		
-	}
-	
-	private Direction getOppositeDirection( Direction d ) {
-		switch(d) {
-			case DOWN:
-				return Direction.UP;
-			case LEFT:
-				return Direction.RIGHT;
-			case RIGHT:
-				return Direction.LEFT;
-			case UP:
-				return Direction.DOWN;
-			default:
-				return defaultDirection;
-		}
-	}
-	
 	public void stopGame() {
 		this.gameOn = false;
 	}
@@ -156,18 +100,8 @@ public class Game{
 		if ( pacman != null ) 
 			pacman.move(this);
 		
-		for ( int i = 0; i < ghosts.length; i++ ) {		
-			
-			int possibleWays = findNewPathForGhost( ghosts[i] ).capacity();
-			
-			if ( getCreatureAt( getNextLocation( ghosts[i], ghosts[i].getDirection() ) ).getType() == Type.WALL ) {
-				int randomWay = (int) (Math.random() * possibleWays);
-				ghosts[i].setNextDirection( findNewPathForGhost( ghosts[i] ).get( randomWay ) );
-			}
-			
-			changeDirection( ghosts[i].getNextDirection(), ghosts[i] );
-			moveGhost( ghosts[i] );
-		}
+		for ( Ghost g : ghosts )		
+			g.move(this);
 		
 	}
 	
@@ -193,4 +127,10 @@ public class Game{
 		topBoard.set(current, new Null());
 		topBoard.set(next, topBoard.getPacman());
 	}
+	
+	public void setByGhost( Location current, Location next, Ghost g ) {
+		topBoard.set(current, new Null());
+		topBoard.set(next, g);
+	}
+
 }

@@ -467,18 +467,5 @@ public class GameTest {
 		// assert
 		assertTrue(original != designed);
 	}
-
-	@Test
-	public void boardSetFromPacman_Null(){
-		// arrange
-		setGameBoardByStringArray(new String[]{"-P"});
-		Location l1 = new Location(0, 0), l2 = new Location(0, 1);
-		
-		// action
-		game.move();
-		
-		// assert
-		assertEquals( Type.NULL , this.game.getCreatureAt(l2).getType() );
-		assertEquals( Type.PACMAN , this.game.getCreatureAt(l1).getType() );
-	}
+	
 }
