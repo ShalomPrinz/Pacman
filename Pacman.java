@@ -19,7 +19,7 @@ public class Pacman extends MovingCreature {
 			case POINT:
 				// score ++
 			case NULL:
-				game.setByPacman( currentLocation, nextLocation );
+				game.set( currentLocation, nextLocation, this );
 				break;
 				
 			case GHOST:

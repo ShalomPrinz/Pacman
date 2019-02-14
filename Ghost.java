@@ -29,7 +29,7 @@ public class Ghost extends MovingCreature {
 		switch ( game.getCreatureAt(nextLocation).getType()){
 			case POINT:
 			case NULL:
-				game.setByGhost(currentLocation, nextLocation, this);
+				game.set(currentLocation, nextLocation, this);
 				break;
 			case PACMAN:
 				game.stopGame();

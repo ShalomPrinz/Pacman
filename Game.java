@@ -1,7 +1,5 @@
 package pacman;
 
-import java.util.Vector;
-
 import pacman.Creature.Type;
 
 public class Game{
@@ -122,15 +120,12 @@ public class Game{
 		
 	}
 	
-	public void setByPacman( Location current, Location next ) {
-		botBoard.set(next, new Null());
+	public void set( Location current, Location next, MovingCreature Mc ) {
 		topBoard.set(current, new Null());
-		topBoard.set(next, topBoard.getPacman());
-	}
-	
-	public void setByGhost( Location current, Location next, Ghost g ) {
-		topBoard.set(current, new Null());
-		topBoard.set(next, g);
+		topBoard.set(next, Mc);
+		
+		if (Mc.getType() == Type.PACMAN)
+			botBoard.set(next, new Null());
 	}
 
 }
