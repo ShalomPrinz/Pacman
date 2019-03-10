@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Arrays;
 import java.util.Scanner;
+import java.util.Vector;
 
 import pacman.Creature.Type;
 
@@ -16,7 +17,8 @@ public class Board {
 	
 	public Board( String[] rowsArray ) {
 		this.ghostsNumber = 0;
-			
+		this.movingCreatures = new Vector<MovingCreature>(0, 1);	
+		
 		if (rowsArray == null){
 			this.board = new Creature[30][30];
 			
@@ -35,6 +37,7 @@ public class Board {
 	
 	private Creature[][] board;
 	private int ghostsNumber;
+	private Vector<MovingCreature> movingCreatures; 
 	
 	public Creature[][] get() {
 		return board.clone();
@@ -80,6 +83,10 @@ public class Board {
 		return Arrays.stream( staticCreatures ).anyMatch( c.getType() :: equals );
 	}
 	
+	public MovingCreature[] getMovingCreatures() {
+		return movingCreatures.toArray( new MovingCreature[ movingCreatures.size() ]);
+	}
+	
 	private Creature[][] setBoard() throws FileNotFoundException {
 		Scanner sc = new Scanner(new BufferedReader(new FileReader("./Board.txt")));
 	    while(sc.hasNextLine()) {
@@ -119,6 +126,10 @@ public class Board {
 	}
 	
 	private void initialize( Location l, Creature c ) {
+		if (!isStaticCreature(c)) {
+			MovingCreature mC = (MovingCreature) c;
+			movingCreatures.add(mC);
+		}
 		set( l, c );
 	}
 	
