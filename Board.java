@@ -50,12 +50,12 @@ public class Board {
 		if ( isStaticCreature(c) )
 			return;
 		
-		MovingCreature Mc = (MovingCreature) c;
+		MovingCreature mC = (MovingCreature) c;
 		
-		Mc.setLocation(l);
+		mC.setLocation(l);
 		
-		if (Mc.getDirection() == null)
-			Mc.setDirection(Game.defaultDirection);
+		if (mC.getDirection() == null)
+			mC.setDirection(Game.defaultDirection);
 	}
 	
 	public void limitToSpecificCreatures( Type[] typesAllowed ) {
