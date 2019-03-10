@@ -5,7 +5,7 @@ import pacman.Creature.Type;
 public class Game{
 	
 	private Board topBoard, botBoard;
-	
+	private int score;
 	boolean gameOn;
 	
 	public static final Direction defaultDirection = Direction.LEFT;
@@ -61,7 +61,15 @@ public class Game{
 		}
 		return new Location(x, y);
 	}
-		
+	
+	public int getScore() {
+		return score;
+	}
+
+	public void setScore(int score) {
+		this.score = score;
+	}
+
 	public void stopGame() {
 		this.gameOn = false;
 	}
