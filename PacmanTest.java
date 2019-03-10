@@ -6,15 +6,22 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import pacman.Creature.Type;
+import pacman.Game.Direction;
 
 public class PacmanTest {
 
 	Game game;
 	Pacman pacman;
 	
-	public void setGameBoardByStringArray(final String[] board){
+	private void setGameBoardByStringArray(final String[] board){
 		this.game = new Game(board);
 	}
+	
+	private void setBoardAndDirection(Location l, Direction d, String[] board) {
+		setGameBoardByStringArray(board);
+		MovingCreature mC = (MovingCreature) game.getCreatureAt(l);
+		mC.setDirection(d);
+	}	
 	
 	// Pacman: Move
 	
@@ -24,12 +31,10 @@ public class PacmanTest {
 	public void PacmanRightWall(){
 		// arrange
 		Location l1 = new Location(0, 0), l2 = new Location(0, 1);
-		setGameBoardByStringArray( new String[]{"PW"} );
-		pacman = (Pacman) this.game.getCreatureAt(l1);
-		pacman.setDirection(Game.Direction.RIGHT);
+		setBoardAndDirection( l1, Game.Direction.RIGHT, new String[]{"PW"} );
 		
 		// action
-		game.move( new MovingCreature[]{pacman} );
+		game.move();
 		
 		// assert
 		assertEquals( Type.PACMAN, this.game.getCreatureAt(l1).getType() );

@@ -90,9 +90,9 @@ public class Game{
 			return topBoardCreature;
 	}
 	
-	public void move( MovingCreature[] moveUs ) {
+	public void move() {
 			
-		for (MovingCreature mC : moveUs)
+		for (MovingCreature mC : topBoard.getMovingCreatures())
 			mC.move(this);		
 	}
 	
