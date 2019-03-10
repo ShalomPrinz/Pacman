@@ -66,8 +66,8 @@ public class Game{
 		this.gameOn = false;
 	}
 	
-	public Location getNextLocation( MovingCreature mC, Direction d ) {
-		Location nextLocation = changeLocationByDirection(mC.getLocation().getX(), mC.getLocation().getY(), d);
+	public Location getNextLocation( Location movingCreatureLocation, Direction d ) {
+		Location nextLocation = changeLocationByDirection( movingCreatureLocation.getX(), movingCreatureLocation.getY(), d );
 		
 		int Xdim = topBoard.getDimensions('X'), Ydim = topBoard.getDimensions('Y');
 		
@@ -96,12 +96,13 @@ public class Game{
 			mC.move(this);		
 	}
 	
-	public void set( Location current, Location next, MovingCreature mC ) {
-		topBoard.set(current, new Null());
-		topBoard.set(next, mC);
+	public void set( MovingCreature mC ) {
+		Location nextLocation = getNextLocation(mC.getLocation(), mC.getDirection());
+		topBoard.set( mC.getLocation(), new Null() );
+		topBoard.set( nextLocation, mC );
 		
 		if (mC.getType() == Type.PACMAN)
-			botBoard.set(next, new Null());
+			botBoard.set(nextLocation, new Null());
 	}
 
 }

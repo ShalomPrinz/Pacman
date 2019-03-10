@@ -11,15 +11,14 @@ public class Pacman extends MovingCreature {
 	void move(Game game) {
 		
 		changeDirection(game, this.getNextDirection(), this);
+		Location nextLocation = game.getNextLocation(this.getLocation(), this.getDirection());
+		Creature nextCreature = game.getCreatureAt(nextLocation);
 		
-		Location currentLocation = this.getLocation();
-		Location nextLocation = game.getNextLocation(this, this.getDirection());
-		
-		switch ( game.getCreatureAt(nextLocation).getType() ){
+		switch ( nextCreature.getType() ){
 			case POINT:
 				// score ++
 			case NULL:
-				game.set( currentLocation, nextLocation, this );
+				game.set(this);
 				break;
 				
 			case GHOST:

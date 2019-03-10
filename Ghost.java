@@ -15,21 +15,22 @@ public class Ghost extends MovingCreature {
 	void move(Game game) {
 		
 		int possibleWays = findNewPath( game ).capacity();
+		Location nextLoaction = game.getNextLocation( this.getLocation(), this.getDirection() );
+		Creature nextCreature = game.getCreatureAt( nextLoaction );
 		
-		if ( game.getCreatureAt( game.getNextLocation( this, this.getDirection() ) ).getType() == Type.WALL ) {
+		if ( nextCreature.getType() == Type.WALL ) {
 			int randomWay = (int) (Math.random() * possibleWays);
-			this.setNextDirection( findNewPath( game ).get( randomWay ) );
+			Direction nextDirection = findNewPath( game ).get( randomWay );
+			this.setNextDirection(nextDirection);
 		}
 		
-		changeDirection( game, this.getNextDirection(), this );
-		
-		Location currentLocation = this.getLocation();
-		Location nextLocation = game.getNextLocation(this, this.getDirection());
+		changeDirection( game, this.getNextDirection(), this );	
+		Location nextLocation = game.getNextLocation(this.getLocation(), this.getDirection());
 		
 		switch ( game.getCreatureAt(nextLocation).getType()){
 			case POINT:
 			case NULL:
-				game.set(currentLocation, nextLocation, this);
+				game.set(this);
 				break;
 			case PACMAN:
 				game.stopGame();
@@ -41,19 +42,24 @@ public class Ghost extends MovingCreature {
 	}
 	
 	private Vector<Direction> findNewPath(Game game) {
-		Vector<Direction> possibleDirections = new Vector<>(0, 1);
 		
+		Vector<Direction> possibleDirections = new Vector<>(0, 1);		
 		Direction oppositeDirection = getOppositeDirection( this.getDirection() );
 		
 		for (Direction d : Direction.values()){
-			if ( game.getCreatureAt( game.getNextLocation(this, d) ).getType() != Type.WALL &&
-					d != oppositeDirection)
+			Location nextLocation = game.getNextLocation(this.getLocation(), d);
+			Creature nextCreature = game.getCreatureAt( nextLocation );
+			
+			if ( nextCreature.getType() != Type.WALL && d != oppositeDirection)
 				possibleDirections.add(d);
 		}
 		
-		if (possibleDirections.capacity() == 0)
-			possibleDirections.add( game.getCreatureAt( game.getNextLocation( this, oppositeDirection ) ).getType()
-					!= Type.WALL ? oppositeDirection : Game.defaultDirection);
+		if (possibleDirections.capacity() == 0) {
+			Location nextLocation = game.getNextLocation( this.getLocation(), oppositeDirection );
+			Creature nextCreature = game.getCreatureAt( nextLocation );
+			
+			possibleDirections.add( nextCreature.getType() == Type.WALL ? Game.defaultDirection : oppositeDirection);
+		}
 		
 		return possibleDirections;
 		
