@@ -1,11 +1,13 @@
 package pacman;
 
+import java.util.Vector;
+
 import pacman.Creature.Type;
 
 public class Game{
 	
 	private Board topBoard, botBoard;
-	private int score;
+	
 	boolean gameOn;
 	
 	public static final Direction defaultDirection = Direction.LEFT;
@@ -34,6 +36,39 @@ public class Game{
 		DOWN
 	}
 	
+	private void movePacman( Pacman p ) {	
+		Location currentLocation = p.getLocation();
+		Location nextLocation = getNextLocation(p, p.getDirection());
+		
+		switch ( getCreatureAt(nextLocation).getType() ){
+			case POINT:
+				// score ++
+			case NULL:
+				topBoard.set( currentLocation, new Null() );
+				topBoard.set( nextLocation, p );
+				botBoard.set( nextLocation, new Null() );
+				break;
+				
+			case GHOST:
+				stopGame();
+				break;
+				
+			default:
+				break;
+		}
+	}
+
+	private Location getNextLocation( MovingCreature Mc, Direction d ) {
+		Location nextLocation = changeLocationByDirection(Mc.getLocation().getX(), Mc.getLocation().getY(), d);
+		
+		int Xdim = topBoard.getDimensions('X'), Ydim = topBoard.getDimensions('Y');
+		
+		nextLocation.setX( setDimensionOutOfBoard( nextLocation.getX(), Xdim ) );
+		nextLocation.setY( setDimensionOutOfBoard( nextLocation.getY(), Ydim ) );
+		
+		return nextLocation;
+	}
+
 	private int setDimensionOutOfBoard( int location, int dimension ) {
 		if (location >= dimension)
 			return 0;
@@ -43,7 +78,29 @@ public class Game{
 		
 		return location;
 	}
+	
+	private void moveGhost( Ghost g ){
 		
+		Location currentLocation = g.getLocation();
+		Location nextLocation = getNextLocation(g, g.getDirection());
+		
+		switch ( getCreatureAt(nextLocation).getType()){
+			case POINT:
+			case NULL:
+				topBoard.set( currentLocation, new Null() );
+				topBoard.set( nextLocation, g );
+				break;
+			case PACMAN:
+				stopGame();
+				break;
+
+			default:
+				break;					
+		}
+		
+		
+	}
+	
 	private Location changeLocationByDirection(int x, int y, Direction d){
 		switch (d){
 		case RIGHT:
@@ -62,27 +119,42 @@ public class Game{
 		return new Location(x, y);
 	}
 	
-	public int getScore() {
-		return score;
-	}
-
-	public void setScore(int score) {
-		this.score = score;
-	}
-
-	public void stopGame() {
+	private void stopGame() {
 		this.gameOn = false;
 	}
 	
-	public Location getNextLocation( Location movingCreatureLocation, Direction d ) {
-		Location nextLocation = changeLocationByDirection( movingCreatureLocation.getX(), movingCreatureLocation.getY(), d );
+	private Vector<Direction> findNewPathForGhost( Ghost ghost ) {
+		Vector<Direction> possibleDirections = new Vector<>(0, 1);
 		
-		int Xdim = topBoard.getDimensions('X'), Ydim = topBoard.getDimensions('Y');
+		Direction oppositeDirection = getOppositeDirection( ghost.getDirection() );
 		
-		nextLocation.setX( setDimensionOutOfBoard( nextLocation.getX(), Xdim ) );
-		nextLocation.setY( setDimensionOutOfBoard( nextLocation.getY(), Ydim ) );
+		for (Direction d : Direction.values()){
+			if ( getCreatureAt( getNextLocation(ghost, d) ).getType() != Type.WALL &&
+					d != oppositeDirection)
+				possibleDirections.add(d);
+		}
 		
-		return nextLocation;
+		if (possibleDirections.capacity() == 0)
+			possibleDirections.add( getCreatureAt( getNextLocation( ghost, oppositeDirection ) ).getType()
+					!= Type.WALL ? oppositeDirection : defaultDirection);
+		
+		return possibleDirections;
+		
+	}
+	
+	private Direction getOppositeDirection( Direction d ) {
+		switch(d) {
+			case DOWN:
+				return Direction.UP;
+			case LEFT:
+				return Direction.RIGHT;
+			case RIGHT:
+				return Direction.LEFT;
+			case UP:
+				return Direction.DOWN;
+			default:
+				return defaultDirection;
+		}
 	}
 	
 	public Creature getCreatureAt( Location l ) {
@@ -100,17 +172,44 @@ public class Game{
 	
 	public void move() {
 			
-		for (MovingCreature mC : topBoard.getMovingCreatures())
-			mC.move(this);		
+		Ghost[] ghosts = topBoard.getGhosts();
+		Pacman pacman = topBoard.getPacman();
+		
+		if ( pacman != null ) {
+			changeDirection(pacman.getNextDirection(), pacman);
+			movePacman(pacman);
+		}
+		
+		for ( int i = 0; i < ghosts.length; i++ ) {		
+			
+			int possibleWays = findNewPathForGhost( ghosts[i] ).capacity();
+			
+			if ( getCreatureAt( getNextLocation( ghosts[i], ghosts[i].getDirection() ) ).getType() == Type.WALL ) {
+				int randomWay = (int) (Math.random() * possibleWays);
+				ghosts[i].setNextDirection( findNewPathForGhost( ghosts[i] ).get( randomWay ) );
+			}
+			
+			changeDirection( ghosts[i].getNextDirection(), ghosts[i] );
+			moveGhost( ghosts[i] );
+		}
+		
 	}
 	
-	public void set( MovingCreature mC ) {
-		Location nextLocation = getNextLocation(mC.getLocation(), mC.getDirection());
-		topBoard.set( mC.getLocation(), new Null() );
-		topBoard.set( nextLocation, mC );
+	public void changeDirection( Direction goThisDirection, MovingCreature wantsAnotherDirection ) {
 		
-		if (mC.getType() == Type.PACMAN)
-			botBoard.set(nextLocation, new Null());
+		if (goThisDirection == null || wantsAnotherDirection.getLocation() == null)
+			return;
+		
+		Location nextLocation = getNextLocation(wantsAnotherDirection, goThisDirection);
+		
+		if ( getCreatureAt( nextLocation ).getType() != Type.WALL ){
+			wantsAnotherDirection.setDirection(goThisDirection);
+			wantsAnotherDirection.setNextDirection(null);
+		}
+		else {
+			wantsAnotherDirection.setNextDirection(goThisDirection);
+		}
+		
 	}
-
+	
 }

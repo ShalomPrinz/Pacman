@@ -5,27 +5,13 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import pacman.Creature.Type;
-import pacman.Game.Direction;
 
 public class GameTest {
 
 	Game game;
 	
-	private void setGameBoardByStringArray(final String[] board){
+	public void setGameBoardByStringArray(final String[] board){
 		this.game = new Game(board);
-	}
-	
-	private void setBoardAndDirection(Location l, Direction d, String[] board) {
-		setGameBoardByStringArray(board);
-		MovingCreature mC = (MovingCreature) game.getCreatureAt(l);
-		mC.setDirection(d);
-	}
-	
-	private void setBoard_Direction_Change(Location l, Direction d, String[] board, Direction next) {
-		setGameBoardByStringArray(board);
-		MovingCreature mC = (MovingCreature) game.getCreatureAt(l);
-		mC.setDirection(d);
-		mC.changeDirection(game, next, mC);
 	}
 	
 	// In each test which checked the moving function, I asserted both changing places
@@ -36,8 +22,10 @@ public class GameTest {
 	@Test
 	public void PacmanRightWall(){
 		// arrange
+		setGameBoardByStringArray(new String[]{"PW"});
 		Location l1 = new Location(0, 0), l2 = new Location(0, 1);
-		setBoardAndDirection( l1, Game.Direction.RIGHT, new String[] {"PW"} );
+		Pacman p = (Pacman) this.game.getCreatureAt(l1);
+		p.setDirection(Game.Direction.RIGHT);
 		
 		// action
 		game.move();
@@ -50,8 +38,10 @@ public class GameTest {
 	@Test
 	public void PacmanRightPoint(){
 		// arrange
+		setGameBoardByStringArray(new String[]{"P-"});
 		Location l1 = new Location(0, 0), l2 = new Location(0, 1);
-		setBoardAndDirection( l1, Game.Direction.RIGHT, new String[] {"P-"} );
+		Pacman p = (Pacman) this.game.getCreatureAt(l1);
+		p.setDirection(Game.Direction.RIGHT);
 		
 		// action
 		game.move();
@@ -64,7 +54,9 @@ public class GameTest {
 	@Test
 	public void PacmanRightGhost(){
 		// arrange
-		setBoardAndDirection( new Location(0, 0), Game.Direction.RIGHT, new String[] {"PG"} );
+		setGameBoardByStringArray(new String[]{"PG"});
+		Pacman p = (Pacman) this.game.getCreatureAt( new Location(0, 0) );
+		p.setDirection(Game.Direction.RIGHT);
 		
 		// action
 		game.move();
@@ -76,8 +68,10 @@ public class GameTest {
 	@Test
 	public void PacmanRightNull(){
 		// arrange
+		setGameBoardByStringArray(new String[]{"P."});
 		Location l1 = new Location(0, 0), l2 = new Location(0, 1);
-		setBoardAndDirection( l1, Game.Direction.RIGHT, new String[] {"P."} );
+		Pacman p = (Pacman) this.game.getCreatureAt(l1);
+		p.setDirection(Game.Direction.RIGHT);
 		
 		// action
 		game.move();
@@ -90,8 +84,10 @@ public class GameTest {
 	@Test
 	public void PacmanOutOfBoard_Right(){
 		// arrange
-		Location l1 = new Location(0, 0), l2 = new Location(0, 1);
-		setBoardAndDirection( l2, Game.Direction.RIGHT, new String[] {"-P"} );		
+		setGameBoardByStringArray(new String[]{"--P", "...", "..."});
+		Location l1 = new Location(0, 0), l2 = new Location(0, 2);
+		Pacman p = (Pacman) this.game.getCreatureAt(l2);
+		p.setDirection(Game.Direction.RIGHT);
 		
 		// action
 		game.move();
@@ -106,8 +102,8 @@ public class GameTest {
 	@Test
 	public void PacmanLeftPoint(){
 		// arrange
+		setGameBoardByStringArray(new String[]{"-P"});
 		Location l1 = new Location(0, 0), l2 = new Location(0, 1);
-		setBoardAndDirection( l2, Game.Direction.LEFT, new String[] {"-P"} );
 		
 		// action
 		game.move();
@@ -120,8 +116,8 @@ public class GameTest {
 	@Test
 	public void PacmanOutOfBoard_Left(){
 		// arrange
-		Location l1 = new Location(0, 0), l2 = new Location(0, 1);
-		setBoardAndDirection( l1, Game.Direction.LEFT, new String[] {"P."} );
+		setGameBoardByStringArray(new String[]{"P--", "...", "..."});
+		Location l1 = new Location(0, 0), l2 = new Location(0, 2);
 		
 		// action
 		game.move();
@@ -136,7 +132,9 @@ public class GameTest {
 	@Test
 	public void PacmanUpGhost(){
 		// arrange
-		setBoardAndDirection( new Location(1, 0), Game.Direction.UP, new String[] {"G-", "PW"} );
+		setGameBoardByStringArray(new String[]{"G-", "PW"});
+		Pacman p = (Pacman) this.game.getCreatureAt( new Location(1, 0) );
+		p.setDirection(Game.Direction.UP);
 		
 		// action
 		game.move();
@@ -150,8 +148,10 @@ public class GameTest {
 	@Test
 	public void PacmanDownWall(){
 		// arrange
+		setGameBoardByStringArray(new String[]{"PW", "W-"});
 		Location l1 = new Location(0, 0), l2 = new Location(1, 0);
-		setBoardAndDirection( l1, Game.Direction.DOWN, new String[] {"PW", "W-"} );
+		Pacman p = (Pacman) this.game.getCreatureAt(l1);
+		p.setDirection(Game.Direction.DOWN);	
 		
 		// action
 		game.move();
@@ -167,8 +167,10 @@ public class GameTest {
 	@Test
 	public void GhostRightWall(){
 		// arrange
+		setGameBoardByStringArray(new String[]{"GW"});
 		Location l1 = new Location(0, 0), l2 = new Location(0, 1);
-		setBoardAndDirection( l1, Game.Direction.RIGHT, new String[] {"GW"} );
+		Ghost g = (Ghost) this.game.getCreatureAt(l1);
+		g.setDirection(Game.Direction.RIGHT);	
 		
 		// action
 		game.move();
@@ -181,8 +183,10 @@ public class GameTest {
 	@Test
 	public void GhostRightPoint(){
 		// arrange
+		setGameBoardByStringArray(new String[]{"G-"});
 		Location l1 = new Location(0, 0), l2 = new Location(0, 1);
-		setBoardAndDirection( l1, Game.Direction.RIGHT, new String[] {"G-"} );
+		Ghost g = (Ghost) this.game.getCreatureAt(l1);
+		g.setDirection(Game.Direction.RIGHT);	
 		
 		// action
 		game.move();
@@ -195,8 +199,10 @@ public class GameTest {
 	@Test
 	public void GhostRightPoint_SecondTurn() {
 		// arrange
+		setGameBoardByStringArray(new String[]{"G-."});
 		Location l1 = new Location(0, 0), l2 = new Location(0, 1), l3 = new Location(0, 2);
-		setBoardAndDirection( l1, Game.Direction.RIGHT, new String[] {"G-."} );
+		Ghost g = (Ghost) this.game.getCreatureAt(l1);
+		g.setDirection(Game.Direction.RIGHT);
 		
 		// action
 		game.move();
@@ -211,7 +217,9 @@ public class GameTest {
 	@Test
 	public void GhostRightPacman(){
 		// arrange
-		setBoardAndDirection( new Location(0, 0), Game.Direction.RIGHT, new String[] {"GP"} );
+		setGameBoardByStringArray(new String[]{"GP"});
+		Ghost g = (Ghost) this.game.getCreatureAt( new Location(0, 0) );
+		g.setDirection(Game.Direction.RIGHT);
 		
 		// action
 		game.move();
@@ -223,8 +231,10 @@ public class GameTest {
 	@Test
 	public void GhostRightGhost(){
 		// arrange
+		setGameBoardByStringArray(new String[]{"GG"});
 		Location l1 = new Location(0, 0), l2 = new Location(0, 1);
-		setBoardAndDirection( l1, Game.Direction.RIGHT, new String[] {"GG"} );
+		Ghost g = (Ghost) this.game.getCreatureAt(l1);
+		g.setDirection(Game.Direction.RIGHT);
 		
 		// action
 		game.move();
@@ -239,8 +249,10 @@ public class GameTest {
 	@Test
 	public void GhostLeftGhost(){
 		// arrange
+		setGameBoardByStringArray(new String[]{"GG"});
 		Location l1 = new Location(0, 0), l2 = new Location(0, 1);
-		setBoardAndDirection( l1, Game.Direction.LEFT, new String[] {"GG"} );
+		Ghost g = (Ghost) this.game.getCreatureAt(l1);
+		g.setDirection(Game.Direction.LEFT);
 		
 		// action
 		game.move();
@@ -255,8 +267,10 @@ public class GameTest {
 	@Test
 	public void GhostUpNull(){
 		// arrange
+		setGameBoardByStringArray(new String[]{".", "G"});
 		Location l1 = new Location(0, 0), l2 = new Location(1, 0);
-		setBoardAndDirection( l2, Game.Direction.UP, new String[] {".", "G"} );
+		Ghost g = (Ghost) this.game.getCreatureAt(l2);
+		g.setDirection(Game.Direction.UP);
 		
 		// action
 		game.move();
@@ -269,15 +283,17 @@ public class GameTest {
 	@Test
 	public void GhostOutOfBoard_Up(){
 		// arrange
-		Location l1 = new Location(0, 0), l2 = new Location(1, 0);
-		setBoardAndDirection( l1, Game.Direction.UP, new String[] {"G", "."} );
+		setGameBoardByStringArray(new String[]{"WGW", "...", "..."});
+		Location l1 = new Location(2, 1), l2 = new Location(0, 1);
+		Ghost g = (Ghost) this.game.getCreatureAt(l2);
+		g.setDirection(Game.Direction.UP);
 		
 		// action
 		game.move();
 		
 		// assert
-		assertEquals( Type.GHOST , this.game.getCreatureAt(l2).getType() );
-		assertEquals( Type.NULL , this.game.getCreatureAt(l1).getType() );
+		assertEquals( Type.GHOST , this.game.getCreatureAt(l1).getType() );
+		assertEquals( Type.NULL , this.game.getCreatureAt(l2).getType() );
 	}
 	
 	// Down
@@ -285,8 +301,10 @@ public class GameTest {
 	@Test
 	public void GhostDownPoint(){
 		// arrange
+		setGameBoardByStringArray(new String[]{"G", "-"});
 		Location l1 = new Location(0, 0), l2 = new Location(1, 0);
-		setBoardAndDirection( l1, Game.Direction.DOWN, new String[] {"G", "-"} );
+		Ghost g = (Ghost) this.game.getCreatureAt(l1);
+		g.setDirection(Game.Direction.DOWN);
 		
 		// action
 		game.move();
@@ -299,8 +317,10 @@ public class GameTest {
 	@Test
 	public void GhostOutOfBoard_Down(){
 		// arrange
-		Location l1 = new Location(1, 0), l2 = new Location(0, 0);
-		setBoardAndDirection( l1, Game.Direction.DOWN, new String[] {"-", "G"} );
+		setGameBoardByStringArray(new String[]{"---", "-.-", ".G."});
+		Location l1 = new Location(2, 1), l2 = new Location(0, 1);
+		Ghost g = (Ghost) this.game.getCreatureAt(l1);
+		g.setDirection(Game.Direction.DOWN);
 		
 		// action
 		game.move();
@@ -316,10 +336,12 @@ public class GameTest {
 	@Test
 	public void PacmanLeft_Down_NotChanging(){
 		// arrange
+		setGameBoardByStringArray(new String[]{"-P", "-W"});
 		Location l1 = new Location(0, 0), l2 = new Location(0, 1);
-		setBoard_Direction_Change( l2, Game.Direction.LEFT, new String[] {"-P", "-W"}, Game.Direction.DOWN );
+		Pacman p = (Pacman) this.game.getCreatureAt(l2);
 		
 		// action
+		game.changeDirection(Game.Direction.DOWN, p);
 		game.move();
 		
 		// assert
@@ -330,10 +352,13 @@ public class GameTest {
 	@Test
 	public void PacmanLeft_Down_Changing(){
 		// arrange
+		setGameBoardByStringArray(new String[]{"P-", "-W"});
 		Location l1 = new Location(0, 0), l2 = new Location(1, 0);
-		setBoard_Direction_Change( l1, Game.Direction.LEFT, new String[] {"P-", "-W"}, Game.Direction.DOWN );
-
+		Pacman p = (Pacman) this.game.getCreatureAt(l1);
+		p.setDirection(Game.Direction.DOWN);
+		
 		// action
+		game.changeDirection(Game.Direction.DOWN, p);
 		game.move();
 		
 		// assert
@@ -344,10 +369,12 @@ public class GameTest {
 	@Test
 	public void PacmanLeft_Down_SaveChange(){
 		// arrange
+		setGameBoardByStringArray(new String[]{"-P", "-W"});
 		Location l1 = new Location(0, 0), l2 = new Location(1, 0), l3 = new Location(0, 1);
-		setBoard_Direction_Change( l3, Game.Direction.LEFT, new String[] {"-P", "-W"}, Game.Direction.DOWN );
+		Pacman p = (Pacman) this.game.getCreatureAt(l3);
 		
 		// action
+		game.changeDirection(Game.Direction.DOWN, p);
 		game.move();
 		game.move();
 		
@@ -361,10 +388,13 @@ public class GameTest {
 	@Test
 	public void GhostLeft_Down_NotChanging(){
 		// arrange
+		setGameBoardByStringArray(new String[]{"-G", "-W"});
 		Location l1 = new Location(0, 0), l2 = new Location(0, 1);
-		setBoard_Direction_Change( l2, Game.Direction.LEFT, new String[] {"-G", "-W"}, Game.Direction.DOWN );
+		Ghost g = (Ghost) this.game.getCreatureAt(l2);
+		g.setDirection(Game.Direction.DOWN);
 		
 		// action
+		game.changeDirection(Game.Direction.DOWN, g);
 		game.move();
 		
 		// assert
@@ -375,10 +405,13 @@ public class GameTest {
 	@Test
 	public void GhostLeft_Down_Changing(){
 		// arrange
+		setGameBoardByStringArray(new String[]{"G-", "-W"});
 		Location l1 = new Location(0, 0), l2 = new Location(1, 0);
-		setBoard_Direction_Change( l1, Game.Direction.LEFT, new String[] {"G-", "-W"}, Game.Direction.DOWN );
+		Ghost g = (Ghost) this.game.getCreatureAt(l1);
+		g.setDirection(Game.Direction.DOWN);
 		
 		// action
+		game.changeDirection(Game.Direction.DOWN, g);
 		game.move();
 		
 		// assert
@@ -389,10 +422,12 @@ public class GameTest {
 	@Test
 	public void GhostLeft_Down_SaveChange(){
 		// arrange
+		setGameBoardByStringArray(new String[]{"-G", "-W"});
 		Location l1 = new Location(0, 0), l2 = new Location(1, 0), l3 = new Location(0, 1);
-		setBoard_Direction_Change( l3, Game.Direction.LEFT, new String[] {"-G", "-W"}, Game.Direction.DOWN );
+		Ghost g = (Ghost) this.game.getCreatureAt(l3);
 		
 		// action
+		game.changeDirection(Game.Direction.DOWN, g);
 		game.move();
 		game.move();
 		
@@ -405,8 +440,7 @@ public class GameTest {
 	public void GhostLeftWall_SmartChange(){
 		// arrange
 		setGameBoardByStringArray(new String[]{"W-G", "W-W", "WWW"});
-		Location l1 = new Location(0, 1), l2 = new Location(1, 1), l3 = new Location(0, 2);
-		setBoardAndDirection( l3, Game.Direction.LEFT, new String[] {"W-G", "W-W", "WWW"} );
+		Location l1 = new Location(0, 1), l2 = new Location(1, 1);
 		
 		// action
 		game.move();
@@ -433,5 +467,5 @@ public class GameTest {
 		// assert
 		assertTrue(original != designed);
 	}
-	
+
 }

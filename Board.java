@@ -17,8 +17,8 @@ public class Board {
 	
 	public Board( String[] rowsArray ) {
 		this.ghostsNumber = 0;
-		this.movingCreatures = new Vector<MovingCreature>(0, 1);	
-		
+		this.ghosts = new Vector< Ghost >(0, 1);
+			
 		if (rowsArray == null){
 			this.board = new Creature[30][30];
 			
@@ -35,9 +35,10 @@ public class Board {
 		
 	}
 	
+	private Pacman pacman;
+	private Vector< Ghost > ghosts;
 	private Creature[][] board;
 	private int ghostsNumber;
-	private Vector<MovingCreature> movingCreatures; 
 	
 	public Creature[][] get() {
 		return board.clone();
@@ -53,12 +54,12 @@ public class Board {
 		if ( isStaticCreature(c) )
 			return;
 		
-		MovingCreature mC = (MovingCreature) c;
+		MovingCreature Mc = (MovingCreature) c;
 		
-		mC.setLocation(l);
+		Mc.setLocation(l);
 		
-		if (mC.getDirection() == null)
-			mC.setDirection(Game.defaultDirection);
+		if (Mc.getDirection() == null)
+			Mc.setDirection(Game.defaultDirection);
 	}
 	
 	public void limitToSpecificCreatures( Type[] typesAllowed ) {
@@ -83,8 +84,12 @@ public class Board {
 		return Arrays.stream( staticCreatures ).anyMatch( c.getType() :: equals );
 	}
 	
-	public MovingCreature[] getMovingCreatures() {
-		return movingCreatures.toArray( new MovingCreature[ movingCreatures.size() ]);
+	public Ghost[] getGhosts() {
+		return this.ghosts.toArray( new Ghost[ this.ghosts.size() ] );
+	}
+	
+	public Pacman getPacman() {
+		return this.pacman;
 	}
 	
 	private Creature[][] setBoard() throws FileNotFoundException {
@@ -126,9 +131,21 @@ public class Board {
 	}
 	
 	private void initialize( Location l, Creature c ) {
-		if (!isStaticCreature(c)) {
-			MovingCreature mC = (MovingCreature) c;
-			movingCreatures.add(mC);
+		
+		if ( !isStaticCreature(c) ) {
+			MovingCreature Mc = (MovingCreature) c;
+			Mc.setLocation(null);
+			Mc.setDirection(null);
+			
+			if ( c.getType() == Type.GHOST ){
+				Ghost g = (Ghost) Mc;
+				ghosts.add(g);
+			}
+			
+			if ( c.getType() == Type.PACMAN){
+				Pacman p = (Pacman) Mc;
+				this.pacman = p;
+			}
 		}
 		set( l, c );
 	}
