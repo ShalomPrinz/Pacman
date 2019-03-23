@@ -18,6 +18,7 @@ public class Board {
 	public Board( String[] rowsArray ) {
 		this.ghostsNumber = 0;
 		this.movingCreatures = new Vector<MovingCreature>(0, 1);	
+		this.revivorLocation = null;
 		
 		if (rowsArray == null){
 			this.board = new Creature[30][30];
@@ -33,11 +34,15 @@ public class Board {
 			this.board = setBoardWithStringArray(rowsArray);
 		}
 		
+		// In a board without Revivor, (0, 0) is the fake location of the Revivor
+		if (revivorLocation == null)
+			revivorLocation = new Location(0, 0);
 	}
 	
 	private Creature[][] board;
 	private int ghostsNumber;
 	private Vector<MovingCreature> movingCreatures; 
+	private Location revivorLocation; 
 	
 	public Creature[][] get() {
 		return board.clone();
@@ -85,6 +90,10 @@ public class Board {
 	
 	public MovingCreature[] getMovingCreatures() {
 		return movingCreatures.toArray( new MovingCreature[ movingCreatures.size() ]);
+	}
+	
+	public Location getRevivorLocation() {
+		return this.revivorLocation;
 	}
 	
 	private Creature[][] setBoard() throws FileNotFoundException {
@@ -135,6 +144,10 @@ public class Board {
 			movingCreatures.add(mC);
 			mC.setInitialLocation(l);
 		}
+		
+		if (c.getType() == Type.REVIVOR)
+			this.revivorLocation = l;
+		
 		set( l, c );
 	}
 	

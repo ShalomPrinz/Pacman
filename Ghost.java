@@ -27,14 +27,15 @@ public class Ghost extends MovingCreature {
 		changeDirection( game, this.getNextDirection(), this );	
 		Location nextLocation = game.getNextLocation(this.getLocation(), this.getDirection());
 		
-		switch ( game.getCreatureAt(nextLocation).getType()){
+		Creature c = game.getCreatureAt(nextLocation);
+		switch ( c.getType() ) {
 			case POINT:
 			case BIG_POINT:
 			case NULL:
 				game.set(this);
 				break;
 			case PACMAN:
-				game.pacmanDead();
+				game.ghostMeetPacman( (Pacman) c, this, false );
 				break;
 
 			default:

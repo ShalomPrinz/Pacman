@@ -80,12 +80,7 @@ public class Game{
 		return this.pacmanLives;
 	}
 	
-	public void pacmanDead() {
-		
-		if (ghostsEating) {
-			this.score += 200;
-			return;
-		}
+	private void pacmanDead() {
 		
 		pacmanLives --;
 		if (pacmanLives == 0)
@@ -95,6 +90,16 @@ public class Game{
 			topBoard.set(mC.getLocation(), new Null());
 			topBoard.set(mC.getInitialLocation(), mC);
 		}
+		
+	}
+	
+	public void ghostMeetPacman(Pacman p, Ghost g, boolean attackerIsPacman) {
+		if (ghostsEating) {
+			topBoard.set( g.getLocation(), attackerIsPacman ? p : new Null() );
+			topBoard.set( botBoard.getRevivorLocation() , g );
+			this.score += 200;
+		} else 
+			pacmanDead();
 		
 	}
 	

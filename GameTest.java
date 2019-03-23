@@ -564,4 +564,18 @@ public class GameTest {
 		assertEquals( 3, game.getPacmanLives() );
 	}
 
+	@Test
+	public void GhostToRevivor() {
+		// arrange
+		Location l1 = new Location(0, 0), l2 = new Location(0, 4);
+		setBoardAndDirection( l1, Game.Direction.RIGHT, new String[] {"G.BPR"} );
+		
+		// action
+		game.move();
+		game.move();
+		
+		// assert
+		assertEquals( Type.GHOST, game.getCreatureAt(l2).getType() );
+	}
+
 }
