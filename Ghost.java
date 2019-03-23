@@ -29,6 +29,7 @@ public class Ghost extends MovingCreature {
 		
 		switch ( game.getCreatureAt(nextLocation).getType()){
 			case POINT:
+			case BIG_POINT:
 			case NULL:
 				game.set(this);
 				break;

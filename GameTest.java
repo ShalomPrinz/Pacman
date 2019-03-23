@@ -237,6 +237,21 @@ public class GameTest {
 	// Left
 	
 	@Test
+	public void GhostLeftBigPoint(){
+		// arrange
+		Location l1 = new Location(0, 2), l2 = new Location(0, 1), l3 = new Location(0, 0);
+		setBoardAndDirection( l1, Game.Direction.LEFT, new String[] {".BG"} );
+		
+		// action
+		game.move();
+		game.move();
+				
+		// assert
+		assertEquals( Type.GHOST, this.game.getCreatureAt(l3).getType() );
+		assertEquals( Type.BIG_POINT, this.game.getCreatureAt(l2).getType() );
+	}
+
+	@Test
 	public void GhostLeftGhost(){
 		// arrange
 		Location l1 = new Location(0, 0), l2 = new Location(0, 1);
@@ -531,6 +546,18 @@ public class GameTest {
 		
 		// assert
 		assertFalse( game.gameOn );
+	}
+	
+	// Pacman eats ghosts
+	
+	@Test
+	public void clearTest() {
+		// arrange
+		
+		// action
+		
+		// assert
+		
 	}
 	
 }
