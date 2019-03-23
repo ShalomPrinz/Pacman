@@ -4,7 +4,7 @@ import pacman.Game.Direction;
 
 public abstract class MovingCreature extends Creature implements Moveable{
 	
-	private Location location;
+	private Location location, initialLocation;
 	private Game.Direction direction;
 	private Game.Direction nextDirection;
 	
@@ -44,6 +44,14 @@ public abstract class MovingCreature extends Creature implements Moveable{
 		this.nextDirection = nextDirection;
 	}
 
+	public Location getInitialLocation() {
+		return this.initialLocation;
+	}
+	
+	public void setInitialLocation(Location initialLocation) {
+		this.initialLocation = initialLocation;
+	}
+	
 	abstract void move(Game game);
 	
 	public void changeDirection( Game game, Direction newDirection, MovingCreature mC ) {

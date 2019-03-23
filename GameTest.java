@@ -434,6 +434,8 @@ public class GameTest {
 		assertTrue(original != designed);
 	}
 	
+	// game locations to update
+	
 	@Test
 	public void updatedLocations_2() {
 		// arrange
@@ -496,5 +498,32 @@ public class GameTest {
 		assertEquals(expected.length, actual.length);
 	}
 
+	// 
 	
+	@Test
+	public void pacmanDeadOnce() {
+		// arrange
+		setGameBoardByStringArray( new String[] {"G.P"} );
+		Location l1 = new Location(0, 0), l2 = new Location(0, 1), l3 = new Location(0, 2);
+		Ghost g = (Ghost) game.getCreatureAt(l1);
+		g.setDirection(Game.Direction.RIGHT);
+		
+		// action
+		game.move();
+		
+		// assert
+		assertEquals( Type.PACMAN, game.getCreatureAt(l3).getType() );
+		assertEquals( Type.NULL, game.getCreatureAt(l2).getType() );
+		assertEquals( Type.GHOST, game.getCreatureAt(l1).getType() );
+	}
+	
+//	@Test
+//	public void clearTest() {
+//		// arrange
+//		
+//		// action
+//		
+//		// assert
+//		
+//	}
 }

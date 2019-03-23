@@ -129,6 +129,7 @@ public class Board {
 		if (!isStaticCreature(c)) {
 			MovingCreature mC = (MovingCreature) c;
 			movingCreatures.add(mC);
+			mC.setInitialLocation(l);
 		}
 		set( l, c );
 	}

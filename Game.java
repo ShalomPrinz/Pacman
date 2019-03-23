@@ -76,6 +76,11 @@ public class Game{
 
 	public void stopGame() {
 		this.gameOn = false;
+		
+		for (MovingCreature mC : topBoard.getMovingCreatures()) {
+			topBoard.set(mC.getLocation(), new Null());
+			topBoard.set(mC.getInitialLocation(), mC);
+		}
 	}
 	
 	public Location getNextLocation( Location movingCreatureLocation, Direction d ) {
@@ -124,4 +129,5 @@ public class Game{
 	public Location[] getLocationsToUpdate() {
 		return move.toArray( new Location[move.size()] );
 	}
+	
 }
