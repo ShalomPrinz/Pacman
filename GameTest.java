@@ -533,14 +533,4 @@ public class GameTest {
 		assertFalse( game.gameOn );
 	}
 	
-	@Test
-	public void clearTest() {
-		// arrange
-		
-		// action
-		
-		// assert
-		
-	}
-	
 }
