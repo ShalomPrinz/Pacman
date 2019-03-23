@@ -29,7 +29,7 @@ public class Game{
 		
 		this.botBoard = new Board(b);
 		this.botBoard.limitToSpecificCreatures(new Type[]{
-				Type.WALL, Type.POINT, Type.NULL, Type.BIG_POINT } );
+				Type.WALL, Type.POINT, Type.NULL, Type.BIG_POINT, Type.REVIVOR } );
 	
 	}	
 	

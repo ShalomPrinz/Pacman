@@ -8,7 +8,8 @@ public abstract class Creature {
 		POINT,
 		BIG_POINT,
 		NULL,
-		WALL
+		WALL,
+		REVIVOR
 	}
 	
 	abstract Type getType();

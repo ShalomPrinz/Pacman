@@ -79,7 +79,7 @@ public class Board {
 	}
 	
 	public boolean isStaticCreature( Creature c ) {
-		Type[] staticCreatures = { Type.NULL, Type.POINT, Type.WALL, Type.BIG_POINT };
+		Type[] staticCreatures = { Type.NULL, Type.POINT, Type.WALL, Type.BIG_POINT, Type.REVIVOR };
 		return Arrays.stream( staticCreatures ).anyMatch( c.getType() :: equals );
 	}
 	
@@ -112,6 +112,8 @@ public class Board {
 				return new Pacman();
 			case "G":
 				return new Ghost();
+			case "R":
+				return new Revivor();
 			default:
 				return new Null();
 		}
