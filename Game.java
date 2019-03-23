@@ -142,8 +142,14 @@ public class Game{
 		topBoard.set( nextLocation, mC );
 		
 		if (mC.getType() == Type.PACMAN) {
-			if ( botBoard.get( nextLocation ).getType() == Type.BIG_POINT )
-				this.ghostsEating = true;
+			switch ( botBoard.get( nextLocation ).getType() ) {
+				case POINT:
+					this.score += 10;
+					break;
+				case BIG_POINT:
+					this.ghostsEating = true;
+					break;
+			}
 			botBoard.set(nextLocation, new Null());
 		}
 		

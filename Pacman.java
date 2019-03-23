@@ -16,7 +16,6 @@ public class Pacman extends MovingCreature {
 		
 		switch ( nextCreature.getType() ){
 			case POINT:
-				game.setScore(game.getScore() + 10);
 			case NULL:
 			case BIG_POINT:
 				game.set(this);
