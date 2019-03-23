@@ -147,6 +147,7 @@ public class Game{
 					this.score += 10;
 					break;
 				case BIG_POINT:
+					this.score += 50;
 					this.ghostsEating = true;
 					break;
 			}
