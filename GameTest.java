@@ -434,4 +434,67 @@ public class GameTest {
 		assertTrue(original != designed);
 	}
 	
+	@Test
+	public void updatedLocations_2() {
+		// arrange
+		Location l1 = new Location(0, 1), l2 = new Location(0, 0);
+		setGameBoardByStringArray( new String[] {"-P"} );
+		Location[] expected = new Location[] {
+				l1, l2
+		};
+		
+		// action
+		game.move();
+		Location[] actual = game.getLocationsToUpdate();
+		
+		// assert
+		for (int i = 0; i < expected.length; i++)
+			assertEquals( expected[i].toString(), actual[i].toString() );
+		
+		assertEquals(expected.length, actual.length);
+	}
+
+	@Test
+	public void updatedLocations_4() {
+		// arrange
+		setGameBoardByStringArray( new String[] {"-P", "-G"} );
+		Location[] expected = new Location[] {
+				new Location(0, 1), new Location(0, 0),
+				new Location(1, 1), new Location(1, 0)
+		};
+		
+		// action
+		game.move();
+		Location[] actual = game.getLocationsToUpdate();
+		
+		// assert
+		for (int i = 0; i < expected.length; i++)
+			assertEquals( expected[i].toString(), actual[i].toString() );
+		
+		assertEquals(expected.length, actual.length);
+	}
+	
+	@Test
+	public void updatedLocations_8() {
+		// arrange
+		setGameBoardByStringArray( new String[] {"-P", "-G", "WW", "WG", "-G", ".G"} );
+		Location[] expected = new Location[] {
+				new Location(0, 1), new Location(0, 0),
+				new Location(1, 1), new Location(1, 0),
+				new Location(4, 1), new Location(4, 0),
+				new Location(5, 1), new Location(5, 0)
+		};
+		
+		// action
+		game.move();
+		Location[] actual = game.getLocationsToUpdate();
+		
+		// assert
+		for (int i = 0; i < expected.length; i++)
+			assertEquals( expected[i].toString(), actual[i].toString() );
+		
+		assertEquals(expected.length, actual.length);
+	}
+
+	
 }

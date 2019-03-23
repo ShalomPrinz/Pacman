@@ -1,5 +1,7 @@
 package pacman;
 
+import java.util.Vector;
+
 import pacman.Creature.Type;
 
 public class Game{
@@ -7,6 +9,7 @@ public class Game{
 	private Board topBoard, botBoard;
 	private int score;
 	boolean gameOn;
+	Vector<Location> move;
 	
 	public static final Direction defaultDirection = Direction.LEFT;
 		
@@ -16,7 +19,8 @@ public class Game{
 	
 	public Game( final String[] b ) {
 		this.gameOn = false;
-				
+		this.move = new Vector<>(0, 2);		
+		
 		this.topBoard = new Board(b);
 		this.topBoard.limitToSpecificCreatures( new Type[]{
 				Type.GHOST, Type.PACMAN });
@@ -106,6 +110,10 @@ public class Game{
 	
 	public void set( MovingCreature mC ) {
 		Location nextLocation = getNextLocation(mC.getLocation(), mC.getDirection());
+		
+		move.add(mC.getLocation());
+		move.add(nextLocation);
+		
 		topBoard.set( mC.getLocation(), new Null() );
 		topBoard.set( nextLocation, mC );
 		
@@ -113,4 +121,7 @@ public class Game{
 			botBoard.set(nextLocation, new Null());
 	}
 
+	public Location[] getLocationsToUpdate() {
+		return move.toArray( new Location[move.size()] );
+	}
 }
