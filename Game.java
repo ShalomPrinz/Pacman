@@ -82,8 +82,10 @@ public class Game{
 	
 	public void pacmanDead() {
 		
-		if (ghostsEating)
+		if (ghostsEating) {
+			this.score += 200;
 			return;
+		}
 		
 		pacmanLives --;
 		if (pacmanLives == 0)
