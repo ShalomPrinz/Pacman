@@ -513,7 +513,7 @@ public class GameTest {
 		assertEquals(expected.length, actual.length);
 	}
 
-	// 
+	// Pacman lives
 	
 	@Test
 	public void pacmanDeadOnce() {
@@ -547,17 +547,21 @@ public class GameTest {
 		// assert
 		assertFalse( game.gameOn );
 	}
-	
-	// Pacman eats ghosts
+		
+	// Pacman vs Ghost
 	
 	@Test
-	public void clearTest() {
+	public void PacmanEatsGhost() {
 		// arrange
+		Location l1 = new Location(0, 0);
+		setBoardAndDirection( l1, Game.Direction.RIGHT, new String[] {"G.BP"} );
 		
 		// action
-		
+		game.move();
+		game.move();
+
 		// assert
-		
+		assertEquals( 3, game.getPacmanLives() );
 	}
-	
+
 }

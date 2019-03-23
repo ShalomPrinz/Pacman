@@ -8,7 +8,7 @@ public class Game{
 	
 	private Board topBoard, botBoard;
 	private int score, pacmanLives;
-	boolean gameOn;
+	boolean gameOn, ghostsEating;
 	Vector<Location> move;
 	
 	public static final Direction defaultDirection = Direction.LEFT;
@@ -21,6 +21,7 @@ public class Game{
 		this.gameOn = true;
 		this.move = new Vector<>(0, 2);		
 		this.pacmanLives = 3;
+		this.ghostsEating = false;
 		
 		this.topBoard = new Board(b);
 		this.topBoard.limitToSpecificCreatures( new Type[]{
@@ -80,6 +81,10 @@ public class Game{
 	}
 	
 	public void stopGame() {
+		
+		if (ghostsEating)
+			return;
+		
 		pacmanLives --;
 		if (pacmanLives == 0)
 			this.gameOn = false;
@@ -136,8 +141,12 @@ public class Game{
 		topBoard.set( mC.getLocation(), new Null() );
 		topBoard.set( nextLocation, mC );
 		
-		if (mC.getType() == Type.PACMAN)
+		if (mC.getType() == Type.PACMAN) {
+			if ( botBoard.get( nextLocation ).getType() == Type.BIG_POINT )
+				this.ghostsEating = true;
 			botBoard.set(nextLocation, new Null());
+		}
+		
 	}
 
 	public Location[] getLocationsToUpdate() {
