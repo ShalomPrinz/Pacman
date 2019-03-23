@@ -80,7 +80,7 @@ public class Game{
 		return this.pacmanLives;
 	}
 	
-	public void stopGame() {
+	public void pacmanDead() {
 		
 		if (ghostsEating)
 			return;

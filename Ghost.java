@@ -34,7 +34,7 @@ public class Ghost extends MovingCreature {
 				game.set(this);
 				break;
 			case PACMAN:
-				game.stopGame();
+				game.pacmanDead();
 				break;
 
 			default:

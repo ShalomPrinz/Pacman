@@ -22,7 +22,7 @@ public class Pacman extends MovingCreature {
 				break;
 				
 			case GHOST:
-				game.stopGame();
+				game.pacmanDead();
 				break;
 				
 			default:
