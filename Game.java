@@ -7,7 +7,7 @@ import pacman.Creature.Type;
 public class Game{
 	
 	private Board topBoard, botBoard;
-	private int score;
+	private int score, pacmanLives;
 	boolean gameOn;
 	Vector<Location> move;
 	
@@ -18,8 +18,9 @@ public class Game{
 	}
 	
 	public Game( final String[] b ) {
-		this.gameOn = false;
+		this.gameOn = true;
 		this.move = new Vector<>(0, 2);		
+		this.pacmanLives = 3;
 		
 		this.topBoard = new Board(b);
 		this.topBoard.limitToSpecificCreatures( new Type[]{
@@ -74,13 +75,20 @@ public class Game{
 		this.score = score;
 	}
 
+	public int getPacmanLives() {
+		return this.pacmanLives;
+	}
+	
 	public void stopGame() {
-		this.gameOn = false;
+		pacmanLives --;
+		if (pacmanLives == 0)
+			this.gameOn = false;
 		
 		for (MovingCreature mC : topBoard.getMovingCreatures()) {
 			topBoard.set(mC.getLocation(), new Null());
 			topBoard.set(mC.getInitialLocation(), mC);
 		}
+		
 	}
 	
 	public Location getNextLocation( Location movingCreatureLocation, Direction d ) {
@@ -109,8 +117,14 @@ public class Game{
 	
 	public void move() {
 			
-		for (MovingCreature mC : topBoard.getMovingCreatures())
-			mC.move(this);		
+		int turnLives = getPacmanLives();
+		
+		for (MovingCreature mC : topBoard.getMovingCreatures()) {
+			mC.move(this);
+			if (turnLives != getPacmanLives())
+				break;
+		}
+					
 	}
 	
 	public void set( MovingCreature mC ) {

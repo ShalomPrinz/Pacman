@@ -70,7 +70,7 @@ public class GameTest {
 		game.move();
 		
 		// assert
-		assertFalse(this.game.gameOn);
+		assertEquals(2, game.getPacmanLives());
 	}
 	
 	@Test
@@ -136,13 +136,13 @@ public class GameTest {
 	@Test
 	public void PacmanUpGhost(){
 		// arrange
-		setBoardAndDirection( new Location(1, 0), Game.Direction.UP, new String[] {"G-", "PW"} );
+		setBoardAndDirection( new Location(1, 1), Game.Direction.UP, new String[] {"G-", "WP"} );
 		
 		// action
 		game.move();
 				
 		// assert
-		assertFalse(this.game.gameOn);
+		assertEquals(2, game.getPacmanLives());
 	}
 
 	// Down
@@ -217,7 +217,7 @@ public class GameTest {
 		game.move();
 				
 		// assert
-		assertFalse(this.game.gameOn);
+		assertEquals(2, game.getPacmanLives());
 	}
 
 	@Test
@@ -517,13 +517,30 @@ public class GameTest {
 		assertEquals( Type.GHOST, game.getCreatureAt(l1).getType() );
 	}
 	
-//	@Test
-//	public void clearTest() {
-//		// arrange
-//		
-//		// action
-//		
-//		// assert
-//		
-//	}
+	@Test
+	public void pacmanDeadThreeTimes() {
+		// arrange
+		setGameBoardByStringArray( new String[] {"G.P"} );
+		Location l1 = new Location(0, 0);
+		Ghost g = (Ghost) game.getCreatureAt(l1);
+		g.setDirection(Game.Direction.RIGHT);
+		
+		// action
+		for (int i = 0; i < 3; i++)
+			game.move();
+		
+		// assert
+		assertFalse( game.gameOn );
+	}
+	
+	@Test
+	public void clearTest() {
+		// arrange
+		
+		// action
+		
+		// assert
+		
+	}
+	
 }
