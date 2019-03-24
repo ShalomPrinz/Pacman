@@ -6,8 +6,10 @@ public abstract class Creature {
 		PACMAN,
 		GHOST,
 		POINT,
+		BIG_POINT,
 		NULL,
-		WALL
+		WALL,
+		REVIVOR
 	}
 	
 	abstract Type getType();

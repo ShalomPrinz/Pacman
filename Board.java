@@ -17,8 +17,9 @@ public class Board {
 	
 	public Board( String[] rowsArray ) {
 		this.ghostsNumber = 0;
-		this.ghosts = new Vector< Ghost >(0, 1);
-			
+		this.movingCreatures = new Vector<MovingCreature>(0, 1);	
+		this.revivorLocation = null;
+		
 		if (rowsArray == null){
 			this.board = new Creature[30][30];
 			
@@ -33,12 +34,15 @@ public class Board {
 			this.board = setBoardWithStringArray(rowsArray);
 		}
 		
+		// In a board without Revivor, (0, 0) is the fake location of the Revivor
+		if (revivorLocation == null)
+			revivorLocation = new Location(0, 0);
 	}
 	
-	private Pacman pacman;
-	private Vector< Ghost > ghosts;
 	private Creature[][] board;
 	private int ghostsNumber;
+	private Vector<MovingCreature> movingCreatures; 
+	private Location revivorLocation; 
 	
 	public Creature[][] get() {
 		return board.clone();
@@ -54,12 +58,12 @@ public class Board {
 		if ( isStaticCreature(c) )
 			return;
 		
-		MovingCreature Mc = (MovingCreature) c;
+		MovingCreature mC = (MovingCreature) c;
 		
-		Mc.setLocation(l);
+		mC.setLocation(l);
 		
-		if (Mc.getDirection() == null)
-			Mc.setDirection(Game.defaultDirection);
+		if (mC.getDirection() == null)
+			mC.setDirection(Game.defaultDirection);
 	}
 	
 	public void limitToSpecificCreatures( Type[] typesAllowed ) {
@@ -80,16 +84,16 @@ public class Board {
 	}
 	
 	public boolean isStaticCreature( Creature c ) {
-		Type[] staticCreatures = { Type.NULL, Type.POINT, Type.WALL};
+		Type[] staticCreatures = { Type.NULL, Type.POINT, Type.WALL, Type.BIG_POINT, Type.REVIVOR };
 		return Arrays.stream( staticCreatures ).anyMatch( c.getType() :: equals );
 	}
 	
-	public Ghost[] getGhosts() {
-		return this.ghosts.toArray( new Ghost[ this.ghosts.size() ] );
+	public MovingCreature[] getMovingCreatures() {
+		return movingCreatures.toArray( new MovingCreature[ movingCreatures.size() ]);
 	}
 	
-	public Pacman getPacman() {
-		return this.pacman;
+	public Location getRevivorLocation() {
+		return this.revivorLocation;
 	}
 	
 	private Creature[][] setBoard() throws FileNotFoundException {
@@ -111,10 +115,14 @@ public class Board {
 				return new Wall();
 			case "-":
 				return new Point();
+			case "B":
+				return new BigPoint();
 			case "P":
 				return new Pacman();
 			case "G":
 				return new Ghost();
+			case "R":
+				return new Revivor();
 			default:
 				return new Null();
 		}
@@ -131,22 +139,15 @@ public class Board {
 	}
 	
 	private void initialize( Location l, Creature c ) {
-		
-		if ( !isStaticCreature(c) ) {
-			MovingCreature Mc = (MovingCreature) c;
-			Mc.setLocation(null);
-			Mc.setDirection(null);
-			
-			if ( c.getType() == Type.GHOST ){
-				Ghost g = (Ghost) Mc;
-				ghosts.add(g);
-			}
-			
-			if ( c.getType() == Type.PACMAN){
-				Pacman p = (Pacman) Mc;
-				this.pacman = p;
-			}
+		if (!isStaticCreature(c)) {
+			MovingCreature mC = (MovingCreature) c;
+			movingCreatures.add(mC);
+			mC.setInitialLocation(l);
 		}
+		
+		if (c.getType() == Type.REVIVOR)
+			this.revivorLocation = l;
+		
 		set( l, c );
 	}
 	
