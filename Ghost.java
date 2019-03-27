@@ -43,7 +43,7 @@ public class Ghost extends MovingCreature {
 		}
 	}
 	
-	private Vector<Direction> findNewPath(Game game) {
+	Vector<Direction> findNewPath(Game game) {
 		
 		Vector<Direction> possibleDirections = new Vector<>(0, 1);		
 		Direction oppositeDirection = getOppositeDirection( this.getDirection() );
@@ -52,11 +52,11 @@ public class Ghost extends MovingCreature {
 			Location nextLocation = game.getNextLocation(this.getLocation(), d);
 			Creature nextCreature = game.getCreatureAt( nextLocation );
 			
-			if ( nextCreature.getType() != Type.WALL && d != oppositeDirection)
+			if ( nextCreature.getType() != Type.WALL && d != oppositeDirection )
 				possibleDirections.add(d);
 		}
 		
-		if (possibleDirections.capacity() == 0) {
+		if (possibleDirections.capacity() == 0) { // no direction to go but opposite
 			Location nextLocation = game.getNextLocation( this.getLocation(), oppositeDirection );
 			Creature nextCreature = game.getCreatureAt( nextLocation );
 			
@@ -67,7 +67,7 @@ public class Ghost extends MovingCreature {
 		
 	}
 	
-	private Direction getOppositeDirection( Direction d ) {
+	Direction getOppositeDirection( Direction d ) {
 		switch(d) {
 			case DOWN:
 				return Direction.UP;
