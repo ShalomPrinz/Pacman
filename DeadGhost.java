@@ -11,6 +11,7 @@ public class DeadGhost extends Ghost {
 			if ( nextLocation.equals(goal) )
 				setDirection(d);
 		}
+		
 	}
 	
 }

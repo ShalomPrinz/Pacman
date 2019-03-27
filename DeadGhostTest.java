@@ -75,4 +75,16 @@ class DeadGhostTest {
 		assertEquals(dg.getLocation(), rev);
 	}
 	
+	@Test
+	void twoStepsRight() {
+		Location rev = new Location(0, 3), deadGhost = new Location(0, 1);
+		setGameAndGhost( new String[] {"WD.R"}, deadGhost);
+		
+		dg.findPath(game, rev);
+		dg.move(game);
+		dg.move(game);
+		
+		assertEquals(dg.getLocation(), rev);
+	}
+	
 }
