@@ -19,7 +19,7 @@ class DeadGhostTest {
 	@Test
 	void oneStepRight() {
 		Location rev = new Location(0, 1), deadGhost = new Location(0, 0);
-		setGameAndGhost( new String[] {"DR"}, deadGhost);
+		setGameAndGhost( new String[] {"DRW", "WWW"}, deadGhost);
 		
 		Direction d = dg.findPath(game, rev);
 		
@@ -38,8 +38,8 @@ class DeadGhostTest {
 
 	@Test
 	void oneStepDown() {
-		Location rev = new Location(1, 0), deadGhost = new Location(0, 0);
-		setGameAndGhost( new String[] {"D", "R"}, deadGhost);
+		Location rev = new Location(1, 1), deadGhost = new Location(0, 1);
+		setGameAndGhost( new String[] {"WD", "WR", "WW"}, deadGhost);
 		
 		Direction d = dg.findPath(game, rev);
 		
@@ -49,7 +49,7 @@ class DeadGhostTest {
 	@Test
 	void oneStepUp() {
 		Location rev = new Location(0, 0), deadGhost = new Location(1, 0);
-		setGameAndGhost( new String[] {"R", "D"}, deadGhost);
+		setGameAndGhost( new String[] {"RW", "DW", "WW"}, deadGhost);
 		
 		Direction d = dg.findPath(game, rev);
 		
@@ -57,7 +57,7 @@ class DeadGhostTest {
 	}
 	
 	@Test
-	void stepDownStepRight() {
+	void stepDownUpStepRightLeft() {
 		Location rev = new Location(1, 1), deadGhost = new Location(0, 0);
 		setGameAndGhost( new String[] {"DW", ".R"}, deadGhost);
 		
@@ -70,4 +70,13 @@ class DeadGhostTest {
 		assertTrue( Direction.LEFT == second || Direction.RIGHT == second );
 	}
 	
+	@Test
+	void wallAhead() {
+		Location rev = new Location(0, 2), deadGhost = new Location(0, 0);
+		setGameAndGhost( new String[] {"DWR"}, deadGhost);
+		
+		Direction d = dg.findPath(game, rev);
+		
+		assertEquals(Direction.LEFT, d);
+	}
 }

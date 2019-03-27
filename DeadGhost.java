@@ -10,20 +10,7 @@ public class DeadGhost extends Ghost {
 		
 		Vector<Direction> directions = super.findNewPath(game);			
 		
-		int xDiff = goal.getX() - getLocation().getX();
-		int yDiff = goal.getY() - getLocation().getY();
-		
-		if (xDiff != 0 && yDiff != 0)
-			return directions.firstElement();
-		
-		if (yDiff > 0)
-			return Direction.RIGHT;
-		if (yDiff < 0)
-			return Direction.LEFT;
-		if (xDiff > 0)
-			return Direction.DOWN;
-	
-		return Direction.UP;
+		return directions.firstElement();
 	}
 	
 }
