@@ -18,8 +18,8 @@ class DeadGhostTest {
 	
 	@Test
 	void oneStepRight() {
-		Location rev = new Location(0, 1), deadGhost = new Location(0, 0);
-		setGameAndGhost( new String[] {"DRW", "WWW"}, deadGhost);
+		Location rev = new Location(0, 2), deadGhost = new Location(0, 1);
+		setGameAndGhost( new String[] {"WDR"}, deadGhost);
 		
 		Direction d = dg.findPath(game, rev);
 		
@@ -29,7 +29,7 @@ class DeadGhostTest {
 	@Test
 	void oneStepLeft() {
 		Location rev = new Location(0, 0), deadGhost = new Location(0, 1);
-		setGameAndGhost( new String[] {"RD"}, deadGhost);
+		setGameAndGhost( new String[] {"RDW"}, deadGhost);
 		
 		Direction d = dg.findPath(game, rev);
 		
@@ -38,8 +38,8 @@ class DeadGhostTest {
 
 	@Test
 	void oneStepDown() {
-		Location rev = new Location(1, 1), deadGhost = new Location(0, 1);
-		setGameAndGhost( new String[] {"WD", "WR", "WW"}, deadGhost);
+		Location rev = new Location(1, 0), deadGhost = new Location(0, 0);
+		setGameAndGhost( new String[] {"D", "R", "W"}, deadGhost);
 		
 		Direction d = dg.findPath(game, rev);
 		
@@ -49,25 +49,25 @@ class DeadGhostTest {
 	@Test
 	void oneStepUp() {
 		Location rev = new Location(0, 0), deadGhost = new Location(1, 0);
-		setGameAndGhost( new String[] {"RW", "DW", "WW"}, deadGhost);
+		setGameAndGhost( new String[] {"R", "D", "W"}, deadGhost);
 		
 		Direction d = dg.findPath(game, rev);
 		
 		assertEquals(Direction.UP, d);
 	}
-	
+		
 	@Test
-	void stepDownStepRight() {
-		Location rev = new Location(1, 2), deadGhost = new Location(0, 1);
-		setGameAndGhost( new String[] {"WDW", "W.R", "WWW"}, deadGhost);
+	void chooseStepDown() {
+		Location rev = new Location(2, 1), deadGhost = new Location(1, 1);
+		setGameAndGhost( new String[] {
+			"W-W",
+			"-D-",
+			"WRW"
+		}, deadGhost);
 		
-		Direction first = dg.findPath(game, rev);
-		dg.setDirection(first);
-		dg.move(game);
-		Direction second = dg.findPath(game, rev); 
+		Direction d = dg.findPath(game, rev);
 		
-		assertEquals(Direction.DOWN, first);
-		assertEquals(Direction.RIGHT, second);
+		assertEquals(Direction.DOWN, d);
 	}
 	
 }
