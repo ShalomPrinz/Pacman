@@ -8,11 +8,18 @@ import pacman.Game.Direction;
 
 class DeadGhostTest {
 
+	Game game;
+	DeadGhost dg;
+	
+	void setGameAndGhost(String[] board, Location deadGhost) {
+		game = new Game(board);
+		dg = (DeadGhost) game.getCreatureAt( deadGhost );
+	}
+	
 	@Test
 	void oneStepRight() {
-		Game game = new Game( new String[] {"DR"} );
-		Location rev = new Location(0, 1), ghost = new Location(0, 0);
-		DeadGhost dg = (DeadGhost) game.getCreatureAt( ghost );
+		Location rev = new Location(0, 1), deadGhost = new Location(0, 0);
+		setGameAndGhost( new String[] {"DR"}, deadGhost);
 		
 		Direction d = dg.findPath(rev);
 		
@@ -21,13 +28,22 @@ class DeadGhostTest {
 	
 	@Test
 	void oneStepLeft() {
-		Game game = new Game( new String[] {"RD"} );
-		Location rev = new Location(0, 0), ghost = new Location(0, 1);
-		DeadGhost dg = (DeadGhost) game.getCreatureAt( ghost );
+		Location rev = new Location(0, 0), deadGhost = new Location(0, 1);
+		setGameAndGhost( new String[] {"RD"}, deadGhost);
 		
 		Direction d = dg.findPath(rev);
 		
 		assertEquals(Direction.LEFT, d);
 	}
 
+	@Test
+	void oneStepDown() {
+		Location rev = new Location(1, 0), deadGhost = new Location(0, 0);
+		setGameAndGhost( new String[] {"D", "R"}, deadGhost);
+		
+		Direction d = dg.findPath(rev);
+		
+		assertEquals(Direction.DOWN, d);
+	}
+	
 }
