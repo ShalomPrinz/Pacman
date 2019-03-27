@@ -21,9 +21,10 @@ class DeadGhostTest {
 		Location rev = new Location(0, 2), deadGhost = new Location(0, 1);
 		setGameAndGhost( new String[] {"WDR"}, deadGhost);
 		
-		Direction d = dg.findPath(game, rev);
+		dg.findPath(game, rev);
+		dg.move(game);
 		
-		assertEquals(Direction.RIGHT, d);
+		assertEquals(dg.getLocation(), rev);
 	}
 	
 	@Test
@@ -31,9 +32,10 @@ class DeadGhostTest {
 		Location rev = new Location(0, 0), deadGhost = new Location(0, 1);
 		setGameAndGhost( new String[] {"RDW"}, deadGhost);
 		
-		Direction d = dg.findPath(game, rev);
+		dg.findPath(game, rev);
+		dg.move(game);
 		
-		assertEquals(Direction.LEFT, d);
+		assertEquals(dg.getLocation(), rev);
 	}
 
 	@Test
@@ -41,9 +43,10 @@ class DeadGhostTest {
 		Location rev = new Location(1, 0), deadGhost = new Location(0, 0);
 		setGameAndGhost( new String[] {"D", "R", "W"}, deadGhost);
 		
-		Direction d = dg.findPath(game, rev);
+		dg.findPath(game, rev);
+		dg.move(game);
 		
-		assertEquals(Direction.DOWN, d);
+		assertEquals(dg.getLocation(), rev);
 	}
 	
 	@Test
@@ -51,13 +54,14 @@ class DeadGhostTest {
 		Location rev = new Location(0, 0), deadGhost = new Location(1, 0);
 		setGameAndGhost( new String[] {"R", "D", "W"}, deadGhost);
 		
-		Direction d = dg.findPath(game, rev);
+		dg.findPath(game, rev);
+		dg.move(game);
 		
-		assertEquals(Direction.UP, d);
+		assertEquals(dg.getLocation(), rev);
 	}
 		
 	@Test
-	void chooseStepDown() {
+	void chooseTheOneStep() {
 		Location rev = new Location(2, 1), deadGhost = new Location(1, 1);
 		setGameAndGhost( new String[] {
 			"W-W",
@@ -65,9 +69,10 @@ class DeadGhostTest {
 			"WRW"
 		}, deadGhost);
 		
-		Direction d = dg.findPath(game, rev);
+		dg.findPath(game, rev);
+		dg.move(game);
 		
-		assertEquals(Direction.DOWN, d);
+		assertEquals(dg.getLocation(), rev);
 	}
 	
 }

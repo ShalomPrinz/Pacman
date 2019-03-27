@@ -32,6 +32,7 @@ public class Ghost extends MovingCreature {
 			case POINT:
 			case BIG_POINT:
 			case NULL:
+			case REVIVOR:
 				game.set(this);
 				break;
 			case PACMAN:
