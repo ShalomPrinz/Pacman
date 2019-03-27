@@ -30,4 +30,9 @@ public class Location{
 	public String toString(){
 		return this.x + "" + this.y;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		return this.toString().equals(obj.toString());
+	}
 }
