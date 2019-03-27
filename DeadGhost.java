@@ -10,8 +10,10 @@ public class DeadGhost extends Ghost {
 			return Direction.RIGHT;
 		if (goal.getY() < getLocation().getY())
 			return Direction.LEFT;
+		if (goal.getX() > getLocation().getX())
+			return Direction.DOWN;
 		
-		return Direction.DOWN;
+		return Direction.UP;
 	}
 	
 }

@@ -46,4 +46,14 @@ class DeadGhostTest {
 		assertEquals(Direction.DOWN, d);
 	}
 	
+	@Test
+	void oneStepUp() {
+		Location rev = new Location(0, 0), deadGhost = new Location(1, 0);
+		setGameAndGhost( new String[] {"R", "D"}, deadGhost);
+		
+		Direction d = dg.findPath(rev);
+		
+		assertEquals(Direction.UP, d);
+	}
+	
 }
