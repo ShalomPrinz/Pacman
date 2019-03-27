@@ -123,6 +123,8 @@ public class Board {
 				return new Ghost();
 			case "D":
 				return new DeadGhost();
+			case "S":
+				return new SmartGhost();
 			case "R":
 				return new Revivor();
 			default:
