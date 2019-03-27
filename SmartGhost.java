@@ -7,20 +7,42 @@ public class SmartGhost extends Ghost{
 	private int horizonalSpeed = 0;
 	private int verticalSpeed = 0;
 	private static final int SPD = 1;
+	Direction forbiddenDirection;
 	
 	@Override
 	void move(Game game) {
 		
+		forbiddenDirection = getOppositeDirection( getDirection() );
+
 		Location nextLocation = game.getNextLocation(getLocation(), getDirection());
 		Creature nextCreature = game.getCreatureAt(nextLocation);
-		
-		if (nextCreature.getType() == Type.WALL) 
+
+		if (nextCreature.getType() == Type.WALL)
 			reverseSpeeds();
-		
+
 		// if (ghost snaps to grid)
 		changeDirection(game);
-		
-		game.set(this);		
+
+		nextLocation = game.getNextLocation(getLocation(), getDirection());
+		nextCreature = game.getCreatureAt(nextLocation);
+
+		for (int i = 0; i < 30 && (nextCreature.getType() == Type.WALL ||  nextCreature.getType() == Type.REVIVOR); i++) {
+            changeDirection(game);
+            nextLocation = game.getNextLocation(getLocation(), getDirection());
+            nextCreature = game.getCreatureAt(nextLocation);
+        }
+
+		if (nextCreature.getType() == Type.WALL){
+
+		}
+
+        if (nextCreature.getType() == Type.WALL ||  nextCreature.getType() == Type.REVIVOR)
+        	setDirection(forbiddenDirection);
+
+		if (nextCreature.getType() == Type.PACMAN)
+			game.ghostMeetPacman( (Pacman) nextCreature, this, false);
+		else
+			game.set(this);	
 	}
 	
 	public void changeDirection(Game game) {

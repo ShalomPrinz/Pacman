@@ -42,4 +42,5 @@ class SmartGhostTest {
 		// assert
 		assertTrue(original != designed);
 	}
+
 }
