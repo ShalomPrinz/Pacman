@@ -6,11 +6,14 @@ public class DeadGhost extends Ghost {
 	
 	public Direction findPath(Location goal) {
 		
-		if (goal.getY() > getLocation().getY())
+		int xDiff = goal.getX() - getLocation().getX();
+		int yDiff = goal.getY() - getLocation().getY();
+		
+		if (yDiff > 0)
 			return Direction.RIGHT;
-		if (goal.getY() < getLocation().getY())
+		if (yDiff < 0)
 			return Direction.LEFT;
-		if (goal.getX() > getLocation().getX())
+		if (xDiff > 0)
 			return Direction.DOWN;
 		
 		return Direction.UP;
