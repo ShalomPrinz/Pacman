@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-class SmartGhostTest {
+class MediumGhostTest {
 
 	Game game;
 	
@@ -16,7 +16,7 @@ class SmartGhostTest {
 	
 	@Test
 	void chance1outOf3() {
-		SmartGhost sg = new SmartGhost();
+		MediumGhost sg = new MediumGhost();
 		int counter = 0;
 		
 		for (int i = 0; i < 90; i++)
@@ -30,7 +30,7 @@ class SmartGhostTest {
 	public void findNewPathForGhost_method() {
 		// arrange
 		setGameBoardByStringArray(new String[]{"W-S", "W-W", "WWW"});
-		SmartGhost sg = (SmartGhost) this.game.getCreatureAt( new Location(0, 2) );
+		MediumGhost sg = (MediumGhost) this.game.getCreatureAt( new Location(0, 2) );
 		Game.Direction original = sg.getDirection();
 		Game.Direction designed;
 		

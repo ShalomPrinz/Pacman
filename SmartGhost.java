@@ -2,7 +2,7 @@ package pacman;
 
 import pacman.Game.Direction;
 
-public class SmartGhost extends Ghost{
+public class MediumGhost extends Ghost{
 	
 	private int horizonalSpeed = 0;
 	private int verticalSpeed = 0;
