@@ -57,12 +57,9 @@ public class Ghost extends MovingCreature {
 				possibleDirections.add(d);
 		}
 		
-		if (possibleDirections.capacity() == 0) { // no direction to go but opposite
-			Location nextLocation = game.getNextLocation( this.getLocation(), oppositeDirection );
-			Creature nextCreature = game.getCreatureAt( nextLocation );
-			
-			possibleDirections.add( nextCreature.getType() == Type.WALL ? Game.defaultDirection : oppositeDirection);
-		}
+		if (possibleDirections.capacity() == 0) // no direction to go but opposite
+			possibleDirections.add(oppositeDirection);
+		
 		
 		return possibleDirections;
 		
