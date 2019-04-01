@@ -93,6 +93,10 @@ public class Game{
 		
 	}
 	
+	public Location getRevivorLocation() {
+		return botBoard.getRevivorLocation();
+	}
+	
 	public void ghostMeetPacman(Pacman p, Ghost g, boolean attackerIsPacman) {
 		if (ghostsEating) {
 			topBoard.set( g.getLocation(), attackerIsPacman ? p : new Null() );
