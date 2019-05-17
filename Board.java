@@ -16,6 +16,8 @@ public class Board {
 	}
 	
 	public Board( String[] rowsArray ) {
+		this.finishedBoardCreating = false;
+		this.bonus = 0;
 		this.ghostsNumber = 0;
 		this.movingCreatures = new Vector<MovingCreature>(0, 1);	
 		this.revivorLocation = null;
@@ -37,12 +39,15 @@ public class Board {
 		// In a board without Revivor, (0, 0) is the fake location of the Revivor
 		if (revivorLocation == null)
 			revivorLocation = new Location(0, 0);
+		
+		this.finishedBoardCreating = true;
 	}
 	
 	private Creature[][] board;
-	private int ghostsNumber;
+	private int ghostsNumber, bonus;
 	private Vector<MovingCreature> movingCreatures; 
-	private Location revivorLocation; 
+	private Location revivorLocation;
+	private boolean finishedBoardCreating;
 	
 	public Creature[][] get() {
 		return board.clone();
@@ -54,6 +59,9 @@ public class Board {
 	
 	public void set( Location l, Creature c ) {
 		board[l.getX()][l.getY()] = c;
+		
+		if (isBonusCreature(c) && finishedBoardCreating)
+			bonus --;
 		
 		if ( isStaticCreature(c) )
 			return;
@@ -88,12 +96,21 @@ public class Board {
 		return Arrays.stream( staticCreatures ).anyMatch( c.getType() :: equals );
 	}
 	
+	public boolean isBonusCreature( Creature c ) {
+		Type[] bonusCreatures = { Type.POINT, Type.BIG_POINT };
+		return Arrays.stream( bonusCreatures ).anyMatch( c.getType() :: equals );
+	}
+	
 	public MovingCreature[] getMovingCreatures() {
 		return movingCreatures.toArray( new MovingCreature[ movingCreatures.size() ]);
 	}
 	
 	public Location getRevivorLocation() {
 		return this.revivorLocation;
+	}
+	
+	public boolean isBoardFinished() {
+		return bonus == 0;
 	}
 	
 	private Creature[][] setBoard() throws FileNotFoundException {
@@ -144,6 +161,8 @@ public class Board {
 			movingCreatures.add(mC);
 			mC.setInitialLocation(l);
 		}
+		if (isBonusCreature(c))
+			bonus ++;
 		
 		if (c.getType() == Type.REVIVOR)
 			this.revivorLocation = l;

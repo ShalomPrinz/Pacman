@@ -551,7 +551,7 @@ public class GameTest {
 	// Pacman vs Ghost
 	
 	@Test
-	public void PacmanEatsGhost() {
+	public void PacmanEatsGhost_Life() {
 		// arrange
 		Location l1 = new Location(0, 0);
 		setBoardAndDirection( l1, Game.Direction.RIGHT, new String[] {"G.BP"} );
@@ -563,7 +563,22 @@ public class GameTest {
 		// assert
 		assertEquals( 3, game.getPacmanLives() );
 	}
+	
+	@Test
+	public void PacmanEatsGhost_Positions() {
+		// arrange
+		Location l1 = new Location(0, 0), l2 = new Location(0, 1), l3 = new Location(0, 2);
+		setBoardAndDirection( l1, Game.Direction.RIGHT, new String[] {"PB.G"} );
+		
+		// action
+		game.move();
+		game.move();
 
+		// assert
+		assertEquals( Type.NULL, game.getCreatureAt(l2).getType() );
+		assertEquals( Type.PACMAN, game.getCreatureAt(l3).getType() );
+	}
+	
 	@Test
 	public void GhostToRevivor() {
 		// arrange
