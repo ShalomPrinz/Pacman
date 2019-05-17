@@ -137,7 +137,8 @@ public class Board {
 			case "P":
 				return new Pacman();
 			case "G":
-				return new Ghost();
+				ghostsNumber ++;
+				return new Ghost( getGhostNum() );
 			case "R":
 				return new Revivor();
 			default:
