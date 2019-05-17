@@ -121,8 +121,6 @@ public class Board {
 				return new Pacman();
 			case "G":
 				return new Ghost();
-			case "D":
-				return new DeadGhost();
 			case "R":
 				return new Revivor();
 			default:
