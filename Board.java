@@ -96,6 +96,10 @@ public class Board {
 		return this.revivorLocation;
 	}
 	
+	public boolean isBoardFinished() {
+		return true;
+	}
+	
 	private Creature[][] setBoard() throws FileNotFoundException {
 		Scanner sc = new Scanner(new BufferedReader(new FileReader("./Board.txt")));
 	    while(sc.hasNextLine()) {
