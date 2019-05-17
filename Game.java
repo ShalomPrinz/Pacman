@@ -136,6 +136,8 @@ public class Game{
 			
 		int turnLives = getPacmanLives();
 		
+		this.move.clear();
+		
 		for (MovingCreature mC : topBoard.getMovingCreatures()) {
 			mC.move(this);
 			if (turnLives != getPacmanLives())
