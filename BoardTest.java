@@ -153,4 +153,16 @@ public class BoardTest {
 		assertEquals(true, isFinished);		
 	}
 	
+	@Test
+	public void isBoardFinished_Point() {
+		// arrange
+		this.board = new Board( new String[] {"-"} );
+		
+		// action
+		boolean isFinished = board.isBoardFinished();
+		
+		// assert
+		assertEquals(false, isFinished);		
+	}
+
 }
