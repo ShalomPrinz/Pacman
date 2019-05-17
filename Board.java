@@ -136,9 +136,12 @@ public class Board {
 				return new BigPoint();
 			case "P":
 				return new Pacman();
+			case "S":
+				ghostsNumber ++;
+				return new SmartGhost( getGhostNum() - 1 );
 			case "G":
 				ghostsNumber ++;
-				return new Ghost( getGhostNum() );
+				return new Ghost( getGhostNum() - 1 );
 			case "R":
 				return new Revivor();
 			default:
